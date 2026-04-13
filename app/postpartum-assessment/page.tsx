@@ -2393,9 +2393,9 @@ function MediumScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/register")
-                appUrl.searchParams.set("email", quizState.email)
+                const appUrl = new URL("https://catalystmomofficial.com/signup")
                 appUrl.searchParams.set("name", quizState.name)
+                appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
                 appUrl.searchParams.set("tier", tier)
                 appUrl.searchParams.set("assessment", "postpartum")
@@ -2727,9 +2727,9 @@ function LowScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/register")
-                appUrl.searchParams.set("email", quizState.email)
+                const appUrl = new URL("https://catalystmomofficial.com/signup")
                 appUrl.searchParams.set("name", quizState.name)
+                appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
                 appUrl.searchParams.set("tier", tier)
                 appUrl.searchParams.set("assessment", "postpartum")

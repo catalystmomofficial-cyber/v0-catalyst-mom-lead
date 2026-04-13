@@ -1074,13 +1074,13 @@ function TTCResultsPage({
 
   const getAppRegistrationUrl = () => {
     const assessmentId = sessionStorage.getItem("ttc_assessment_id")
-    const appUrl = new URL("https://catalystmomofficial.com/register")
+    const appUrl = new URL("https://catalystmomofficial.com/signup")
+    appUrl.searchParams.set("name", quizState.name)
+    appUrl.searchParams.set("email", quizState.email)
 
     if (assessmentId) {
       appUrl.searchParams.set("assessment_id", assessmentId)
     }
-    appUrl.searchParams.set("email", quizState.email)
-    appUrl.searchParams.set("name", quizState.name)
     appUrl.searchParams.set("score", score.toString())
     appUrl.searchParams.set("tier", tier)
     appUrl.searchParams.set("assessment", "ttc")

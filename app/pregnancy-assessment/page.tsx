@@ -1932,9 +1932,9 @@ ${
                   className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                   onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/register")
-                    appUrl.searchParams.set("email", quizState.email)
+                    const appUrl = new URL("https://catalystmomofficial.com/signup")
                     appUrl.searchParams.set("name", quizState.name)
+                    appUrl.searchParams.set("email", quizState.email)
                     appUrl.searchParams.set("score", score.toString())
                     appUrl.searchParams.set("tier", tier)
                     appUrl.searchParams.set("assessment", "pregnancy")
@@ -1949,129 +1949,6 @@ ${
                 <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
                   Start seeing results in 7 days • Cancel anytime • No contracts
                 </p>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {tier === "low" && (
-          <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
-            <CardHeader>
-              <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-                Let's Build Your Pregnancy Wellness Foundations
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <p className="text-lg" style={{ color: "#3A2412" }}>
-                {quizState.name}, you're experiencing some common pregnancy challenges. The good news? Small, strategic
-                changes can significantly improve your pregnancy health.
-              </p>
-
-              <div className="space-y-6">
-                <h3 className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-                  Your Top 5 Focus Areas:
-                </h3>
-                {breakdown
-                  .filter((item) => item.score < 8)
-                  .slice(0, 5)
-                  .map((gap, index) => {
-                    const explanation = getComprehensiveGapExplanation(gap.practice, gap.score)
-                    if (explanation.status === "strong") return null
-                    return (
-                      <div
-                        key={index}
-                        className="p-6 rounded-lg space-y-4"
-                        style={{ backgroundColor: "#FFEBEE", borderLeft: "4px solid #E57373" }}
-                      >
-                        <h4 className="font-bold text-xl" style={{ color: "#3A2412" }}>
-                          {index + 1}. {gap.practice} ({gap.score}/10)
-                        </h4>
-                        <div className="space-y-3">
-                          <div>
-                            <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
-                              What This Means:
-                            </p>
-                            <p style={{ color: "#3A2412" }}>{explanation.whatThisMeans}</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
-                              The Consequence:
-                            </p>
-                            <p style={{ color: "#3A2412" }}>{explanation.consequence}</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
-                              How the App Fixes This:
-                            </p>
-                            <p style={{ color: "#3A2412" }}>{explanation.howAppFixes}</p>
-                          </div>
-                          <div>
-                            <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
-                              Timeline:
-                            </p>
-                            <p style={{ color: "#3A2412" }}>{explanation.timeline}</p>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-                  Women at Your Score Level:
-                </h3>
-                {getTierTestimonials().map((testimonial, index) => (
-                  <div key={index} className="p-4 rounded-lg" style={{ backgroundColor: "#F8F5F2" }}>
-                    <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                      "{testimonial.quote}"
-                    </p>
-                    <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                      — {testimonial.name}
-                    </p>
-                    <p className="text-sm" style={{ color: "#666" }}>
-                      {testimonial.score} • {testimonial.result}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
-                <h3 className="text-2xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-                  Join the Catalyst Mom App
-                </h3>
-                <p className="text-lg mb-6" style={{ color: "#3A2412" }}>
-                  Get pregnancy-safe workouts, meal plans, symptom management protocols, labor prep, and community
-                  support—all in one app.
-                </p>
-                <Button
-                  size="lg"
-                  className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-                  style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-                  onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/register")
-                    appUrl.searchParams.set("email", quizState.email)
-                    appUrl.searchParams.set("name", quizState.name)
-                    appUrl.searchParams.set("score", score.toString())
-                    appUrl.searchParams.set("tier", tier)
-                    appUrl.searchParams.set("assessment", "pregnancy")
-                    appUrl.searchParams.set("trimester", quizState.trimester)
-                    appUrl.searchParams.set("weeks_pregnant", quizState.weeksPregnant)
-                    appUrl.searchParams.set("goal", quizState.primaryGoal)
-                    window.open(appUrl.toString(), "_blank")
-                  }}
-                >
-                  Join Now - $29/month
-                </Button>
-                <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Start seeing results in 7 days • Cancel anytime • No contracts
-                </p>
-              </div>
-              <div className="text-center p-6 bg-amber-50 rounded-lg">
-                <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
-                  Questions?
-                </h3>
-                <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
               </div>
             </CardContent>
           </Card>
