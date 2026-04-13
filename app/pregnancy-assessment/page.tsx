@@ -80,20 +80,6 @@ export default function PregnancyAssessment() {
 
   const questions = [
     {
-      id: "name",
-      title: "What's your name?",
-      subtitle: "So we can personalize your experience",
-      type: "text",
-      field: "name",
-    },
-    {
-      id: "email",
-      title: "What's your email?",
-      subtitle: "We'll send your personalized results here",
-      type: "email",
-      field: "email",
-    },
-    {
       id: "trimester",
       title: "Which trimester are you in?",
       subtitle: "This helps us give you stage-appropriate recommendations",
@@ -323,6 +309,20 @@ export default function PregnancyAssessment() {
         { value: "dairy-free", label: "Dairy-free" },
         { value: "other", label: "Other" },
       ],
+    },
+    {
+      id: "name",
+      title: "Almost there! What's your name?",
+      subtitle: "So we can personalize your results",
+      type: "text",
+      field: "name",
+    },
+    {
+      id: "email",
+      title: "Where should we send your personalized results?",
+      subtitle: "We'll email your full assessment breakdown",
+      type: "email",
+      field: "email",
     },
     {
       id: "additional-notes",

@@ -903,22 +903,6 @@ export default function PostpartumAssessment() {
 
   const questions = [
     {
-      id: "name",
-      title: "Welcome to Catalyst Mom!",
-      subtitle: "Let's create your personalized postpartum recovery assessment",
-      type: "text",
-      field: "name",
-      placeholder: "Enter your first name",
-    },
-    {
-      id: "email",
-      title: "What's your email?",
-      subtitle: "We'll send your results here",
-      type: "email",
-      field: "email",
-      placeholder: "your@email.com",
-    },
-    {
       id: "weeks",
       title: "How many weeks/months postpartum are you?",
       subtitle: "This helps us give you stage-appropriate recommendations",
@@ -1129,6 +1113,22 @@ export default function PostpartumAssessment() {
       type: "textarea",
       field: "birthExperience",
       placeholder: "E.g., Vaginal birth, C-section, induced, emergency, water birth...",
+    },
+    {
+      id: "name",
+      title: "Almost there! What's your name?",
+      subtitle: "So we can personalize your results",
+      type: "text",
+      field: "name",
+      placeholder: "Enter your first name",
+    },
+    {
+      id: "email",
+      title: "Where should we send your personalized results?",
+      subtitle: "We'll email your full assessment breakdown",
+      type: "email",
+      field: "email",
+      placeholder: "your@email.com",
     },
     {
       id: "additional-notes",

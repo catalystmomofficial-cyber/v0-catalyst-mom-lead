@@ -378,22 +378,6 @@ export default function TTCAssessment() {
 
   const questions = [
     {
-      id: "name",
-      title: "Welcome to Catalyst Mom!",
-      subtitle: "Let's create your personalized TTC fertility assessment",
-      type: "text",
-      field: "name",
-      placeholder: "Enter your first name",
-    },
-    {
-      id: "email",
-      title: "What's your email?",
-      subtitle: "We'll send your results here",
-      type: "email",
-      field: "email",
-      placeholder: "your@email.com",
-    },
-    {
       id: "ttc-duration",
       title: "How long have you been trying to conceive?",
       subtitle: "This helps us understand your journey",
@@ -607,6 +591,22 @@ export default function TTCAssessment() {
         { value: "dairy-free", label: "Dairy-free" },
         { value: "other", label: "Other" },
       ],
+    },
+    {
+      id: "name",
+      title: "Almost there! What's your name?",
+      subtitle: "So we can personalize your results",
+      type: "text",
+      field: "name",
+      placeholder: "Enter your first name",
+    },
+    {
+      id: "email",
+      title: "Where should we send your personalized results?",
+      subtitle: "We'll email your full assessment breakdown",
+      type: "email",
+      field: "email",
+      placeholder: "your@email.com",
     },
     {
       id: "additional-notes",
