@@ -903,220 +903,107 @@ export default function PostpartumAssessment() {
 
   const questions = [
     {
-      id: "weeks",
-      title: "How many weeks/months postpartum are you?",
+      id: "timeline",
+      title: "How far along are you in your postpartum journey?",
       subtitle: "This helps us give you stage-appropriate recommendations",
       type: "radio",
       field: "weeksPostpartum",
       options: [
-        { value: "0-6", label: "0-6 weeks (still healing)" },
-        { value: "6-12", label: "6 weeks - 3 months" },
-        { value: "3-6", label: "3-6 months" },
-        { value: "6-12m", label: "6-12 months" },
-        { value: "12-18", label: "12-18 months" },
-        { value: "18+", label: "18+ months" },
+        { value: "0-6", label: "0–6 weeks (still in early healing)" },
+        { value: "6-12", label: "6 weeks – 3 months" },
+        { value: "3-6", label: "3–6 months" },
+        { value: "6-12m", label: "6–12 months" },
+        { value: "12+", label: "12 months or more" },
       ],
     },
     {
       id: "medical-clearance",
-      title: "Have you been medically cleared for exercise by your doctor?",
-      subtitle: "Safety first - this is critical!",
+      title: "Have you been cleared by your doctor or midwife to begin exercise?",
+      subtitle: "Safety first",
       type: "radio",
       field: "medicalClearance",
       options: [
-        { value: "yes", label: "✅ Yes, I've been cleared (6+ weeks postpartum)", points: 10 },
-        { value: "not-yet", label: "⏳ Not yet - still under 6 weeks", points: 0 },
-        { value: "skipped", label: "❌ I skipped this / wasn't told I needed clearance", points: 0 },
+        { value: "yes", label: "Yes, I have been cleared" },
+        { value: "not-yet", label: "Not yet — I am still under 6 weeks" },
+        { value: "never-told", label: "I was never told I needed clearance" },
       ],
     },
     {
       id: "diastasis-recti",
-      title: "Are you experiencing diastasis recti (abdominal separation) or 'mom pooch'?",
-      subtitle: "60% of postpartum women have this - you're not alone",
+      title: "Do you have diastasis recti (abdominal separation)?",
+      subtitle: "60% of postpartum women experience this",
       type: "radio",
       field: "diastasisRecti",
       options: [
-        { value: "diagnosed", label: "Yes, diagnosed by doctor/physical therapist", points: 10 },
-        { value: "think-so", label: "I think so, but haven't been formally checked", points: 5 },
-        { value: "no", label: "No, I don't have this issue", points: 10 },
-        { value: "dont-know", label: "I don't know what this is", points: 0 },
+        { value: "diagnosed", label: "Yes, diagnosed by a doctor or physio" },
+        { value: "think-so", label: "I think so but have not been checked" },
+        { value: "no", label: "No, I do not have this" },
+        { value: "dont-know", label: "I am not sure what this is" },
       ],
     },
     {
-      id: "core-safe",
-      title: "Are you doing core-safe exercises (avoiding crunches, sit-ups, planks)?",
-      subtitle: "Many popular exercises can WORSEN diastasis recti",
+      id: "core-pelvic-floor",
+      title: "How would you describe your core and pelvic floor right now?",
+      subtitle: "This helps us understand your recovery needs",
       type: "radio",
       field: "coreSafeExercises",
       options: [
-        { value: "yes", label: "✅ Yes, I'm being careful with core work", points: 10 },
-        { value: "crunches", label: "⚠️ I'm doing crunches/sit-ups (not sure if safe)", points: 0 },
-        { value: "unsure", label: "🤷 I'm not sure what's safe vs. unsafe", points: 3 },
-        { value: "not-working", label: "❌ I'm not working out at all yet", points: 5 },
+        { value: "leak", label: "I leak when I sneeze, laugh, or jump" },
+        { value: "weak", label: "My belly still looks pregnant and feels weak" },
+        { value: "pain", label: "I have lower back pain or pelvic pressure" },
+        { value: "all", label: "All of the above" },
+        { value: "okay", label: "I feel mostly okay" },
       ],
     },
     {
-      id: "pelvic-floor",
-      title: "Are you doing pelvic floor exercises (Kegels or PT-recommended)?",
-      subtitle: "These prevent incontinence and support core healing",
-      type: "radio",
-      field: "pelvicFloor",
-      options: [
-        { value: "yes", label: "✅ Yes, daily or several times per week", points: 10 },
-        { value: "sometimes", label: "⏱️ Occasionally, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I haven't started", points: 0 },
-        { value: "dont-know", label: "🤷 I don't know how to do them properly", points: 2 },
-      ],
-    },
-    {
-      id: "nutrition-tracking",
-      title: "Are you tracking your nutrition or calorie intake?",
-      subtitle: "You can't out-exercise a poor diet - especially postpartum",
-      type: "radio",
-      field: "nutrition",
-      options: [
-        { value: "yes", label: "✅ Yes, I track consistently", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not every day", points: 5 },
-        { value: "no", label: "❌ No, I don't track anything", points: 0 },
-        { value: "try", label: "🤷 I try to 'eat healthy' but don't track", points: 3 },
-      ],
-    },
-    {
-      id: "protein",
-      title: "Are you eating enough protein daily (80g+ recommended postpartum)?",
-      subtitle: "Protein is CRITICAL for energy, milk production, and recovery",
-      type: "radio",
-      field: "proteinIntake",
-      options: [
-        { value: "yes", label: "✅ Yes, I hit 80g+ most days", points: 10 },
-        { value: "sometimes", label: "⏱️ Some days, but inconsistent", points: 5 },
-        { value: "no", label: "❌ No, I'm probably under 50g", points: 0 },
-        { value: "unsure", label: "🤷 I have no idea how much I eat", points: 0 },
-      ],
-    },
-    {
-      id: "rest",
-      title: "Do you prioritize rest/sleep when baby sleeps?",
-      subtitle: "Your body heals during rest - not during chores",
-      type: "radio",
-      field: "rest",
-      options: [
-        { value: "yes", label: "✅ Yes, I rest when I can", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but I often do chores instead", points: 5 },
-        { value: "no", label: "❌ No, I use that time to catch up on everything", points: 0 },
-        { value: "no-sleep", label: "😅 What sleep? Baby doesn't sleep!", points: 3 },
-      ],
-    },
-    {
-      id: "hydration",
-      title: "Are you staying hydrated (8+ glasses of water daily)?",
-      subtitle: "Dehydration = exhaustion and slow recovery",
-      type: "radio",
-      field: "hydration",
-      options: [
-        { value: "yes", label: "✅ Yes, I drink 8+ glasses", points: 10 },
-        { value: "mostly", label: "⏱️ Most days, but sometimes forget", points: 7 },
-        { value: "no", label: "❌ No, I barely drink water", points: 0 },
-        { value: "coffee", label: "🤷 I drink coffee... does that count?", points: 2 },
-      ],
-    },
-    {
-      id: "workout-routine",
-      title: "Do you have a consistent workout routine (even just 10 minutes)?",
-      subtitle: "Consistency beats intensity for postpartum recovery",
+      id: "movement",
+      title: "How consistently are you moving your body right now?",
+      subtitle: "Movement is medicine",
       type: "radio",
       field: "workoutRoutine",
       options: [
-        { value: "yes", label: "✅ Yes, 3-4+ times per week", points: 10 },
-        { value: "sometimes", label: "⏱️ 1-2 times per week", points: 5 },
-        { value: "random", label: "❌ No, I work out randomly", points: 2 },
-        { value: "no", label: "❌ No, I haven't started working out yet", points: 0 },
+        { value: "3-plus", label: "3 or more times per week" },
+        { value: "1-2", label: "Once or twice a week" },
+        { value: "occasional", label: "Occasionally with no real routine" },
+        { value: "not-started", label: "I have not started yet — not sure what is safe" },
       ],
     },
     {
-      id: "tracking-wellness",
-      title: "Are you tracking your mood, energy, or wellness in any way?",
-      subtitle: "What gets measured gets improved",
+      id: "fueling",
+      title: "How well are you nourishing your postpartum body?",
+      subtitle: "Recovery requires proper fuel",
       type: "radio",
-      field: "tracking",
+      field: "nutrition",
       options: [
-        { value: "yes", label: "✅ Yes, I journal or use an app", points: 10 },
-        { value: "sometimes", label: "⏱️ Occasionally, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I don't track anything", points: 0 },
-        { value: "feel", label: "🤷 I just know when I feel bad", points: 0 },
+        { value: "well", label: "Well — I eat balanced meals with good protein" },
+        { value: "okay", label: "Okay — I try but it is inconsistent" },
+        { value: "poorly", label: "Poorly — I grab whatever is quick and easy" },
+        { value: "no-idea", label: "I have no idea — I am just surviving" },
       ],
     },
     {
-      id: "primary-goal",
-      title: "What's your PRIMARY goal right now? (Pick ONE)",
-      subtitle: "Let's focus on what matters most to you",
+      id: "energy-rest",
+      title: "How would you describe your energy and recovery right now?",
+      subtitle: "Rest is where healing happens",
       type: "radio",
-      field: "primaryGoal",
+      field: "rest",
       options: [
-        { value: "weight-loss", label: "Lose baby weight (10+ lbs)" },
-        { value: "heal-dr", label: "Heal diastasis recti / flatten 'mom pooch'" },
-        { value: "strength", label: "Build strength and feel confident" },
-        { value: "energy", label: "Increase energy levels (stop feeling exhausted)" },
-        { value: "pre-pregnancy", label: "Get back to pre-pregnancy fitness level" },
-        { value: "active", label: "Just stay active and healthy" },
+        { value: "good", label: "Good — I rest when I can and feel okay" },
+        { value: "tired", label: "Tired but managing" },
+        { value: "exhausted", label: "Exhausted — running on empty every day" },
+        { value: "depleted", label: "Completely depleted — I have nothing left" },
       ],
     },
     {
-      id: "biggest-obstacle",
-      title: "What's the BIGGEST obstacle stopping you from reaching your wellness goals?",
-      subtitle: "Knowing your obstacle helps us help you",
-      type: "radio",
-      field: "biggestObstacle",
-      options: [
-        { value: "no-time", label: "No time - baby demands all my energy" },
-        { value: "dont-know-safe", label: "Don't know what's safe for postpartum" },
-        { value: "exhausted", label: "Too tired/exhausted to work out" },
-        { value: "no-accountability", label: "No accountability or support system" },
-        { value: "tried-failed", label: "Tried programs that didn't work for moms" },
-        { value: "pain", label: "Physical pain or complications (DR, C-section, pelvic floor)" },
-        { value: "overwhelmed", label: "Overwhelmed by conflicting advice online" },
-      ],
-    },
-    {
-      id: "support-type",
-      title: "What type of support would help you MOST right now?",
-      subtitle: "This helps us recommend the right path",
-      type: "radio",
-      field: "supportType",
-      options: [
-        { value: "self-guided", label: "Self-guided app with workouts I can do anytime" },
-        { value: "community", label: "Community of moms going through the same thing" },
-        { value: "1on1", label: "1-on-1 personalized coaching with expert" },
-        { value: "done-for-you", label: "Done-for-you plan with full accountability" },
-        { value: "education", label: "Just need education/information first (not ready to commit)" },
-      ],
-    },
-    {
-      id: "dietary",
-      title: "Dietary preferences or restrictions?",
-      subtitle: "We'll personalize nutrition recommendations",
-      type: "radio",
-      field: "dietaryRestrictions",
-      options: [
-        { value: "none", label: "None" },
-        { value: "vegetarian", label: "Vegetarian" },
-        { value: "vegan", label: "Vegan" },
-        { value: "gluten-free", label: "Gluten-free" },
-        { value: "dairy-free", label: "Dairy-free" },
-        { value: "other", label: "Other" },
-      ],
-    },
-    {
-      id: "birth-experience", // Added from updates
-      title: "Briefly, what was your birth experience like?",
-      subtitle: "This helps us understand any specific recovery needs",
-      type: "textarea",
-      field: "birthExperience",
-      placeholder: "E.g., Vaginal birth, C-section, induced, emergency, water birth...",
+      id: "unlock-results",
+      title: "Your personalised Maternal Wellness Score is ready",
+      subtitle: "Where should we send your recovery roadmap?",
+      type: "section-header",
+      field: null,
     },
     {
       id: "name",
-      title: "Almost there! What's your name?",
+      title: "What's your first name?",
       subtitle: "So we can personalize your results",
       type: "text",
       field: "name",
@@ -1124,16 +1011,44 @@ export default function PostpartumAssessment() {
     },
     {
       id: "email",
-      title: "Where should we send your personalized results?",
+      title: "Where should we send your recovery roadmap?",
       subtitle: "We'll email your full assessment breakdown",
       type: "email",
       field: "email",
       placeholder: "your@email.com",
     },
     {
+      id: "primary-goal",
+      title: "What matters most to you right now?",
+      subtitle: "This helps us personalize your roadmap",
+      type: "radio",
+      field: "primaryGoal",
+      options: [
+        { value: "heal-dr", label: "Heal my diastasis recti and close the gap" },
+        { value: "pelvic-floor", label: "Stop leaking and strengthen my pelvic floor" },
+        { value: "energy", label: "Get my energy back and feel like myself again" },
+        { value: "weight-loss", label: "Lose the baby weight safely" },
+        { value: "strength", label: "Build strength and feel confident in my body" },
+      ],
+    },
+    {
+      id: "biggest-barrier",
+      title: "What is the main thing stopping you right now?",
+      subtitle: "Knowing this helps us support you better",
+      type: "radio",
+      field: "biggestObstacle",
+      options: [
+        { value: "dont-know", label: "I do not know what is safe for my body" },
+        { value: "no-time", label: "I have no time — the baby takes everything" },
+        { value: "exhausted", label: "I am too exhausted to start anything" },
+        { value: "tried-failed", label: "I have tried things before and nothing worked" },
+        { value: "pain", label: "I have pain or complications holding me back" },
+      ],
+    },
+    {
       id: "additional-notes",
       title: "Anything else we should know?",
-      subtitle: "Share any concerns, limitations, or preferences to make this perfect for you",
+      subtitle: "Share any concerns, limitations, or preferences",
       type: "textarea",
       field: "additionalNotes",
       placeholder: "E.g., C-section recovery, twins, back pain, specific time constraints...",
@@ -1143,42 +1058,52 @@ export default function PostpartumAssessment() {
   const calculateScore = () => {
     let totalScore = 0
 
-    // Q4: Medical clearance
+    // Q1: Timeline postpartum (always counts as 10, just for tracking)
+    totalScore += 10
+
+    // Q2: Medical clearance
     if (quizState.medicalClearance === "yes") totalScore += 10
-    // Q5: Diastasis recti
+    else totalScore += 0
+
+    // Q3: Diastasis recti
     if (quizState.diastasisRecti === "diagnosed") totalScore += 10
-    else if (quizState.diastasisRecti === "think-so") totalScore += 5
+    else if (quizState.diastasisRecti === "think-so") totalScore += 7
     else if (quizState.diastasisRecti === "no") totalScore += 10
-    // Q6: Core safe exercises
-    if (quizState.coreSafeExercises === "yes") totalScore += 10
-    else if (quizState.coreSafeExercises === "unsure") totalScore += 3
-    else if (quizState.coreSafeExercises === "not-working") totalScore += 5
-    // Q7: Pelvic floor
-    if (quizState.pelvicFloor === "yes") totalScore += 10
-    else if (quizState.pelvicFloor === "sometimes") totalScore += 5
-    else if (quizState.pelvicFloor === "dont-know") totalScore += 2
-    // Q8: Nutrition tracking
-    if (quizState.nutrition === "yes") totalScore += 10
-    else if (quizState.nutrition === "sometimes") totalScore += 5
-    else if (quizState.nutrition === "try") totalScore += 3
-    // Q9: Protein
-    if (quizState.proteinIntake === "yes") totalScore += 10
-    else if (quizState.proteinIntake === "sometimes") totalScore += 5
-    // Q10: Rest
-    if (quizState.rest === "yes") totalScore += 10
-    else if (quizState.rest === "sometimes") totalScore += 5
-    else if (quizState.rest === "no-sleep") totalScore += 3
-    // Q11: Hydration
-    if (quizState.hydration === "yes") totalScore += 10
-    else if (quizState.hydration === "mostly") totalScore += 7
-    else if (quizState.hydration === "coffee") totalScore += 2
-    // Q12: Workout routine
-    if (quizState.workoutRoutine === "yes") totalScore += 10
-    else if (quizState.workoutRoutine === "sometimes") totalScore += 5
-    else if (quizState.workoutRoutine === "random") totalScore += 2
-    // Q13: Tracking wellness
-    if (quizState.tracking === "yes") totalScore += 10
-    else if (quizState.tracking === "sometimes") totalScore += 5
+    else totalScore += 3 // dont-know
+
+    // Q4: Core and pelvic floor
+    if (quizState.coreSafeExercises === "leak") totalScore += 3
+    else if (quizState.coreSafeExercises === "weak") totalScore += 5
+    else if (quizState.coreSafeExercises === "pain") totalScore += 4
+    else if (quizState.coreSafeExercises === "all") totalScore += 2
+    else if (quizState.coreSafeExercises === "okay") totalScore += 10
+
+    // Q5: Movement
+    if (quizState.workoutRoutine === "3-plus") totalScore += 10
+    else if (quizState.workoutRoutine === "1-2") totalScore += 7
+    else if (quizState.workoutRoutine === "occasional") totalScore += 4
+    else if (quizState.workoutRoutine === "not-started") totalScore += 0
+
+    // Q6: Nutrition/Fueling
+    if (quizState.nutrition === "well") totalScore += 10
+    else if (quizState.nutrition === "okay") totalScore += 6
+    else if (quizState.nutrition === "poorly") totalScore += 2
+    else if (quizState.nutrition === "no-idea") totalScore += 0
+
+    // Q7: Energy and rest
+    if (quizState.rest === "good") totalScore += 10
+    else if (quizState.rest === "tired") totalScore += 7
+    else if (quizState.rest === "exhausted") totalScore += 2
+    else if (quizState.rest === "depleted") totalScore += 0
+
+    // Q8, Q9, Q10 are name/email/goal/barrier - these don't score but are counted for navigation
+    // Name and email are informational only
+
+    // Q11: Primary goal (doesn't affect scoring, just for personalization)
+    totalScore += 0 // No points for this question
+
+    // Q12: Biggest barrier (doesn't affect scoring, just for personalization)
+    totalScore += 0 // No points for this question
 
     return totalScore
   }
