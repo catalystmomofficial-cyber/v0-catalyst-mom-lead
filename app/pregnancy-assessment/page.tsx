@@ -86,18 +86,10 @@ export default function PregnancyAssessment() {
       type: "radio",
       field: "trimester",
       options: [
-        { value: "first", label: "First trimester (weeks 1-13)" },
-        { value: "second", label: "Second trimester (weeks 14-26)" },
-        { value: "third", label: "Third trimester (weeks 27-40)" },
+        { value: "first", label: "First trimester (weeks 1 to 13)" },
+        { value: "second", label: "Second trimester (weeks 14 to 26)" },
+        { value: "third", label: "Third trimester (weeks 27 to 40)" },
       ],
-    },
-    {
-      id: "weeksPregnant",
-      title: "How many weeks pregnant are you?",
-      subtitle: "Enter the number of weeks (1-40)",
-      type: "text",
-      field: "weeksPregnant",
-      placeholder: "e.g., 24",
     },
     {
       id: "prenatal-care",
@@ -106,228 +98,124 @@ export default function PregnancyAssessment() {
       type: "radio",
       field: "prenatalCare",
       options: [
-        { value: "yes", label: "✅ Yes, I see my doctor/midwife regularly", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I haven't started prenatal care", points: 0 },
+        { value: "yes", label: "Yes, I see my doctor or midwife regularly" },
+        { value: "sometimes", label: "Sometimes, but not consistently" },
+        { value: "no", label: "No, I have not started prenatal care yet" },
       ],
     },
     {
       id: "exercise-safety",
-      title: "Are you doing pregnancy-safe exercise?",
-      subtitle: "Avoiding high-impact and unsafe movements",
+      title: "How are you approaching movement and exercise during pregnancy?",
+      subtitle: "Staying active safely supports both you and baby",
       type: "radio",
       field: "exerciseSafety",
       options: [
-        { value: "yes", label: "✅ Yes, I do pregnancy-safe workouts", points: 10 },
-        { value: "unsure", label: "🤷 I'm not sure what's safe", points: 3 },
-        { value: "intense", label: "⚠️ I'm doing intense/high-impact exercise", points: 0 },
-        { value: "no", label: "❌ I'm not exercising at all", points: 5 },
+        { value: "yes", label: "I do pregnancy-safe workouts regularly" },
+        { value: "unsure", label: "I want to move but I am not sure what is safe" },
+        { value: "no", label: "I am not exercising at all right now" },
+        { value: "intense", label: "I am still doing high-intensity workouts" },
       ],
     },
     {
       id: "nutrition",
-      title: "Are you eating pregnancy-supporting nutrition?",
-      subtitle: "Folate, iron, calcium, and protein are critical",
+      title: "How well are you nourishing your body during pregnancy?",
+      subtitle: "Folate, iron, calcium and protein are critical for you and baby",
       type: "radio",
       field: "nutrition",
       options: [
-        { value: "yes", label: "✅ Yes, I focus on prenatal nutrition", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I eat whatever", points: 0 },
-        { value: "trying", label: "🤷 I try to eat healthy but don't focus on pregnancy needs", points: 3 },
+        { value: "yes", label: "Well — I focus on prenatal nutrition" },
+        { value: "sometimes", label: "Okay — I try but it is inconsistent" },
+        { value: "trying", label: "I eat healthy but do not focus on pregnancy needs" },
+        { value: "no", label: "Poorly — I eat whatever I can keep down" },
       ],
     },
     {
       id: "supplements",
       title: "Are you taking prenatal vitamins and supplements?",
-      subtitle: "Prenatal vitamin, iron, calcium, DHA, etc.",
+      subtitle: "Prenatal vitamins, iron, calcium and DHA all matter",
       type: "radio",
       field: "supplementation",
       options: [
-        { value: "yes", label: "✅ Yes, I take a full prenatal protocol", points: 10 },
-        { value: "some", label: "⏱️ I take some, but not a full protocol", points: 5 },
-        { value: "no", label: "❌ No, I don't take any", points: 0 },
-        { value: "unsure", label: "🤷 I'm not sure what to take", points: 2 },
-      ],
-    },
-    {
-      id: "stress",
-      title: "How would you rate your stress levels?",
-      subtitle: "Chronic stress impacts pregnancy health",
-      type: "radio",
-      field: "stress",
-      options: [
-        { value: "low", label: "✅ Low - I manage stress well", points: 10 },
-        { value: "moderate", label: "⏱️ Moderate - some stress but manageable", points: 5 },
-        { value: "high", label: "❌ High - I'm constantly stressed", points: 0 },
-        { value: "very-high", label: "🚨 Very high - pregnancy anxiety is consuming me", points: 0 },
-      ],
-    },
-    {
-      id: "sleep",
-      title: "Are you getting 8-10 hours of quality sleep?",
-      subtitle: "Sleep is when your body heals and baby develops",
-      type: "radio",
-      field: "sleep",
-      options: [
-        { value: "yes", label: "✅ Yes, 8-10 hours most nights", points: 10 },
-        { value: "mostly", label: "⏱️ Mostly, but sometimes less", points: 7 },
-        { value: "no", label: "❌ No, I get 5-6 hours", points: 0 },
-        { value: "poor", label: "😅 I get less than 5 hours", points: 0 },
+        { value: "yes", label: "Yes, I take a full prenatal protocol" },
+        { value: "some", label: "I take some but not a complete protocol" },
+        { value: "unsure", label: "I am not sure what I should be taking" },
+        { value: "no", label: "No, I do not take any" },
       ],
     },
     {
       id: "pelvic-floor",
-      title: "Are you doing pelvic floor exercises?",
+      title: "Are you doing pelvic floor exercises during pregnancy?",
       subtitle: "These prepare you for labor and prevent postpartum issues",
       type: "radio",
       field: "pelvicFloor",
       options: [
-        { value: "yes", label: "✅ Yes, regularly", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I haven't started", points: 0 },
-        { value: "dont-know", label: "🤷 I don't know how to do them", points: 2 },
+        { value: "yes", label: "Yes, I do them regularly" },
+        { value: "sometimes", label: "Sometimes, but not consistently" },
+        { value: "dont-know", label: "I am not sure how to do them properly" },
+        { value: "no", label: "No, I have not started" },
       ],
     },
     {
-      id: "diastasis-recti",
-      title: "Are you aware of diastasis recti prevention?",
-      subtitle: "Pregnancy can cause abdominal separation",
+      id: "stress",
+      title: "How would you describe your stress and anxiety levels?",
+      subtitle: "Chronic stress impacts both your health and your baby",
       type: "radio",
-      field: "diastasisRecti",
+      field: "stress",
       options: [
-        { value: "yes", label: "✅ Yes, I'm doing prevention exercises", points: 10 },
-        { value: "aware", label: "⏱️ I'm aware but not doing prevention", points: 5 },
-        { value: "no", label: "❌ No, I don't know what this is", points: 0 },
-      ],
-    },
-    {
-      id: "nausea",
-      title: "Are you managing pregnancy nausea/symptoms?",
-      subtitle: "Morning sickness and fatigue are common",
-      type: "radio",
-      field: "nausea",
-      options: [
-        { value: "none", label: "✅ No nausea or minimal symptoms", points: 10 },
-        { value: "managed", label: "⏱️ I have symptoms but manage them well", points: 7 },
-        { value: "struggling", label: "❌ I'm struggling with severe nausea", points: 2 },
-        { value: "severe", label: "🚨 Severe - affecting my nutrition", points: 0 },
-      ],
-    },
-    {
-      id: "energy",
-      title: "How are your energy levels?",
-      subtitle: "Fatigue is normal but shouldn't be debilitating",
-      type: "radio",
-      field: "energy",
-      options: [
-        { value: "good", label: "✅ Good - I have energy most days", points: 10 },
-        { value: "okay", label: "⏱️ Okay - some days are better than others", points: 5 },
-        { value: "low", label: "❌ Low - I'm exhausted most days", points: 0 },
-        { value: "very-low", label: "🚨 Very low - I can barely function", points: 0 },
-      ],
-    },
-    {
-      id: "workout-routine",
-      title: "Do you have a consistent workout routine?",
-      subtitle: "Consistency supports pregnancy health",
-      type: "radio",
-      field: "workoutRoutine",
-      options: [
-        { value: "yes", label: "✅ Yes, 3-4+ times per week", points: 10 },
-        { value: "sometimes", label: "⏱️ 1-2 times per week", points: 5 },
-        { value: "random", label: "❌ No, I work out randomly", points: 2 },
-        { value: "no", label: "❌ No, I haven't started", points: 0 },
-      ],
-    },
-    {
-      id: "tracking-wellness",
-      title: "Are you tracking your wellness metrics?",
-      subtitle: "Weight, blood pressure, mood, energy, etc.",
-      type: "radio",
-      field: "tracking", // Correct field name
-      options: [
-        { value: "yes", label: "✅ Yes, I track multiple metrics", points: 10 },
-        { value: "some", label: "⏱️ I track some metrics", points: 5 },
-        { value: "no", label: "❌ No, I don't track anything", points: 0 },
-      ],
-    },
-    {
-      id: "primary-goal",
-      title: "What's your PRIMARY goal right now?",
-      subtitle: "Let's focus on what matters most to you",
-      type: "radio",
-      field: "primaryGoal",
-      options: [
-        { value: "healthy-pregnancy", label: "Have a healthy pregnancy" },
-        { value: "manage-symptoms", label: "Manage pregnancy symptoms" },
-        { value: "prepare-labor", label: "Prepare for labor and delivery" },
-        { value: "postpartum-ready", label: "Prepare for postpartum recovery" },
-        { value: "stay-active", label: "Stay active and fit during pregnancy" },
-      ],
-    },
-    {
-      id: "biggest-obstacle",
-      title: "What's the BIGGEST obstacle to your wellness goals?",
-      subtitle: "Knowing your obstacle helps us help you",
-      type: "radio",
-      field: "biggestObstacle",
-      options: [
-        { value: "dont-know-safe", label: "Don't know what's safe during pregnancy" },
-        { value: "exhausted", label: "Too tired/exhausted to work out" },
-        { value: "symptoms", label: "Pregnancy symptoms (nausea, pain, etc.)" },
-        { value: "anxiety", label: "Pregnancy anxiety and worry" },
-        { value: "no-support", label: "No support or guidance" },
-        { value: "overwhelmed", label: "Overwhelmed by conflicting advice" },
-      ],
-    },
-    {
-      id: "support-type",
-      title: "What type of support would help you MOST?",
-      subtitle: "This helps us recommend the right path",
-      type: "radio",
-      field: "supportType",
-      options: [
-        { value: "education", label: "Education and information" },
-        { value: "community", label: "Community of pregnant women" },
-        { value: "coaching", label: "1-on-1 personalized coaching" },
-        { value: "plan", label: "Done-for-you pregnancy plan" },
-        { value: "accountability", label: "Accountability and tracking" },
-      ],
-    },
-    {
-      id: "dietary",
-      title: "Dietary preferences or restrictions?",
-      subtitle: "We'll personalize nutrition recommendations",
-      type: "radio",
-      field: "dietaryRestrictions",
-      options: [
-        { value: "none", label: "None" },
-        { value: "vegetarian", label: "Vegetarian" },
-        { value: "vegan", label: "Vegan" },
-        { value: "gluten-free", label: "Gluten-free" },
-        { value: "dairy-free", label: "Dairy-free" },
-        { value: "other", label: "Other" },
+        { value: "low", label: "Low — I feel calm and manage stress well" },
+        { value: "moderate", label: "Moderate — some stress but manageable" },
+        { value: "high", label: "High — I feel anxious or overwhelmed often" },
+        { value: "very-high", label: "Very high — pregnancy anxiety is consuming me" },
       ],
     },
     {
       id: "name",
-      title: "Almost there! What's your name?",
-      subtitle: "So we can personalize your results",
+      title: "Almost there! What is your first name?",
+      subtitle: "So we can personalize your pregnancy wellness score",
       type: "text",
       field: "name",
+      placeholder: "Enter your first name",
     },
     {
       id: "email",
       title: "Where should we send your personalized results?",
-      subtitle: "We'll email your full assessment breakdown",
+      subtitle: "We will email your full pregnancy assessment breakdown",
       type: "email",
       field: "email",
+      placeholder: "your@email.com",
+    },
+    {
+      id: "primary-goal",
+      title: "What matters most to you right now?",
+      subtitle: "This helps us personalize your roadmap",
+      type: "radio",
+      field: "primaryGoal",
+      options: [
+        { value: "healthy-pregnancy", label: "Have the healthiest pregnancy possible" },
+        { value: "manage-symptoms", label: "Manage symptoms like nausea and fatigue" },
+        { value: "prepare-labor", label: "Prepare my body for labor and delivery" },
+        { value: "postpartum-ready", label: "Set myself up for postpartum recovery" },
+        { value: "stay-active", label: "Stay active and strong throughout pregnancy" },
+      ],
+    },
+    {
+      id: "biggest-obstacle",
+      title: "What is the main thing holding you back right now?",
+      subtitle: "Knowing this helps us support you better",
+      type: "radio",
+      field: "biggestObstacle",
+      options: [
+        { value: "dont-know-safe", label: "I do not know what is safe during pregnancy" },
+        { value: "exhausted", label: "I am too tired or nauseous to do much" },
+        { value: "anxiety", label: "Pregnancy anxiety and worry" },
+        { value: "no-support", label: "I have no support or guidance" },
+        { value: "overwhelmed", label: "Overwhelmed by conflicting advice online" },
+      ],
     },
     {
       id: "additional-notes",
       title: "Anything else we should know?",
-      subtitle: "Share any concerns, limitations, or preferences",
+      subtitle: "Share any concerns, conditions, or context that might help",
       type: "textarea",
       field: "additionalNotes",
       placeholder: "E.g., gestational diabetes, high blood pressure, previous complications, specific concerns...",
@@ -337,47 +225,43 @@ export default function PregnancyAssessment() {
   const calculateScore = () => {
     let totalScore = 0
 
+    // Q1: Trimester (always 10 — context, not penalized)
+    totalScore += 10
+
+    // Q2: Prenatal care
     if (quizState.prenatalCare === "yes") totalScore += 10
     else if (quizState.prenatalCare === "sometimes") totalScore += 5
+    else totalScore += 0
 
+    // Q3: Exercise safety
     if (quizState.exerciseSafety === "yes") totalScore += 10
-    else if (quizState.exerciseSafety === "unsure") totalScore += 3
-    else if (quizState.exerciseSafety === "no") totalScore += 5
+    else if (quizState.exerciseSafety === "unsure") totalScore += 4
+    else if (quizState.exerciseSafety === "no") totalScore += 4
+    else totalScore += 0 // intense
 
+    // Q4: Nutrition
     if (quizState.nutrition === "yes") totalScore += 10
-    else if (quizState.nutrition === "sometimes") totalScore += 5
+    else if (quizState.nutrition === "sometimes") totalScore += 6
     else if (quizState.nutrition === "trying") totalScore += 3
+    else totalScore += 0
 
+    // Q5: Supplements
     if (quizState.supplementation === "yes") totalScore += 10
-    else if (quizState.supplementation === "some") totalScore += 5
+    else if (quizState.supplementation === "some") totalScore += 6
     else if (quizState.supplementation === "unsure") totalScore += 2
+    else totalScore += 0
 
-    if (quizState.stress === "low") totalScore += 10
-    else if (quizState.stress === "moderate") totalScore += 5
-
-    if (quizState.sleep === "yes") totalScore += 10
-    else if (quizState.sleep === "mostly") totalScore += 7
-
+    // Q6: Pelvic floor
     if (quizState.pelvicFloor === "yes") totalScore += 10
-    else if (quizState.pelvicFloor === "sometimes") totalScore += 5
+    else if (quizState.pelvicFloor === "sometimes") totalScore += 6
     else if (quizState.pelvicFloor === "dont-know") totalScore += 2
+    else totalScore += 0
 
-    if (quizState.diastasisRecti === "yes") totalScore += 10
-    else if (quizState.diastasisRecti === "aware") totalScore += 5
-
-    if (quizState.nausea === "none") totalScore += 10
-    else if (quizState.nausea === "managed") totalScore += 7
-    else if (quizState.nausea === "struggling") totalScore += 2
-
-    if (quizState.energy === "good") totalScore += 10
-    else if (quizState.energy === "okay") totalScore += 5
-
-    if (quizState.workoutRoutine === "yes") totalScore += 10
-    else if (quizState.workoutRoutine === "sometimes") totalScore += 5
-    else if (quizState.workoutRoutine === "random") totalScore += 2
-
-    if (quizState.tracking === "yes") totalScore += 10
-    else if (quizState.tracking === "some") totalScore += 5
+    // Q7: Stress
+    if (quizState.stress === "low") totalScore += 10
+    else if (quizState.stress === "moderate") totalScore += 6
+    else if (quizState.stress === "high") totalScore += 2
+    else totalScore += 0
 
     return totalScore
   }

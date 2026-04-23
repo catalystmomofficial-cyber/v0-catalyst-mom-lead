@@ -380,222 +380,99 @@ export default function TTCAssessment() {
     {
       id: "ttc-duration",
       title: "How long have you been trying to conceive?",
-      subtitle: "This helps us understand your journey",
+      subtitle: "This helps us understand where you are in your journey",
       type: "radio",
       field: "ttcDuration",
       options: [
         { value: "less-3", label: "Less than 3 months" },
-        { value: "3-6", label: "3-6 months" },
-        { value: "6-12", label: "6-12 months" },
-        { value: "1-2", label: "1-2 years" },
-        { value: "2-3", label: "2-3 years" },
-        { value: "3+", label: "3+ years" },
+        { value: "3-6", label: "3 to 6 months" },
+        { value: "6-12", label: "6 to 12 months" },
+        { value: "1-2", label: "1 to 2 years" },
+        { value: "2+", label: "2 years or more" },
       ],
     },
     {
       id: "cycle-tracking",
       title: "Are you tracking your menstrual cycle?",
-      subtitle: "Understanding your cycle is foundational for TTC",
+      subtitle: "Understanding your cycle is foundational for conception",
       type: "radio",
       field: "cycleTracking",
       options: [
-        { value: "yes-app", label: "✅ Yes, using an app or method", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I don't track it", points: 0 },
-        { value: "irregular", label: "🤷 My cycle is too irregular to track", points: 3 },
+        { value: "yes-app", label: "Yes, using an app or method consistently" },
+        { value: "sometimes", label: "Sometimes, but not consistently" },
+        { value: "irregular", label: "My cycle is too irregular to track" },
+        { value: "no", label: "No, I am not tracking it" },
       ],
     },
     {
       id: "ovulation",
       title: "Do you know when you ovulate?",
-      subtitle: "Ovulation timing is critical for conception",
+      subtitle: "Timing is one of the most critical factors for conception",
       type: "radio",
       field: "ovulationAwareness",
       options: [
-        { value: "yes", label: "✅ Yes, I track ovulation signs", points: 10 },
-        { value: "roughly", label: "⏱️ Roughly, but not precisely", points: 5 },
-        { value: "no", label: "❌ No, I have no idea", points: 0 },
-        { value: "irregular", label: "🤷 My cycle is too irregular", points: 2 },
+        { value: "yes", label: "Yes, I track ovulation signs or use OPKs" },
+        { value: "roughly", label: "Roughly, but not precisely" },
+        { value: "irregular", label: "My cycle is too irregular to predict" },
+        { value: "no", label: "No, I have no idea" },
       ],
     },
     {
       id: "fertility-nutrition",
-      title: "Are you eating fertility-supporting foods?",
+      title: "How well are you nourishing your body for fertility?",
       subtitle: "Nutrition directly impacts egg quality and hormone balance",
       type: "radio",
       field: "fertilityNutrition",
       options: [
-        { value: "yes", label: "✅ Yes, I focus on fertility nutrition", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but not consistently", points: 5 },
-        { value: "no", label: "❌ No, I eat whatever", points: 0 },
-        { value: "trying", label: "🤷 I try to eat healthy but don't focus on fertility", points: 3 },
+        { value: "yes", label: "Well — I focus on fertility-supporting foods" },
+        { value: "sometimes", label: "Okay — I try but it is inconsistent" },
+        { value: "trying", label: "I eat healthy but do not focus on fertility specifically" },
+        { value: "no", label: "Poorly — I eat whatever is available" },
       ],
     },
     {
       id: "supplements",
       title: "Are you taking fertility-supporting supplements?",
-      subtitle: "Prenatal vitamins, CoQ10, vitamin D, etc.",
+      subtitle: "Prenatal vitamins, CoQ10, vitamin D and others matter",
       type: "radio",
       field: "supplementation",
       options: [
-        { value: "yes", label: "✅ Yes, I take recommended supplements", points: 10 },
-        { value: "some", label: "⏱️ I take some, but not a full protocol", points: 5 },
-        { value: "no", label: "❌ No, I don't take any", points: 0 },
-        { value: "unsure", label: "🤷 I'm not sure what to take", points: 2 },
+        { value: "yes", label: "Yes, I take a full recommended protocol" },
+        { value: "some", label: "I take some but not a complete protocol" },
+        { value: "unsure", label: "I am not sure what I should be taking" },
+        { value: "no", label: "No, I do not take any" },
       ],
     },
     {
       id: "stress",
-      title: "How would you rate your stress levels?",
-      subtitle: "Chronic stress impacts fertility hormones",
+      title: "How would you describe your stress levels right now?",
+      subtitle: "Chronic stress directly impacts reproductive hormones",
       type: "radio",
       field: "stress",
       options: [
-        { value: "low", label: "✅ Low - I manage stress well", points: 10 },
-        { value: "moderate", label: "⏱️ Moderate - some stress but manageable", points: 5 },
-        { value: "high", label: "❌ High - I'm constantly stressed", points: 0 },
-        { value: "very-high", label: "🚨 Very high - TTC is consuming me", points: 0 },
+        { value: "low", label: "Low — I manage stress well" },
+        { value: "moderate", label: "Moderate — some stress but manageable" },
+        { value: "high", label: "High — I am constantly stressed" },
+        { value: "very-high", label: "Very high — the TTC journey is consuming me" },
       ],
     },
     {
       id: "sleep",
-      title: "Are you getting 7-9 hours of quality sleep?",
+      title: "Are you getting 7 to 9 hours of quality sleep most nights?",
       subtitle: "Sleep is when your body produces reproductive hormones",
       type: "radio",
       field: "sleep",
       options: [
-        { value: "yes", label: "✅ Yes, 7-9 hours most nights", points: 10 },
-        { value: "mostly", label: "⏱️ Mostly, but sometimes less", points: 7 },
-        { value: "no", label: "❌ No, I get 5-6 hours", points: 0 },
-        { value: "poor", label: "😅 I get less than 5 hours", points: 0 },
-      ],
-    },
-    {
-      id: "exercise",
-      title: "Are you doing fertility-safe exercise?",
-      subtitle: "Moderate exercise supports fertility; excessive exercise can suppress it",
-      type: "radio",
-      field: "exercise",
-      options: [
-        { value: "yes", label: "✅ Yes, moderate exercise 3-4x/week", points: 10 },
-        { value: "sometimes", label: "⏱️ Sometimes, but inconsistent", points: 5 },
-        { value: "intense", label: "⚠️ I do intense workouts 5+ days/week", points: 2 },
-        { value: "no", label: "❌ No, I'm sedentary", points: 0 },
-      ],
-    },
-    {
-      id: "alcohol",
-      title: "How much alcohol do you consume?",
-      subtitle: "Alcohol impacts egg quality and hormone balance",
-      type: "radio",
-      field: "alcohol",
-      options: [
-        { value: "none", label: "✅ None or very rarely", points: 10 },
-        { value: "occasional", label: "⏱️ Occasional (1-2 drinks/week)", points: 7 },
-        { value: "regular", label: "⚠️ Regular (3-5 drinks/week)", points: 3 },
-        { value: "daily", label: "❌ Daily or heavy drinking", points: 0 },
-      ],
-    },
-    {
-      id: "smoking",
-      title: "Do you smoke or use nicotine?",
-      subtitle: "Smoking significantly reduces fertility",
-      type: "radio",
-      field: "smoking",
-      options: [
-        { value: "no", label: "✅ No, I don't smoke", points: 10 },
-        { value: "occasional", label: "⏱️ Occasionally", points: 5 },
-        { value: "yes", label: "❌ Yes, I smoke regularly", points: 0 },
-      ],
-    },
-    {
-      id: "workout-routine",
-      title: "Do you have a consistent workout routine?",
-      subtitle: "Consistency supports hormonal balance",
-      type: "radio",
-      field: "workoutRoutine",
-      options: [
-        { value: "yes", label: "✅ Yes, 3-4+ times per week", points: 10 },
-        { value: "sometimes", label: "⏱️ 1-2 times per week", points: 5 },
-        { value: "random", label: "❌ No, I work out randomly", points: 2 },
-        { value: "no", label: "❌ No, I haven't started", points: 0 },
-      ],
-    },
-    {
-      id: "tracking-wellness",
-      title: "Are you tracking your wellness metrics?",
-      subtitle: "Basal body temperature, cervical mucus, etc.",
-      type: "radio",
-      field: "tracking",
-      options: [
-        { value: "yes", label: "✅ Yes, I track multiple metrics", points: 10 },
-        { value: "some", label: "⏱️ I track some metrics", points: 5 },
-        { value: "no", label: "❌ No, I don't track anything", points: 0 },
-      ],
-    },
-    {
-      id: "primary-goal",
-      title: "What's your PRIMARY goal right now?",
-      subtitle: "Let's focus on what matters most to you",
-      type: "radio",
-      field: "primaryGoal",
-      options: [
-        { value: "conceive", label: "Get pregnant as soon as possible" },
-        { value: "optimize", label: "Optimize my fertility health" },
-        { value: "understand", label: "Understand my cycle better" },
-        { value: "support", label: "Get support through the TTC journey" },
-        { value: "prepare", label: "Prepare my body for conception" },
-      ],
-    },
-    {
-      id: "biggest-obstacle",
-      title: "What's the BIGGEST obstacle to your fertility goals?",
-      subtitle: "Knowing your obstacle helps us help you",
-      type: "radio",
-      field: "biggestObstacle",
-      options: [
-        { value: "dont-know", label: "Don't know where to start" },
-        { value: "overwhelmed", label: "Overwhelmed by conflicting advice" },
-        { value: "no-support", label: "No support or accountability" },
-        { value: "irregular", label: "Irregular cycles or PCOS" },
-        { value: "age", label: "Age-related concerns" },
-        { value: "partner", label: "Partner's health/involvement" },
-        { value: "stress", label: "Stress and emotional toll" },
-      ],
-    },
-    {
-      id: "support-type",
-      title: "What type of support would help you MOST?",
-      subtitle: "This helps us recommend the right path",
-      type: "radio",
-      field: "supportType",
-      options: [
-        { value: "education", label: "Education and information" },
-        { value: "community", label: "Community of women TTC" },
-        { value: "coaching", label: "1-on-1 personalized coaching" },
-        { value: "plan", label: "Done-for-you fertility plan" },
-        { value: "accountability", label: "Accountability and tracking" },
-      ],
-    },
-    {
-      id: "dietary",
-      title: "Dietary preferences or restrictions?",
-      subtitle: "We'll personalize nutrition recommendations",
-      type: "radio",
-      field: "dietaryRestrictions",
-      options: [
-        { value: "none", label: "None" },
-        { value: "vegetarian", label: "Vegetarian" },
-        { value: "vegan", label: "Vegan" },
-        { value: "gluten-free", label: "Gluten-free" },
-        { value: "dairy-free", label: "Dairy-free" },
-        { value: "other", label: "Other" },
+        { value: "yes", label: "Yes, 7 to 9 hours most nights" },
+        { value: "mostly", label: "Mostly, but some nights less" },
+        { value: "no", label: "No, I average 5 to 6 hours" },
+        { value: "poor", label: "Less than 5 hours most nights" },
       ],
     },
     {
       id: "name",
-      title: "Almost there! What's your name?",
-      subtitle: "So we can personalize your results",
+      title: "Almost there! What is your first name?",
+      subtitle: "So we can personalize your fertility score",
       type: "text",
       field: "name",
       placeholder: "Enter your first name",
@@ -603,15 +480,43 @@ export default function TTCAssessment() {
     {
       id: "email",
       title: "Where should we send your personalized results?",
-      subtitle: "We'll email your full assessment breakdown",
+      subtitle: "We will email your full fertility assessment breakdown",
       type: "email",
       field: "email",
       placeholder: "your@email.com",
     },
     {
+      id: "primary-goal",
+      title: "What is your primary goal right now?",
+      subtitle: "This helps us personalize your roadmap",
+      type: "radio",
+      field: "primaryGoal",
+      options: [
+        { value: "conceive", label: "Get pregnant as soon as possible" },
+        { value: "optimize", label: "Optimize my overall fertility health" },
+        { value: "understand", label: "Understand my cycle and ovulation better" },
+        { value: "prepare", label: "Prepare my body before trying" },
+        { value: "support", label: "Get support through the emotional toll of TTC" },
+      ],
+    },
+    {
+      id: "biggest-obstacle",
+      title: "What is the biggest thing stopping you right now?",
+      subtitle: "Knowing this helps us support you better",
+      type: "radio",
+      field: "biggestObstacle",
+      options: [
+        { value: "dont-know", label: "I do not know where to start" },
+        { value: "irregular", label: "Irregular cycles or a condition like PCOS" },
+        { value: "stress", label: "Stress and the emotional weight of trying" },
+        { value: "no-support", label: "No support or accountability" },
+        { value: "overwhelmed", label: "Overwhelmed by conflicting advice online" },
+      ],
+    },
+    {
       id: "additional-notes",
       title: "Anything else we should know?",
-      subtitle: "Share any concerns, limitations, or preferences",
+      subtitle: "Share any conditions, concerns, or context that might help",
       type: "textarea",
       field: "additionalNotes",
       placeholder: "E.g., PCOS, endometriosis, irregular cycles, partner concerns...",
@@ -621,45 +526,44 @@ export default function TTCAssessment() {
   const calculateScore = () => {
     let totalScore = 0
 
+    // Q1: TTC duration (always 10 — for context, not scored negatively)
+    totalScore += 10
+
+    // Q2: Cycle tracking
     if (quizState.cycleTracking === "yes-app") totalScore += 10
-    else if (quizState.cycleTracking === "sometimes") totalScore += 5
+    else if (quizState.cycleTracking === "sometimes") totalScore += 6
     else if (quizState.cycleTracking === "irregular") totalScore += 3
+    else totalScore += 0
 
+    // Q3: Ovulation awareness
     if (quizState.ovulationAwareness === "yes") totalScore += 10
-    else if (quizState.ovulationAwareness === "roughly") totalScore += 5
-    else if (quizState.ovulationAwareness === "irregular") totalScore += 2
+    else if (quizState.ovulationAwareness === "roughly") totalScore += 6
+    else if (quizState.ovulationAwareness === "irregular") totalScore += 3
+    else totalScore += 0
 
+    // Q4: Fertility nutrition
     if (quizState.fertilityNutrition === "yes") totalScore += 10
-    else if (quizState.fertilityNutrition === "sometimes") totalScore += 5
+    else if (quizState.fertilityNutrition === "sometimes") totalScore += 6
     else if (quizState.fertilityNutrition === "trying") totalScore += 3
+    else totalScore += 0
 
+    // Q5: Supplements
     if (quizState.supplementation === "yes") totalScore += 10
-    else if (quizState.supplementation === "some") totalScore += 5
+    else if (quizState.supplementation === "some") totalScore += 6
     else if (quizState.supplementation === "unsure") totalScore += 2
+    else totalScore += 0
 
+    // Q6: Stress
     if (quizState.stress === "low") totalScore += 10
-    else if (quizState.stress === "moderate") totalScore += 5
+    else if (quizState.stress === "moderate") totalScore += 6
+    else if (quizState.stress === "high") totalScore += 2
+    else totalScore += 0
 
+    // Q7: Sleep
     if (quizState.sleep === "yes") totalScore += 10
     else if (quizState.sleep === "mostly") totalScore += 7
-
-    if (quizState.exercise === "yes") totalScore += 10
-    else if (quizState.exercise === "sometimes") totalScore += 5
-    else if (quizState.exercise === "intense") totalScore += 2
-
-    if (quizState.alcohol === "none") totalScore += 10
-    else if (quizState.alcohol === "occasional") totalScore += 7
-    else if (quizState.alcohol === "regular") totalScore += 3
-
-    if (quizState.smoking === "no") totalScore += 10
-    else if (quizState.smoking === "occasional") totalScore += 5
-
-    if (quizState.workoutRoutine === "yes") totalScore += 10
-    else if (quizState.workoutRoutine === "sometimes") totalScore += 5
-    else if (quizState.workoutRoutine === "random") totalScore += 2
-
-    if (quizState.tracking === "yes") totalScore += 10
-    else if (quizState.tracking === "some") totalScore += 5
+    else if (quizState.sleep === "no") totalScore += 2
+    else totalScore += 0
 
     return totalScore
   }
