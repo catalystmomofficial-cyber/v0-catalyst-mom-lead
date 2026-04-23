@@ -133,6 +133,11 @@ export default function StageRouter() {
           <p className="text-sm sm:text-base" style={{ color: "#3A2412" }}>
             Free personalized assessment • Get your wellness score & roadmap • No credit card required
           </p>
+          <p className="text-xs mt-4" style={{ color: "#8A7060" }}>
+            <Link href="/privacy-policy" className="underline hover:opacity-70 transition-opacity">
+              Privacy Policy
+            </Link>
+          </p>
         </div>
       </div>
     </div>
