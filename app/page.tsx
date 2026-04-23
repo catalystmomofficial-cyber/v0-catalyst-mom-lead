@@ -51,8 +51,7 @@ export default function StageRouter() {
           </h1>
 
           <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-2" style={{ color: "#3A2412" }}>
-            Take our personalized 3-minute assessment designed specifically for your stage. Get your score, insights,
-            and roadmap to thrive.
+            Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
           </p>
         </div>
 
@@ -133,6 +132,11 @@ export default function StageRouter() {
         <div className="text-center py-8 border-t" style={{ borderTopColor: "#E8D5C4" }}>
           <p className="text-sm sm:text-base" style={{ color: "#3A2412" }}>
             Free personalized assessment • Get your wellness score & roadmap • No credit card required
+          </p>
+          <p className="text-xs mt-4" style={{ color: "#8A7060" }}>
+            <Link href="/privacy-policy" className="underline hover:opacity-70 transition-opacity">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>
