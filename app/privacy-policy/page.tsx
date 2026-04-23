@@ -6,6 +6,38 @@ export const metadata: Metadata = {
   description: "How Catalyst Mom collects, uses, and protects your personal information.",
 }
 
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+  <div className="pb-10" style={{ borderBottom: "1px solid rgba(181,101,29,0.1)" }}>
+    <h2
+      className="text-xl font-bold mb-4 flex items-center gap-3"
+      style={{ color: "#B5651D", fontFamily: "Georgia, serif" }}
+    >
+      {title}
+      <span className="flex-1 h-px" style={{ background: "linear-gradient(to right, rgba(181,101,29,0.3), transparent)" }} />
+    </h2>
+    <div className="space-y-3 text-sm" style={{ color: "#2C2218" }}>
+      {children}
+    </div>
+  </div>
+)
+
+const SubHeading = ({ children }: { children: React.ReactNode }) => (
+  <p className="font-semibold mt-5 mb-2" style={{ color: "#2C2218" }}>
+    {children}
+  </p>
+)
+
+const List = ({ items }: { items: React.ReactNode[] }) => (
+  <ul className="space-y-2 my-3">
+    {items.map((item, i) => (
+      <li key={i} className="flex items-start gap-3 text-sm leading-relaxed" style={{ color: "#2C2218" }}>
+        <span className="font-bold mt-0.5 shrink-0" style={{ color: "#B5651D" }}>—</span>
+        <span>{item}</span>
+      </li>
+    ))}
+  </ul>
+)
+
 export default function PrivacyPolicyPage() {
   return (
     <div style={{ backgroundColor: "#FDF6EE", color: "#2C2218", fontFamily: "sans-serif", lineHeight: 1.8 }}>
@@ -98,12 +130,10 @@ export default function PrivacyPolicyPage() {
         <Section title="3. How We Use Your Information">
           <p>We use your information to:</p>
           <List items={[
-            "Create and manage your account",
-            "Personalise your experience based on your motherhood stage",
-            "Deliver workout programs, meal plans, wellness content, and expert resources",
-            "Process payments and manage subscriptions",
-            "Send you push notifications, reminders, and program updates (with your consent)",
-            "Send transactional and marketing emails (you can unsubscribe at any time)",
+            "Provide, personalise, and improve our Platform",
+            "Create and manage your account, send service updates",
+            "Process payments and verify transactions",
+            "Send you wellness reminders, community alerts, and marketing communications",
             "Improve our Platform through analytics and user feedback",
             "Respond to your questions and support requests",
             "Comply with legal obligations",
@@ -232,43 +262,5 @@ export default function PrivacyPolicyPage() {
       </footer>
 
     </div>
-  )
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="pb-10" style={{ borderBottom: "1px solid rgba(181,101,29,0.1)" }}>
-      <h2
-        className="text-xl font-bold mb-4 flex items-center gap-3"
-        style={{ color: "#B5651D", fontFamily: "Georgia, serif" }}
-      >
-        {title}
-        <span className="flex-1 h-px" style={{ background: "linear-gradient(to right, rgba(181,101,29,0.3), transparent)" }} />
-      </h2>
-      <div className="space-y-3 text-sm" style={{ color: "#2C2218" }}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function SubHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="font-semibold mt-5 mb-2" style={{ color: "#2C2218" }}>
-      {children}
-    </p>
-  )
-}
-
-function List({ items }: { items: React.ReactNode[] }) {
-  return (
-    <ul className="space-y-2 my-3">
-      {items.map((item, i) => (
-        <li key={i} className="flex items-start gap-3 text-sm leading-relaxed" style={{ color: "#2C2218" }}>
-          <span className="font-bold mt-0.5 shrink-0" style={{ color: "#B5651D" }}>—</span>
-          <span>{item}</span>
-        </li>
-      ))}
-    </ul>
   )
 }
