@@ -996,26 +996,10 @@ export default function PostpartumAssessment() {
     },
     {
       id: "unlock-results",
-      title: "Your personalised Maternal Wellness Score is ready",
-      subtitle: "Where should we send your recovery roadmap?",
-      type: "section-header",
-      field: null,
-    },
-    {
-      id: "name",
-      title: "What's your first name?",
-      subtitle: "So we can personalize your results",
-      type: "text",
+      title: "Your Maternal Wellness Score is ready",
+      subtitle: "Enter your details below to unlock your personalised recovery roadmap",
+      type: "unlock",
       field: "name",
-      placeholder: "Enter your first name",
-    },
-    {
-      id: "email",
-      title: "Where should we send your recovery roadmap?",
-      subtitle: "We'll email your full assessment breakdown",
-      type: "email",
-      field: "email",
-      placeholder: "your@email.com",
     },
     {
       id: "primary-goal",
@@ -1222,6 +1206,15 @@ export default function PostpartumAssessment() {
 
   const isCurrentQuestionValid = () => {
     const question = questions[currentQuestion]
+
+    if (question.type === "unlock") {
+      return (
+        quizState.name.trim() !== "" &&
+        quizState.email.trim() !== "" &&
+        isValidEmail(quizState.email)
+      )
+    }
+
     const value = quizState[question.field as keyof QuizState]
 
     if (question.type === "text" || question.type === "email") {
@@ -1517,6 +1510,42 @@ export default function PostpartumAssessment() {
           </CardHeader>
 
           <CardContent className="p-8">
+            {question.type === "unlock" && (
+              <div className="space-y-5">
+                <div className="text-center p-4 rounded-lg mb-2" style={{ backgroundColor: "#FFF8E1" }}>
+                  <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
+                    Your personalised recovery roadmap is waiting. Enter your details below and we will send it straight to your inbox.
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2" style={{ color: "#3A2412" }}>
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      value={quizState.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      placeholder="Enter your first name"
+                      className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2" style={{ color: "#3A2412" }}>
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={quizState.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      placeholder="your@email.com"
+                      className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {question.type === "text" && (
               <input
                 type="text"

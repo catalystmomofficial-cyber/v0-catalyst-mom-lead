@@ -431,19 +431,6 @@ export default function TTCAssessment() {
       ],
     },
     {
-      id: "supplements",
-      title: "Are you taking fertility-supporting supplements?",
-      subtitle: "Prenatal vitamins, CoQ10, vitamin D and others matter",
-      type: "radio",
-      field: "supplementation",
-      options: [
-        { value: "yes", label: "Yes, I take a full recommended protocol" },
-        { value: "some", label: "I take some but not a complete protocol" },
-        { value: "unsure", label: "I am not sure what I should be taking" },
-        { value: "no", label: "No, I do not take any" },
-      ],
-    },
-    {
       id: "stress",
       title: "How would you describe your stress levels right now?",
       subtitle: "Chronic stress directly impacts reproductive hormones",
@@ -547,13 +534,7 @@ export default function TTCAssessment() {
     else if (quizState.fertilityNutrition === "trying") totalScore += 3
     else totalScore += 0
 
-    // Q5: Supplements
-    if (quizState.supplementation === "yes") totalScore += 10
-    else if (quizState.supplementation === "some") totalScore += 6
-    else if (quizState.supplementation === "unsure") totalScore += 2
-    else totalScore += 0
-
-    // Q6: Stress
+    // Q5: Stress
     if (quizState.stress === "low") totalScore += 10
     else if (quizState.stress === "moderate") totalScore += 6
     else if (quizState.stress === "high") totalScore += 2
