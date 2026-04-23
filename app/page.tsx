@@ -47,7 +47,7 @@ export default function StageRouter() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4" style={{ color: "#A15C2F" }}>
-            Where Are You in Your Motherhood Journey?
+            Your body has been through something extraordinary. Find out where your recovery really stands.
           </h1>
 
           <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-2" style={{ color: "#3A2412" }}>
@@ -87,43 +87,43 @@ export default function StageRouter() {
         {/* Social Proof */}
         <div className="text-center mb-12 sm:mb-16">
           <p className="text-lg sm:text-xl font-semibold mb-8" style={{ color: "#A15C2F" }}>
-            Join 2,847+ moms who've transformed their wellness journey
+            After supporting over 2,000 mamas with our digital guides, we built the Catalyst Mom App to take your recovery even deeper.
           </p>
 
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
               <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                "This app gave me energy back during pregnancy - worth every penny!"
+                &ldquo;I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this.&rdquo;
               </p>
               <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                - Sarah, mom of 2
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
               <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                "Finally found workouts that work with my postpartum body. Game changer!"
+                &ldquo;I had been trying for 8 months and felt completely lost. I didn&apos;t even know my cycle properly — I was just guessing. This program helped me understand what my body was actually doing. Two months in, I finally felt like I had a real plan and not just hope.&rdquo;
               </p>
               <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                - Maria, new mom
+                — TTC Mama · Catalyst Mom Community
               </p>
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
               <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                "The TTC-safe workouts helped me stay healthy while trying to conceive."
+                &ldquo;I was terrified of tearing again after my first birth. I started the birth ball protocol in my third trimester and did the breathing exercises every single day. When labour hit I actually felt prepared. My midwife was shocked at how in control I was — and I didn&apos;t tear at all this time.&rdquo;
               </p>
               <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                - Jessica, expecting mom
+                — Pregnancy Mama · Catalyst Mom Community
               </p>
             </div>
 
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
               <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                "Love the meal plans that actually fit my dietary restrictions!"
+                &ldquo;My second VBAC was completely different. After doing the low-impact exercises throughout my pregnancy, when labour finally kicked in I felt in control the whole way through. I pushed my baby out in 10 minutes. My first VBAC took over an hour of pushing. This program changed everything.&rdquo;
               </p>
               <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                - Amanda, mom of 3
+                — VBAC Mama · Catalyst Mom Community
               </p>
             </div>
           </div>
