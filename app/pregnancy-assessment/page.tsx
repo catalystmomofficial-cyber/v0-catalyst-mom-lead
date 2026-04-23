@@ -130,19 +130,6 @@ export default function PregnancyAssessment() {
       ],
     },
     {
-      id: "supplements",
-      title: "Are you taking prenatal vitamins and supplements?",
-      subtitle: "Prenatal vitamins, iron, calcium and DHA all matter",
-      type: "radio",
-      field: "supplementation",
-      options: [
-        { value: "yes", label: "Yes, I take a full prenatal protocol" },
-        { value: "some", label: "I take some but not a complete protocol" },
-        { value: "unsure", label: "I am not sure what I should be taking" },
-        { value: "no", label: "No, I do not take any" },
-      ],
-    },
-    {
       id: "pelvic-floor",
       title: "Are you doing pelvic floor exercises during pregnancy?",
       subtitle: "These prepare you for labor and prevent postpartum issues",
@@ -245,13 +232,7 @@ export default function PregnancyAssessment() {
     else if (quizState.nutrition === "trying") totalScore += 3
     else totalScore += 0
 
-    // Q5: Supplements
-    if (quizState.supplementation === "yes") totalScore += 10
-    else if (quizState.supplementation === "some") totalScore += 6
-    else if (quizState.supplementation === "unsure") totalScore += 2
-    else totalScore += 0
-
-    // Q6: Pelvic floor
+    // Q5: Pelvic floor
     if (quizState.pelvicFloor === "yes") totalScore += 10
     else if (quizState.pelvicFloor === "sometimes") totalScore += 6
     else if (quizState.pelvicFloor === "dont-know") totalScore += 2
