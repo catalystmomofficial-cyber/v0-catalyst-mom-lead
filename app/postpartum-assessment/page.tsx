@@ -1480,12 +1480,12 @@ export default function PostpartumAssessment() {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: "#A15C2F" }}>
-                  <Heart className="h-5 w-5 text-white" />
-                </div>
-                <span className="font-bold" style={{ color: "#A15C2F" }}>
-                  Catalyst Mom
-                </span>
+              <div>
+                <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-8 w-8" />
+              </div>
+              <span className="font-bold" style={{ color: "#A15C2F" }}>
+                Catalyst Mom
+              </span>
               </div>
               <Badge style={{ backgroundColor: "#A15C2F", color: "white" }}>
                 {currentQuestion + 1} of {questions.length}

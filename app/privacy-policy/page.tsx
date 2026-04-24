@@ -55,7 +55,7 @@ const privacyHtml = `
 
 <div class="pm">
   <header>
-    <a href="/" class="logo">Catalyst Mom</a>
+    <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" style="height: 32px; width: auto;" />
     <a href="/" class="back-btn">Back to Assessment</a>
   </header>
 
