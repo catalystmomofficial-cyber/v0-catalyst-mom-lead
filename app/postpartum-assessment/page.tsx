@@ -850,6 +850,7 @@ The good news? Every single one of these gaps is closable.
 ✅ Progress tracking (see improvement weekly)
 ✅ Community support (you're not alone)
 ✅ 1-on-1 Human Check-ins — Bi-weekly expert progress reviews.
+✅ 24/7 Catalyst AI Expert — Instant answers to any wellness question.
 
 Most moms at your score feel stuck. But here's the truth: Small, strategic changes create BIG results.
 
