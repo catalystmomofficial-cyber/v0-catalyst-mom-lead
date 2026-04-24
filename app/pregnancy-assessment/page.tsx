@@ -1560,7 +1560,11 @@ ${
                         </p>
                         <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                           <span className="text-green-600 flex-shrink-0">✅</span>
-                          <span>Expert guidance and community support</span>
+                          <span>1-on-1 Human Check-ins — Bi-weekly expert progress reviews.</span>
+                        </p>
+                        <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                          <span className="text-green-600 flex-shrink-0">✅</span>
+                          <span>24/7 Catalyst AI Expert — Instant answers to any wellness question.</span>
                         </p>
                         <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                           <span className="text-green-600 flex-shrink-0">✅</span>

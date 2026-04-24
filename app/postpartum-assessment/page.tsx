@@ -849,7 +849,7 @@ The good news? Every single one of these gaps is closable.
 ✅ Daily guidance (no more guessing)
 ✅ Progress tracking (see improvement weekly)
 ✅ Community support (you're not alone)
-✅ Expert coaching (when you need it)
+✅ 1-on-1 Human Check-ins — Bi-weekly expert progress reviews.
 
 Most moms at your score feel stuck. But here's the truth: Small, strategic changes create BIG results.
 

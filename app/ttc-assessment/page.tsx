@@ -149,7 +149,7 @@ High stress → High cortisol → Suppressed ovulation → Delayed conception. S
 **What the App Does:**
 ✅ Daily stress management protocols (breathwork, meditation, fertility yoga)
 ✅ Community support (you're not alone in this)
-✅ Mindset coaching to shift from anxiety to empowerment
+✅ 1-on-1 Human Check-ins — Bi-weekly expert progress reviews.
 ✅ Tracking tools to reduce the mental load
 ✅ Evidence-based protocols so you KNOW you're doing the right things
 
@@ -210,7 +210,7 @@ You don't need to do EVERYTHING. You need to do the RIGHT things in the RIGHT or
 ✅ Step-by-step protocols (no guessing, no overwhelm)
 ✅ Prioritized action plans (what to do first, second, third)
 ✅ All the tools in one place (tracking, nutrition, workouts, supplements)
-✅ Weekly coaching calls to answer questions
+✅ 24/7 Catalyst AI Expert — Instant answers to any wellness question.
 ✅ Community support from women who've been where you are
 
 **Timeline:** You'll feel less overwhelmed within 1 week. You'll see measurable improvements in 4-6 weeks.`,
