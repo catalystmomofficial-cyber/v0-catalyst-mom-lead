@@ -37,13 +37,8 @@ export default function StageRouter() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="p-3 rounded-xl shadow-lg" style={{ backgroundColor: "#A15C2F" }}>
-              <Heart className="h-7 w-7 sm:h-8 sm:w-8 text-white" />
-            </div>
-            <span className="text-3xl sm:text-4xl font-bold" style={{ color: "#A15C2F" }}>
-              Catalyst Mom
-            </span>
+          <div className="flex items-center justify-center mb-6">
+            <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-16 w-16 sm:h-20 sm:w-20" />
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4" style={{ color: "#A15C2F" }}>
