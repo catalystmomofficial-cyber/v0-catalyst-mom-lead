@@ -2042,7 +2042,7 @@ function HighScorerContent({
                 recovery was an absolute DREAM - back in my jeans 6 weeks postpartum. Best investment I made."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Emily R., VIP Client, Mom of 2
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
             <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
@@ -2052,7 +2052,7 @@ function HighScorerContent({
                 level."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Jessica L., VIP Client, Mom of 1
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
           </div>
@@ -2157,8 +2157,8 @@ function MediumScorerContent({
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
                     <p>You're doing some Kegels, but not a complete strengthening protocol. Here's why this matters:</p>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>85% of severe tearing happens with weak pelvic floor</li>
-                      <li>Proper training reduces tearing risk by 85%</li>
+                      <li>A weak pelvic floor isn't just about leaking—it's about a core that can't support your life. We rebuild that foundation.</li>
+                      <li>Your score reveals a Critical Gap in your recovery foundations. Without the right protocol, you are settling for a "new normal" of leaking and instability.</li>
                       <li>Also prevents prolapse, incontinence, painful sex postpartum</li>
                       <li>Supports core healing and overall recovery</li>
                     </ul>
@@ -2270,7 +2270,7 @@ function MediumScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>12-Week Pelvic Floor Protocol</strong> - Reduces tearing risk by 85%, prevents prolapse
+                  <strong>12-Week Pelvic Floor Protocol</strong> - Rebuild your foundation so you can laugh, sneeze, and move without leaking
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -2288,7 +2288,7 @@ function MediumScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Weekly Group Coaching Calls</strong> - Ask questions, get expert guidance, troubleshoot
+                  <strong>1-on-1 Human Check-ins — Bi-weekly expert progress reviews + 24/7 Catalyst AI Support</strong> - Access expert guidance whenever you need it
                   challenges
                 </span>
               </p>
@@ -2641,7 +2641,7 @@ function LowScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Weekly Coaching Calls</strong> - Get your questions answered by experts
+                  <strong>1-on-1 Human Check-ins — Bi-weekly expert progress reviews + 24/7 Catalyst AI Support</strong> - Your coach checks in bi-weekly to ensure you stay on track. AI support available whenever you need answers.
                 </span>
               </p>
             </div>
