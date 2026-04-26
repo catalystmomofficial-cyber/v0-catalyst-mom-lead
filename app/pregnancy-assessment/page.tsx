@@ -1816,7 +1816,7 @@ ${
                   Join Now - $29/month
                 </Button>
                 <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Start seeing results in 7 days • Cancel anytime • No contracts
+                  Feel more connected to your core in just 7 days • Cancel anytime • No contracts
                 </p>
               </div>
             </CardContent>

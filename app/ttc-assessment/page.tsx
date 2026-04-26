@@ -1415,7 +1415,7 @@ function TTCResultsPage({
                 Join the Catalyst Mom App Now - $29/month
               </Button>
               <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Start seeing results in 7 days. Cancel anytime. No contracts.
+                Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
               </p>
             </div>
           </CardContent>
@@ -1553,7 +1553,7 @@ function TTCResultsPage({
               <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
                 Questions?
               </p>
-              <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+              <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
             </div>
           </CardContent>
         </Card>

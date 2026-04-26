@@ -136,10 +136,19 @@ function PersonalizedConcernSection({
                 </p>
               </div>
 
-              <div>
-                <p className="font-bold text-lg mb-3" style={{ color: "#A15C2F" }}>
-                  What the App Does:
-                </p>
+                  <div>
+                    <p className="font-bold text-lg mb-3" style={{ color: "#A15C2F" }}>
+                      What's Included:
+                    </p>
+                    <div className="space-y-2">
+                      <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                        <span className="text-green-600 flex-shrink-0">✅</span>
+                        <span>1-on-1 Human Check-ins — Bi-weekly expert progress reviews</span>
+                      </p>
+                      <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                        <span className="text-green-600 flex-shrink-0">✅</span>
+                        <span>24/7 Catalyst AI Expert — Instant answers to any wellness question</span>
+                      </p>
                 <div className="space-y-2">
                   <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                     <span className="text-green-600 flex-shrink-0">✅</span>
@@ -2309,7 +2318,7 @@ function MediumScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
               </p>
             </div>
           </div>
@@ -2326,7 +2335,7 @@ function MediumScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2335,7 +2344,7 @@ function MediumScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2362,7 +2371,7 @@ function MediumScorerContent({
               Join the Catalyst Mom App Now - $29/month
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Start seeing results in 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
 
@@ -2513,9 +2522,9 @@ function LowScorerContent({
                     <p>What happens without proper training:</p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Incontinence (leaking when you laugh, sneeze, jump)</li>
-                      <li>Prolapse (organs dropping into vaginal canal)</li>
-                      <li>Painful sex for months/years</li>
-                      <li>Core weakness that never fully recovers</li>
+                      <li>Pelvic heaviness and instability that should not be ignored</li>
+                      <li>Discomfort and tension many mamas are told is just part of recovery — it is not</li>
+                      <li>Core instability that affects everything from posture to daily energy</li>
                     </ul>
                     <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
                       Inside the app: 12-week pelvic floor protocol (5 min/day), proper Kegel technique, progress
@@ -2627,7 +2636,7 @@ function LowScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Community Support</strong> - 1,000+ moms who understand what you're going through
+                  <strong>Community Support</strong> - 2,000+ mamas supported who understand what you're going through
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -2643,7 +2652,7 @@ function LowScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
               </p>
             </div>
           </div>
@@ -2660,7 +2669,7 @@ function LowScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2669,7 +2678,7 @@ function LowScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2696,7 +2705,7 @@ function LowScorerContent({
               Join the Catalyst Mom App Now - $29/month
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Start seeing results in 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
 
