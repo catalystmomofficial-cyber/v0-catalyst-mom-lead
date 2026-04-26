@@ -2100,12 +2100,11 @@ function MediumScorerContent({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            {quizState.name}, you're doing a lot right! You're ahead of 60% of postpartum moms.
-          </p>
           <p className="text-lg leading-relaxed font-semibold" style={{ color: "#A15C2F" }}>
-            But you have <strong>3 key gaps</strong> that are holding you back from breakthrough results - and based on
-            what you shared, these gaps are DIRECTLY causing your concerns.
+            {quizState.name}, your score reveals a Critical Gap in your recovery. This is why you aren't feeling like yourself yet.
+          </p>
+          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+            You're doing some things right, but you have <strong>3 key gaps</strong> that are holding you back from breakthrough results — and based on what you shared, these gaps are DIRECTLY causing your concerns.
           </p>
 
           <div className="space-y-4 mt-6">
@@ -2318,7 +2317,7 @@ function MediumScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+                Expert-led recovery for less than the cost of a single physical therapy co-pay. Cancel anytime. No contracts.
               </p>
             </div>
           </div>
@@ -2413,11 +2412,11 @@ function LowScorerContent({
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            {quizState.name}, you're experiencing some common challenges that are keeping you from feeling your best.
-          </p>
           <p className="text-lg leading-relaxed font-semibold" style={{ color: "#A15C2F" }}>
-            But here's the good news: Small, strategic changes can make a HUGE difference in how you feel.
+            {quizState.name}, your score reveals a Critical Gap in your recovery. This is why you aren't feeling like yourself yet.
+          </p>
+          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+            But here's the truth: Your body is READY to heal. It's just missing the right protocols. Small, strategic changes can make a MASSIVE difference in how you feel — and fast.
           </p>
 
           {/* Critical Safety Issues */}
@@ -2522,9 +2521,9 @@ function LowScorerContent({
                     <p>What happens without proper training:</p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Incontinence (leaking when you laugh, sneeze, jump)</li>
-                      <li>Pelvic heaviness and instability that should not be ignored</li>
-                      <li>Discomfort and tension many mamas are told is just part of recovery — it is not</li>
-                      <li>Core instability that affects everything from posture to daily energy</li>
+                      <li>That "falling out" feeling, pelvic heaviness, or the leaking when you sneeze/laugh that you've been told is "normal." It is NOT normal, and you don't have to live with it.</li>
+                      <li>Pain or tension during intimacy that ruins your confidence. We address the root cause of pelvic tension so you can feel like yourself again.</li>
+                      <li>The "Mummy Tummy" or core gap (Diastasis Recti) that makes you look 4 months pregnant when you aren't. We don't just "work out"—we close the gap and restore your stomach's strength.</li>
                     </ul>
                     <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
                       Inside the app: 12-week pelvic floor protocol (5 min/day), proper Kegel technique, progress
@@ -2652,7 +2651,7 @@ function LowScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+                Expert-led recovery for less than the cost of a single physical therapy co-pay. Cancel anytime. No contracts.
               </p>
             </div>
           </div>
