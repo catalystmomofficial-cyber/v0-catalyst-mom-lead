@@ -1265,31 +1265,31 @@ ${
     if (tier === "high") {
       return [
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Jessica M.",
           score: "Score: 78/120",
           quote:
             "I was already doing most things right, but the app helped me optimize the last 20%. I had the smoothest labor and easiest postpartum recovery of all my friends.",
           result: "Optimized pregnancy, 6-hour labor, back to pre-pregnancy weight in 8 weeks",
         },
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Amanda K.",
           score: "Score: 82/120",
           quote:
-            "The expert guidance and birth protocols helped me prepare mentally and physically for labor. I felt so confident and in control during delivery.",
+            "The VIP coaching helped me prepare mentally and physically for labor. I felt so confident and in control during delivery.",
           result: "Unmedicated birth, no tearing, felt amazing postpartum",
         },
       ]
     } else if (tier === "medium") {
       return [
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Rachel T.",
           score: "Score: 55/120",
           quote:
             "I was doing some things right but had major gaps. The app gave me a clear plan to follow. My energy improved within a week and I felt so much better the rest of my pregnancy.",
           result: "Avoided gestational diabetes, gained healthy weight, smooth delivery",
         },
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Lauren S.",
           score: "Score: 62/120",
           quote:
             "I didn't know what was safe during pregnancy and was too scared to exercise. The app showed me exactly what to do. I stayed active my entire pregnancy and recovered so fast postpartum.",
@@ -1299,14 +1299,14 @@ ${
     } else {
       return [
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Emily R.",
           score: "Score: 28/120",
           quote:
             "I was struggling with severe nausea and had no idea what to eat or how to exercise. The app's protocols helped me manage my symptoms and I actually started feeling good during pregnancy.",
           result: "Nausea reduced 70%, gained healthy weight, prepared for labor",
         },
         {
-          name: "Pregnancy Mama · Catalyst Mom Community",
+          name: "Sarah J.",
           score: "Score: 35/120",
           quote:
             "I was overwhelmed and didn't know where to start. The app gave me a step-by-step plan. I went from barely functioning to feeling strong and confident.",
@@ -1673,7 +1673,7 @@ ${
 
               <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
                 <h3 className="text-2xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-                  Personalized Pregnancy Optimization Program
+                  VIP Pregnancy Optimization Program
                 </h3>
                 <p className="text-lg mb-6" style={{ color: "#3A2412" }}>
                   For high-performing women who want exclusive 1-on-1 coaching to optimize every aspect of pregnancy,
@@ -1696,7 +1696,7 @@ ${
                     window.open(appUrl.toString(), "_blank")
                   }}
                 >
-                  Get Your Personalized Pregnancy Roadmap
+                  Book Your VIP Strategy Call
                 </Button>
                 <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
                   Limited to 10 clients per month • Investment: $197/month
@@ -1816,7 +1816,7 @@ ${
                   Join Now - $29/month
                 </Button>
                 <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Feel more connected to your core in just 7 days • Cancel anytime • No contracts
+                  Start seeing results in 7 days • Cancel anytime • No contracts
                 </p>
               </div>
             </CardContent>
