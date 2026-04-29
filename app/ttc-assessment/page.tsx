@@ -959,7 +959,7 @@ function TTCResultsPage({
 
   const getAppRegistrationUrl = () => {
     const assessmentId = sessionStorage.getItem("ttc_assessment_id")
-    const appUrl = new URL("https://catalystmomofficial.com/signup")
+    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
     appUrl.searchParams.set("name", quizState.name)
     appUrl.searchParams.set("email", quizState.email)
 

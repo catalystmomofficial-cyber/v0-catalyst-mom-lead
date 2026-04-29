@@ -1684,7 +1684,7 @@ ${
                   className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                   onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/register")
+                    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                     appUrl.searchParams.set("email", quizState.email)
                     appUrl.searchParams.set("name", quizState.name)
                     appUrl.searchParams.set("score", score.toString())
@@ -1801,7 +1801,7 @@ ${
                   className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                   onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/signup")
+                    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                     appUrl.searchParams.set("name", quizState.name)
                     appUrl.searchParams.set("email", quizState.email)
                     appUrl.searchParams.set("score", score.toString())

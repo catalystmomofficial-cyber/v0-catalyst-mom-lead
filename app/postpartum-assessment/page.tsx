@@ -1367,7 +1367,7 @@ export default function PostpartumAssessment() {
                 <div class="cta">
                   <h2>Ready to Transform Your Wellness Journey?</h2>
                   <p>This free guide is just the beginning. Get personalized coaching, community support, and expert-designed programs.</p>
-                  <button onclick="window.location.href='https://catalystmom.online'">Join Catalyst Mom Today</button>
+                  <button onclick="window.location.href='https://catalystmomofficial.com/dashboard'">Join Catalyst Mom Today</button>
                 </div>
                 
                 <script>
@@ -2304,12 +2304,43 @@ function MediumScorerContent({
               </div>
             )}
 
+            {/* C-section Safety Disclaimer */}
+            {(quizState.additionalNotes.toLowerCase().includes("c-section") ||
+              quizState.additionalNotes.toLowerCase().includes("section") ||
+              quizState.additionalNotes.toLowerCase().includes("surgery") ||
+              quizState.additionalNotes.toLowerCase().includes("cesarean")) && (
+              <div className="mt-6 p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
+                <p className="font-semibold mb-2" style={{ color: "#B91C1C" }}>
+                  Important C-Section Recovery Note
+                </p>
+                <p style={{ color: "#3A2412" }}>
+                  We see you had a C-section. Your incision site needs extra care during recovery. Our protocols include specific C-section modifications to protect your healing incision while still making progress. Always consult with your healthcare provider before starting any exercise program, especially if you&apos;re still in the early healing phase (under 6-8 weeks post-surgery).
+                </p>
+              </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                <p className="font-semibold mb-2" style={{ color: "#166534" }}>
+                  Perfect for Busy Mamas
+                </p>
+                <p style={{ color: "#3A2412" }}>
+                  We get it - time is your biggest challenge. That&apos;s why our protocol requires only <strong>15 minutes per day</strong>. No hour-long gym sessions. Just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
               <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                 Less than one physical therapy session. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
               </p>
             </div>
           </div>
@@ -2348,7 +2379,7 @@ function MediumScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
@@ -2359,7 +2390,9 @@ function MediumScorerContent({
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              Join the Catalyst Mom App Now - $29/month
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Start seeing results in 7 days. Cancel anytime. No contracts.
@@ -2638,12 +2671,43 @@ function LowScorerContent({
               </p>
             </div>
 
+            {/* C-section Safety Disclaimer */}
+            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+              quizState.additionalNotes?.toLowerCase().includes("section") ||
+              quizState.additionalNotes?.toLowerCase().includes("surgery") ||
+              quizState.additionalNotes?.toLowerCase().includes("cesarean")) && (
+              <div className="mt-6 p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
+                <p className="font-semibold mb-2" style={{ color: "#B91C1C" }}>
+                  Important C-Section Recovery Note
+                </p>
+                <p style={{ color: "#3A2412" }}>
+                  We see you had a C-section. Your incision site needs extra care during recovery. Our protocols include specific C-section modifications to protect your healing incision while still making progress. Always consult with your healthcare provider before starting any exercise program, especially if you&apos;re still in the early healing phase (under 6-8 weeks post-surgery).
+                </p>
+              </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                <p className="font-semibold mb-2" style={{ color: "#166534" }}>
+                  Perfect for Busy Mamas
+                </p>
+                <p style={{ color: "#3A2412" }}>
+                  We get it - time is your biggest challenge. That&apos;s why our protocol requires only <strong>15 minutes per day</strong>. No hour-long gym sessions. Just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
               <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                 Less than one physical therapy session. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
               </p>
             </div>
           </div>
@@ -2682,7 +2746,7 @@ function LowScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
@@ -2693,7 +2757,9 @@ function LowScorerContent({
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              Join the Catalyst Mom App Now - $29/month
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Start seeing results in 7 days. Cancel anytime. No contracts.

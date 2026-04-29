@@ -140,7 +140,7 @@ function TTCResults({ score, tier, quizState }: { score: number; tier: string; q
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
                 style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                 onClick={() =>
-                  window.open(`https://catalystmomofficial.com/register?assessment_id=${quizState.id}`, "_blank")
+                  window.open(`https://catalystmomofficial.com/dashboard?assessment_id=${quizState.id}`, "_blank")
                 }
               >
                 Access Your Full Plan in the App
@@ -197,7 +197,7 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
                 style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                 onClick={() =>
-                  window.open(`https://catalystmomofficial.com/register?assessment_id=${quizState.id}`, "_blank")
+                  window.open(`https://catalystmomofficial.com/dashboard?assessment_id=${quizState.id}`, "_blank")
                 }
               >
                 Access Your Full Plan in the App
@@ -254,7 +254,7 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
                 style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                 onClick={() =>
-                  window.open(`https://catalystmomofficial.com/register?assessment_id=${quizState.id}`, "_blank")
+                  window.open(`https://catalystmomofficial.com/dashboard?assessment_id=${quizState.id}`, "_blank")
                 }
               >
                 Access Your Full Plan in the App
