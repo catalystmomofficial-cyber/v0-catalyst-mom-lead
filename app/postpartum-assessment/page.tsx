@@ -2033,7 +2033,7 @@ function HighScorerContent({
                 recovery was an absolute DREAM - back in my jeans 6 weeks postpartum. Best investment I made."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Emily R., VIP Client, Mom of 2
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
             <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
@@ -2043,7 +2043,7 @@ function HighScorerContent({
                 level."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Jessica L., VIP Client, Mom of 1
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
           </div>
@@ -2274,7 +2274,7 @@ function MediumScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Community of 1,000+ Postpartum Moms</strong> - Support, shared experiences, accountability
+                  <strong>Community of 2,000+ mamas supported</strong> - Support, shared experiences, accountability
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -2357,7 +2357,7 @@ function MediumScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2366,7 +2366,7 @@ function MediumScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2404,7 +2404,7 @@ function MediumScorerContent({
             <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
               Questions?
             </h3>
-            <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
           </div>
         </CardContent>
       </Card>
@@ -2660,7 +2660,7 @@ function LowScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Community Support</strong> - 1,000+ moms who understand what you're going through
+                  <strong>Community Support</strong> - 2,000+ mamas who understand what you're going through
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -2724,7 +2724,7 @@ function LowScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2733,7 +2733,7 @@ function LowScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2771,7 +2771,7 @@ function LowScorerContent({
             <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
               Questions?
             </h3>
-            <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
           </div>
         </CardContent>
       </Card>
