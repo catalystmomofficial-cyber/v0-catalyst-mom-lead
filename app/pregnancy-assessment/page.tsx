@@ -1265,7 +1265,7 @@ ${
     if (tier === "high") {
       return [
         {
-          name: "Jessica M.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 78/120",
           quote:
             "I was already doing most things right, but the app helped me optimize the last 20%. I had the smoothest labor and easiest postpartum recovery of all my friends.",
@@ -1299,14 +1299,14 @@ ${
     } else {
       return [
         {
-          name: "Emily R.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 28/120",
           quote:
             "I was struggling with severe nausea and had no idea what to eat or how to exercise. The app's protocols helped me manage my symptoms and I actually started feeling good during pregnancy.",
           result: "Nausea reduced 70%, gained healthy weight, prepared for labor",
         },
         {
-          name: "Sarah J.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 35/120",
           quote:
             "I was overwhelmed and didn't know where to start. The app gave me a step-by-step plan. I went from barely functioning to feeling strong and confident.",

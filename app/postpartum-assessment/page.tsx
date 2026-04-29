@@ -2337,7 +2337,7 @@ function MediumScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
               </p>
               <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
                 Protocol requires only 15 mins/day
@@ -2541,12 +2541,12 @@ function LowScorerContent({
                 {gap.practice.includes("Pelvic Floor") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
                     <p className="font-semibold">
-                      Without pelvic floor training, you're at 85% higher risk for complications.
+                      Without pelvic floor training, your foundations stay weak — and that is fixable with the right protocol.
                     </p>
                     <p>What happens without proper training:</p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Incontinence (leaking when you laugh, sneeze, jump)</li>
-                      <li>Prolapse (organs dropping into vaginal canal)</li>
+                      <li>Pelvic heaviness and that falling-out feeling that makes you afraid to jump, run, or sneeze</li>
                       <li>Painful sex for months/years</li>
                       <li>Core weakness that never fully recovers</li>
                     </ul>
@@ -2666,7 +2666,13 @@ function LowScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Weekly Coaching Calls</strong> - Get your questions answered by experts
+                  <strong>1-on-1 Human Check-ins — Bi-weekly expert progress reviews</strong>
+                </span>
+              </p>
+              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                <span>
+                  <strong>24/7 Catalyst AI Expert — Instant answers to any wellness question</strong>
                 </span>
               </p>
             </div>
@@ -2704,7 +2710,7 @@ function LowScorerContent({
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
               </p>
               <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
                 Protocol requires only 15 mins/day

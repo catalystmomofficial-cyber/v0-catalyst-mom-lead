@@ -1512,7 +1512,7 @@ function TTCResultsPage({
                     that made a BIG difference. Pregnant on my 2nd cycle after joining."
                   </p>
                   <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                    — Sarah K., TTC for 3 months → Pregnant in 8 weeks
+                    — TTC Mama · Catalyst Mom Community
                   </p>
                 </div>
                 <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
@@ -1521,7 +1521,7 @@ function TTCResultsPage({
                     window perfectly. The app helped me nail the timing. Pregnant immediately."
                   </p>
                   <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                    — Jessica M., TTC for 2 months → Pregnant in 4 weeks
+                    — TTC Mama · Catalyst Mom Community
                   </p>
                 </div>
               </>
@@ -1553,7 +1553,7 @@ function TTCResultsPage({
               <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>
                 Questions?
               </p>
-              <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+              <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
             </div>
           </CardContent>
         </Card>
