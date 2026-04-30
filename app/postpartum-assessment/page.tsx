@@ -2105,7 +2105,6 @@ function HighScorerContent({
             </p>
           </div>
       </div>
-    </div>
   )
 }
 
