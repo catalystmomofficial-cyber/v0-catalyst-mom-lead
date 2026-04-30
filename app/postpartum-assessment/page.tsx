@@ -2093,16 +2093,16 @@ function HighScorerContent({
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
-                ? "Start My Gentle Healing Protocol"
-                : "Join the Catalyst Mom App Now"}
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Protocol requires only 15 mins/day. Cancel anytime.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </>
   )
 }
@@ -2393,8 +2393,7 @@ function MediumScorerContent({
             <div className="space-y-4">
               <div className="p-4 bg-white rounded-lg">
                 <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I scored 32/100 and felt hopeless. After 12 weeks in the app, I hit 78. My energy is back, my core is
-                  healing, and I finally feel like myself again."
+                  "I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
                   — Postpartum Mama · Catalyst Mom Community
@@ -2402,8 +2401,7 @@ function MediumScorerContent({
               </div>
               <div className="p-4 bg-white rounded-lg">
                 <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I was doing everything wrong - crunches, skipping meals, no pelvic floor work. The app taught me the
-                  RIGHT way. My diastasis recti is almost healed!"
+                  "not me getting emotional over being able to carry my toddler upstairs without my back hurting. this mama is STRONG now! best investment ever fr"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
                   — Postpartum Mama · Catalyst Mom Community
