@@ -2384,33 +2384,6 @@ function MediumScorerContent({
               </p>
             </div>
           </div>
-            )}
-
-            {/* No Time Objection - 15 mins/day highlight */}
-            {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
-              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
-              <div className="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                <p className="font-semibold mb-2" style={{ color: "#166534" }}>
-                  Perfect for Busy Mamas
-                </p>
-                <p style={{ color: "#3A2412" }}>
-                  We get it - time is your biggest challenge. That&apos;s why our protocol requires only <strong>15 minutes per day</strong>. No hour-long gym sessions. Just focused, effective movements you can do while baby naps or plays nearby.
-                </p>
-              </div>
-            )}
-
-            <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
-              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                💰 $29/month
-              </p>
-              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
-              </p>
-              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
-                Protocol requires only 15 mins/day
-              </p>
-            </div>
-          </div>
 
           {/* Social Proof */}
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
