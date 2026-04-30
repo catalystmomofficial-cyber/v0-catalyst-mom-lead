@@ -2048,18 +2048,57 @@ function HighScorerContent({
             </div>
           </div>
 
+          {/* C-section Safety Disclaimer */}
+          {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+            quizState.additionalNotes?.toLowerCase().includes("c section") ||
+            quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+            quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+              <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                C-Section Recovery Note
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+              </p>
+            </div>
+          )}
+
+          {/* No Time Objection */}
+          {(quizState.biggestObstacle === "no-time" ||
+            quizState.biggestObstacle?.toLowerCase().includes("time") ||
+            quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+              <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                Built for Busy Mamas
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+              </p>
+            </div>
+          )}
+
           {/* CTA */}
           <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
             <Button
               size="lg"
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-              onClick={() => window.open("https://calendly.com/catalystmomofficial/30min", "_blank")}
+              onClick={() => {
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+                appUrl.searchParams.set("name", quizState.name)
+                appUrl.searchParams.set("email", quizState.email)
+                appUrl.searchParams.set("score", score.toString())
+                appUrl.searchParams.set("tier", tier)
+                appUrl.searchParams.set("assessment", "postpartum")
+                window.open(appUrl.toString(), "_blank")
+              }}
             >
-              Book Your VIP Strategy Call
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
+                ? "Start My Gentle Healing Protocol"
+                : "Join the Catalyst Mom App Now"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Limited to 10 clients per month
+              Protocol requires only 15 mins/day. Cancel anytime.
             </p>
           </div>
         </CardContent>
@@ -2305,18 +2344,46 @@ function MediumScorerContent({
             )}
 
             {/* C-section Safety Disclaimer */}
-            {(quizState.additionalNotes.toLowerCase().includes("c-section") ||
-              quizState.additionalNotes.toLowerCase().includes("section") ||
-              quizState.additionalNotes.toLowerCase().includes("surgery") ||
-              quizState.additionalNotes.toLowerCase().includes("cesarean")) && (
-              <div className="mt-6 p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
-                <p className="font-semibold mb-2" style={{ color: "#B91C1C" }}>
-                  Important C-Section Recovery Note
+            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+              quizState.additionalNotes?.toLowerCase().includes("c section") ||
+              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+                <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                  C-Section Recovery Note
                 </p>
-                <p style={{ color: "#3A2412" }}>
-                  We see you had a C-section. Your incision site needs extra care during recovery. Our protocols include specific C-section modifications to protect your healing incision while still making progress. Always consult with your healthcare provider before starting any exercise program, especially if you&apos;re still in the early healing phase (under 6-8 weeks post-surgery).
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
                 </p>
               </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle === "no-time" ||
+              quizState.biggestObstacle?.toLowerCase().includes("time") ||
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+                <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                  Built for Busy Mamas
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
+              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                $29/month
+              </p>
+              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
+              </p>
+            </div>
+          </div>
             )}
 
             {/* No Time Objection - 15 mins/day highlight */}
@@ -2679,35 +2746,36 @@ function LowScorerContent({
 
             {/* C-section Safety Disclaimer */}
             {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
-              quizState.additionalNotes?.toLowerCase().includes("section") ||
-              quizState.additionalNotes?.toLowerCase().includes("surgery") ||
-              quizState.additionalNotes?.toLowerCase().includes("cesarean")) && (
-              <div className="mt-6 p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
-                <p className="font-semibold mb-2" style={{ color: "#B91C1C" }}>
-                  Important C-Section Recovery Note
+              quizState.additionalNotes?.toLowerCase().includes("c section") ||
+              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+                <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                  C-Section Recovery Note
                 </p>
-                <p style={{ color: "#3A2412" }}>
-                  We see you had a C-section. Your incision site needs extra care during recovery. Our protocols include specific C-section modifications to protect your healing incision while still making progress. Always consult with your healthcare provider before starting any exercise program, especially if you&apos;re still in the early healing phase (under 6-8 weeks post-surgery).
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
                 </p>
               </div>
             )}
 
             {/* No Time Objection - 15 mins/day highlight */}
-            {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
+            {(quizState.biggestObstacle === "no-time" ||
+              quizState.biggestObstacle?.toLowerCase().includes("time") ||
               quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
-              <div className="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
-                <p className="font-semibold mb-2" style={{ color: "#166534" }}>
-                  Perfect for Busy Mamas
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+                <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                  Built for Busy Mamas
                 </p>
-                <p style={{ color: "#3A2412" }}>
-                  We get it - time is your biggest challenge. That&apos;s why our protocol requires only <strong>15 minutes per day</strong>. No hour-long gym sessions. Just focused, effective movements you can do while baby naps or plays nearby.
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
                 </p>
               </div>
             )}
 
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
               <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                💰 $29/month
+                $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                 Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
@@ -2721,7 +2789,7 @@ function LowScorerContent({
           {/* Social Proof */}
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
             <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
-              💬 What Moms Who Started Where You Are Say:
+              What Moms Who Started Where You Are Say:
             </h3>
             <div className="space-y-4">
               <div className="p-4 bg-white rounded-lg">
