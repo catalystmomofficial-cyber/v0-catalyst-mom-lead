@@ -150,7 +150,7 @@ High stress → High cortisol → Suppressed ovulation → Delayed conception. S
 ✅ Daily stress management protocols (breathwork, meditation, fertility yoga)
 ✅ Community support (you're not alone in this)
 ✅ 1-on-1 Human Check-ins — Bi-weekly expert progress reviews.
-�� Tracking tools to reduce the mental load
+��� Tracking tools to reduce the mental load
 ✅ Evidence-based protocols so you KNOW you're doing the right things
 
 **Timeline:** Stress hormone improvements can happen in 2-4 weeks. Fertility improvements follow in 1-2 cycles.`,
@@ -626,7 +626,7 @@ export default function TTCAssessment() {
 
         if (data && data[0]) {
           sessionStorage.setItem("ttc_assessment_id", data[0].id)
-          const resultsUrl = `https://catalystmom.online/results/${data[0].id}`
+          const resultsUrl = `https://catalystmomofficial.com/dashboard?assessment_id=${data[0].id}`
 
           // Second Omnisend call - update with results URL
           const omnisendUpdateResult = await addContactToOmnisend({
