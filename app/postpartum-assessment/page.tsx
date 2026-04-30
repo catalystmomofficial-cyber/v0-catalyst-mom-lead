@@ -2084,26 +2084,29 @@ function HighScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+                const appUrl = new URL("https://catalystmomofficial.com/signup")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
                 appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("assessment", "postpartum")
+                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
-                ? "Start My Gentle Healing Protocol"
-                : "Join the Catalyst Mom App Now"}
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Protocol requires only 15 mins/day. Cancel anytime.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
-        </CardContent>
-      </Card>
-    </>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -2393,8 +2396,7 @@ function MediumScorerContent({
             <div className="space-y-4">
               <div className="p-4 bg-white rounded-lg">
                 <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I scored 32/100 and felt hopeless. After 12 weeks in the app, I hit 78. My energy is back, my core is
-                  healing, and I finally feel like myself again."
+                  "I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
                   — Postpartum Mama · Catalyst Mom Community
@@ -2402,8 +2404,7 @@ function MediumScorerContent({
               </div>
               <div className="p-4 bg-white rounded-lg">
                 <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I was doing everything wrong - crunches, skipping meals, no pelvic floor work. The app taught me the
-                  RIGHT way. My diastasis recti is almost healed!"
+                  "not me getting emotional over being able to carry my toddler upstairs without my back hurting. this mama is STRONG now! best investment ever fr"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
                   — Postpartum Mama · Catalyst Mom Community
@@ -2419,14 +2420,15 @@ function MediumScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+                const appUrl = new URL("https://catalystmomofficial.com/signup")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
                 appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("assessment", "postpartum")
-                appUrl.searchParams.set("weeks_postpartum", quizState.weeksPostpartum)
-                appUrl.searchParams.set("goal", quizState.primaryGoal)
+                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
                 window.open(appUrl.toString(), "_blank")
               }}
             >
@@ -2435,223 +2437,11 @@ function MediumScorerContent({
                 : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Start seeing results in 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
 
-          {/* Questions */}
-          <div className="text-center p-6 bg-amber-50 rounded-lg">
-            <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
-              Questions?
-            </h3>
-            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
-          </div>
-        </CardContent>
-      </Card>
-    </>
-  )
-}
-
-function LowScorerContent({
-  score,
-  quizState,
-  breakdown,
-  tier,
-}: {
-  score: number
-  quizState: QuizState
-  breakdown: any[]
-  tier: string
-}) {
-  const criticalGaps = breakdown.filter((item) => item.score <= 3).slice(0, 3)
-  const allGaps = breakdown.filter((item) => item.score <= 5).slice(0, 3)
-  const gapsToShow = criticalGaps.length > 0 ? criticalGaps : allGaps
-
-  return (
-    <>
-      {/* What Your Score Means */}
-      <Card className="border-0 shadow-xl mb-8">
-        <CardHeader>
-          <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-            💡 What Your {score}/100 Really Means
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            {quizState.name}, you're experiencing some common challenges that are keeping you from feeling your best.
-          </p>
-          <p className="text-lg leading-relaxed font-semibold" style={{ color: "#A15C2F" }}>
-            But here's the good news: Small, strategic changes can make a HUGE difference in how you feel.
-          </p>
-
-          {/* Critical Safety Issues */}
-          <div className="space-y-4">
-            {quizState.medicalClearance !== "yes" && (
-              <div className="p-6 bg-red-50 rounded-lg border-l-4 border-red-400">
-                <p className="font-semibold text-xl mb-3" style={{ color: "#A15C2F" }}>
-                  🚨 URGENT: Medical Clearance Required
-                </p>
-                <p className="mb-3" style={{ color: "#3A2412" }}>
-                  Before starting ANY workout program, you need medical clearance from your doctor - especially if you
-                  had a C-section or complications.
-                </p>
-                <p className="font-semibold" style={{ color: "#3A2412" }}>
-                  Why this matters:
-                </p>
-                <ul className="list-disc pl-6 mt-2 space-y-1" style={{ color: "#3A2412" }}>
-                  <li>Your uterus needs 6+ weeks to shrink back to normal size</li>
-                  <li>Internal healing takes time (especially C-section incisions)</li>
-                  <li>Exercising too soon can cause serious complications</li>
-                  <li>Medical clearance ensures you're ready to start safely</li>
-                </ul>
-              </div>
-            )}
-
-            {quizState.coreSafeExercises === "crunches" && (
-              <div className="p-6 bg-red-50 rounded-lg border-l-4 border-red-400">
-                <p className="font-semibold text-xl mb-3" style={{ color: "#A15C2F" }}>
-                  🚨 STOP: You're Doing Unsafe Exercises
-                </p>
-                <p className="mb-3" style={{ color: "#3A2412" }}>
-                  Crunches and sit-ups are the WORST exercises for postpartum moms. They can make diastasis recti WORSE,
-                  not better.
-                </p>
-                <p className="font-semibold" style={{ color: "#3A2412" }}>
-                  What happens if you keep doing them:
-                </p>
-                <ul className="list-disc pl-6 mt-2 space-y-1" style={{ color: "#3A2412" }}>
-                  <li>Diastasis recti worsens by 60%</li>
-                  <li>"Mom pooch" becomes permanent</li>
-                  <li>Back pain increases</li>
-                  <li>Pelvic floor dysfunction develops</li>
-                </ul>
-                <p className="mt-3 font-semibold" style={{ color: "#A15C2F" }}>
-                  The app will show you SAFE core exercises that actually heal your abs.
-                </p>
-              </div>
-            )}
-          </div>
-
-          {/* Priority Gaps */}
-          <div className="space-y-4 mt-6">
-            <h3 className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-              🎯 Your Priority Areas to Fix First:
-            </h3>
-
-            {gapsToShow.map((gap, index) => (
-              <div key={index} className="p-6 bg-amber-50 rounded-lg border-l-4" style={{ borderLeftColor: "#FFB74D" }}>
-                <p className="font-semibold text-xl mb-3" style={{ color: "#A15C2F" }}>
-                  {index + 1}. {gap.practice} ({gap.score}/10) - Critical Gap
-                </p>
-
-                {gap.practice.includes("Nutrition") && (
-                  <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p className="font-semibold">This is THE #1 reason you're exhausted and not losing weight.</p>
-                    <p>Without proper nutrition tracking:</p>
-                    <ul className="list-disc pl-6 space-y-1">
-                      <li>You're likely under-eating (slows metabolism)</li>
-                      <li>Or eating the wrong macros at wrong times (energy crashes)</li>
-                      <li>Milk supply suffers (if breastfeeding)</li>
-                      <li>Recovery takes 2-3x longer</li>
-                    </ul>
-                    <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                      Inside the app: Simple meal plans (no complicated recipes), macro tracking made easy, grocery
-                      lists, energy optimization that works in 7 days.
-                    </p>
-                  </div>
-                )}
-
-                {gap.practice.includes("Protein") && (
-                  <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p className="font-semibold">You're probably eating under 50g/day. You need 80g+ for recovery.</p>
-                    <p>Without adequate protein:</p>
-                    <ul className="list-disc pl-6 space-y-1">
-                      <li>Constant exhaustion (protein = energy)</li>
-                      <li>Muscle loss (your body eats muscle for fuel)</li>
-                      <li>Slow healing (wounds, tears, C-section)</li>
-                      <li>Low milk supply (if breastfeeding)</li>
-                    </ul>
-                    <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                      Inside the app: Protein-rich meal ideas, quick snacks that hit 20g+, macro tracking, recipes that
-                      make 80g easy.
-                    </p>
-                  </div>
-                )}
-
-                {gap.practice.includes("Pelvic Floor") && (
-                  <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p className="font-semibold">
-                      Without pelvic floor training, your foundations stay weak — and that is fixable with the right protocol.
-                    </p>
-                    <p>What happens without proper training:</p>
-                    <ul className="list-disc pl-6 space-y-1">
-                      <li>Incontinence (leaking when you laugh, sneeze, jump)</li>
-                      <li>Pelvic heaviness and that falling-out feeling that makes you afraid to jump, run, or sneeze</li>
-                      <li>Painful sex for months/years</li>
-                      <li>Core weakness that never fully recovers</li>
-                    </ul>
-                    <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                      Inside the app: 12-week pelvic floor protocol (5 min/day), proper Kegel technique, progress
-                      tracking, prevention strategies.
-                    </p>
-                  </div>
-                )}
-
-                {gap.practice.includes("Core") && (
-                  <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p className="font-semibold">
-                      Without core-safe exercises, your "mom pooch" and back pain will persist.
-                    </p>
-                    <p>What happens without proper core work:</p>
-                    <ul className="list-disc pl-6 space-y-1">
-                      <li>Diastasis recti worsens or never heals</li>
-                      <li>"Mom pooch" becomes permanent</li>
-                      <li>Chronic back pain develops</li>
-                      <li>Pelvic floor dysfunction worsens</li>
-                    </ul>
-                    <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                      Inside the app: Core-safe exercises (NO crunches), diastasis recti healing protocols, 10-20 min
-                      workouts, safe progressions.
-                    </p>
-                  </div>
-                )}
-
-                {!gap.practice.includes("Nutrition") &&
-                  !gap.practice.includes("Protein") &&
-                  !gap.practice.includes("Pelvic Floor") &&
-                  !gap.practice.includes("Core") && (
-                    <div className="space-y-3" style={{ color: "#3A2412" }}>
-                      <p>This gap is preventing you from feeling your best and recovering properly.</p>
-                      <p>Without addressing this:</p>
-                      <ul className="list-disc pl-6 space-y-1">
-                        <li>Recovery takes 2-3x longer</li>
-                        <li>You're at higher risk for complications</li>
-                        <li>Energy and wellness continue to suffer</li>
-                        <li>Long-term health may be impacted</li>
-                      </ul>
-                      <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                        Inside the app: Step-by-step protocols, expert guidance, and personalized support to close this
-                        gap.
-                      </p>
-                    </div>
-                  )}
-              </div>
-            ))}
-          </div>
-
-          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400 mt-6">
-            <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
-              You're Not Behind. You're Not Lazy. You're Not Broken.
-            </p>
-            <p className="text-lg text-center" style={{ color: "#3A2412" }}>
-              You just need the right guidance and support system. And that's exactly what the Catalyst Mom App
-              provides.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Join App CTA */}
+          {/* Join App CTA */}
       <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
         <CardHeader className="text-center">
           <CardTitle className="text-3xl mb-2" style={{ color: "#A15C2F" }}>
@@ -2793,14 +2583,15 @@ function LowScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+                const appUrl = new URL("https://catalystmomofficial.com/signup")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
                 appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("assessment", "postpartum")
-                appUrl.searchParams.set("weeks_postpartum", quizState.weeksPostpartum)
-                appUrl.searchParams.set("goal", quizState.primaryGoal)
+                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
                 window.open(appUrl.toString(), "_blank")
               }}
             >
@@ -2809,19 +2600,11 @@ function LowScorerContent({
                 : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Start seeing results in 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
-
-          {/* Questions */}
-          <div className="text-center p-6 bg-amber-50 rounded-lg">
-            <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
-              Questions?
-            </h3>
-            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </>
   )
 }

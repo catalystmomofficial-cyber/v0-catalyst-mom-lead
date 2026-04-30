@@ -959,18 +959,15 @@ function TTCResultsPage({
 
   const getAppRegistrationUrl = () => {
     const assessmentId = sessionStorage.getItem("ttc_assessment_id")
-    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+    const appUrl = new URL("https://catalystmomofficial.com/signup")
     appUrl.searchParams.set("name", quizState.name)
     appUrl.searchParams.set("email", quizState.email)
-
-    if (assessmentId) {
-      appUrl.searchParams.set("assessment_id", assessmentId)
-    }
     appUrl.searchParams.set("score", score.toString())
     appUrl.searchParams.set("tier", tier)
-    appUrl.searchParams.set("assessment", "ttc")
-    appUrl.searchParams.set("goal", quizState.primaryGoal)
-    appUrl.searchParams.set("obstacle", quizState.biggestObstacle)
+    appUrl.searchParams.set("stage", "ttc")
+    appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+    appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+    appUrl.searchParams.set("birth_experience", "")
 
     return appUrl.toString()
   }
