@@ -1367,7 +1367,7 @@ export default function PostpartumAssessment() {
                 <div class="cta">
                   <h2>Ready to Transform Your Wellness Journey?</h2>
                   <p>This free guide is just the beginning. Get personalized coaching, community support, and expert-designed programs.</p>
-                  <button onclick="window.location.href='https://catalystmom.online'">Join Catalyst Mom Today</button>
+                  <button onclick="window.location.href='https://catalystmomofficial.com/dashboard'">Join Catalyst Mom Today</button>
                 </div>
                 
                 <script>
@@ -2033,7 +2033,7 @@ function HighScorerContent({
                 recovery was an absolute DREAM - back in my jeans 6 weeks postpartum. Best investment I made."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Emily R., VIP Client, Mom of 2
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
             <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
@@ -2043,10 +2043,39 @@ function HighScorerContent({
                 level."
               </p>
               <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Jessica L., VIP Client, Mom of 1
+                — Postpartum Mama · Catalyst Mom Community
               </p>
             </div>
           </div>
+
+          {/* C-section Safety Disclaimer */}
+          {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+            quizState.additionalNotes?.toLowerCase().includes("c section") ||
+            quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+            quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+              <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                C-Section Recovery Note
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+              </p>
+            </div>
+          )}
+
+          {/* No Time Objection */}
+          {(quizState.biggestObstacle === "no-time" ||
+            quizState.biggestObstacle?.toLowerCase().includes("time") ||
+            quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+              <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                Built for Busy Mamas
+              </p>
+              <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+              </p>
+            </div>
+          )}
 
           {/* CTA */}
           <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
@@ -2054,12 +2083,22 @@ function HighScorerContent({
               size="lg"
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-              onClick={() => window.open("https://calendly.com/catalystmomofficial/30min", "_blank")}
+              onClick={() => {
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
+                appUrl.searchParams.set("name", quizState.name)
+                appUrl.searchParams.set("email", quizState.email)
+                appUrl.searchParams.set("score", score.toString())
+                appUrl.searchParams.set("tier", tier)
+                appUrl.searchParams.set("assessment", "postpartum")
+                window.open(appUrl.toString(), "_blank")
+              }}
             >
-              Book Your VIP Strategy Call
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
+                ? "Start My Gentle Healing Protocol"
+                : "Join the Catalyst Mom App Now"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Limited to 10 clients per month
+              Protocol requires only 15 mins/day. Cancel anytime.
             </p>
           </div>
         </CardContent>
@@ -2274,7 +2313,7 @@ function MediumScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Community of 1,000+ Postpartum Moms</strong> - Support, shared experiences, accountability
+                  <strong>Community of 2,000+ mamas supported</strong> - Support, shared experiences, accountability
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -2304,12 +2343,71 @@ function MediumScorerContent({
               </div>
             )}
 
+            {/* C-section Safety Disclaimer */}
+            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+              quizState.additionalNotes?.toLowerCase().includes("c section") ||
+              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+                <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                  C-Section Recovery Note
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+                </p>
+              </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle === "no-time" ||
+              quizState.biggestObstacle?.toLowerCase().includes("time") ||
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+                <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                  Built for Busy Mamas
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
+              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                $29/month
+              </p>
+              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
+              </p>
+            </div>
+          </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-4 bg-green-50 rounded-lg border-l-4 border-green-500">
+                <p className="font-semibold mb-2" style={{ color: "#166534" }}>
+                  Perfect for Busy Mamas
+                </p>
+                <p style={{ color: "#3A2412" }}>
+                  We get it - time is your biggest challenge. That&apos;s why our protocol requires only <strong>15 minutes per day</strong>. No hour-long gym sessions. Just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
               <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
                 💰 $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
               </p>
             </div>
           </div>
@@ -2326,7 +2424,7 @@ function MediumScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2335,7 +2433,7 @@ function MediumScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2348,7 +2446,7 @@ function MediumScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
@@ -2359,7 +2457,9 @@ function MediumScorerContent({
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              Join the Catalyst Mom App Now - $29/month
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Start seeing results in 7 days. Cancel anytime. No contracts.
@@ -2371,7 +2471,7 @@ function MediumScorerContent({
             <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
               Questions?
             </h3>
-            <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
           </div>
         </CardContent>
       </Card>
@@ -2508,12 +2608,12 @@ function LowScorerContent({
                 {gap.practice.includes("Pelvic Floor") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
                     <p className="font-semibold">
-                      Without pelvic floor training, you're at 85% higher risk for complications.
+                      Without pelvic floor training, your foundations stay weak — and that is fixable with the right protocol.
                     </p>
                     <p>What happens without proper training:</p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Incontinence (leaking when you laugh, sneeze, jump)</li>
-                      <li>Prolapse (organs dropping into vaginal canal)</li>
+                      <li>Pelvic heaviness and that falling-out feeling that makes you afraid to jump, run, or sneeze</li>
                       <li>Painful sex for months/years</li>
                       <li>Core weakness that never fully recovers</li>
                     </ul>
@@ -2627,23 +2727,61 @@ function LowScorerContent({
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Community Support</strong> - 1,000+ moms who understand what you're going through
+                  <strong>Community Support</strong> - 2,000+ mamas who understand what you're going through
                 </span>
               </p>
               <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
                 <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
                 <span>
-                  <strong>Weekly Coaching Calls</strong> - Get your questions answered by experts
+                  <strong>1-on-1 Human Check-ins — Bi-weekly expert progress reviews</strong>
+                </span>
+              </p>
+              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                <span>
+                  <strong>24/7 Catalyst AI Expert — Instant answers to any wellness question</strong>
                 </span>
               </p>
             </div>
 
+            {/* C-section Safety Disclaimer */}
+            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+              quizState.additionalNotes?.toLowerCase().includes("c section") ||
+              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+                <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                  C-Section Recovery Note
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+                </p>
+              </div>
+            )}
+
+            {/* No Time Objection - 15 mins/day highlight */}
+            {(quizState.biggestObstacle === "no-time" ||
+              quizState.biggestObstacle?.toLowerCase().includes("time") ||
+              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
+              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+                <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                  Built for Busy Mamas
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
               <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                💰 $29/month
+                $29/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one physical therapy session. Cancel anytime. No contracts.
+                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
               </p>
             </div>
           </div>
@@ -2651,7 +2789,7 @@ function LowScorerContent({
           {/* Social Proof */}
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
             <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
-              💬 What Moms Who Started Where You Are Say:
+              What Moms Who Started Where You Are Say:
             </h3>
             <div className="space-y-4">
               <div className="p-4 bg-white rounded-lg">
@@ -2660,7 +2798,7 @@ function LowScorerContent({
                   healing, and I finally feel like myself again."
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Sarah M., Mom of 2
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
               <div className="p-4 bg-white rounded-lg">
@@ -2669,7 +2807,7 @@ function LowScorerContent({
                   RIGHT way. My diastasis recti is almost healed!"
                 </p>
                 <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Jessica T., Mom of 1
+                  — Postpartum Mama · Catalyst Mom Community
                 </p>
               </div>
             </div>
@@ -2682,7 +2820,7 @@ function LowScorerContent({
               className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
               style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
               onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
+                const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                 appUrl.searchParams.set("name", quizState.name)
                 appUrl.searchParams.set("email", quizState.email)
                 appUrl.searchParams.set("score", score.toString())
@@ -2693,7 +2831,9 @@ function LowScorerContent({
                 window.open(appUrl.toString(), "_blank")
               }}
             >
-              Join the Catalyst Mom App Now - $29/month
+              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
+                ? "Start My Gentle Healing Protocol - $29/month"
+                : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Start seeing results in 7 days. Cancel anytime. No contracts.
@@ -2705,7 +2845,7 @@ function LowScorerContent({
             <h3 className="text-lg font-bold mb-2" style={{ color: "#A15C2F" }}>
               Questions?
             </h3>
-            <p style={{ color: "#3A2412" }}>Email: support@catalystmom.online</p>
+            <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
           </div>
         </CardContent>
       </Card>

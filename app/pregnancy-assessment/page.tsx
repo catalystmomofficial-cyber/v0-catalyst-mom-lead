@@ -1265,7 +1265,7 @@ ${
     if (tier === "high") {
       return [
         {
-          name: "Jessica M.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 78/120",
           quote:
             "I was already doing most things right, but the app helped me optimize the last 20%. I had the smoothest labor and easiest postpartum recovery of all my friends.",
@@ -1299,14 +1299,14 @@ ${
     } else {
       return [
         {
-          name: "Emily R.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 28/120",
           quote:
             "I was struggling with severe nausea and had no idea what to eat or how to exercise. The app's protocols helped me manage my symptoms and I actually started feeling good during pregnancy.",
           result: "Nausea reduced 70%, gained healthy weight, prepared for labor",
         },
         {
-          name: "Sarah J.",
+          name: "Pregnancy Mama · Catalyst Mom Community",
           score: "Score: 35/120",
           quote:
             "I was overwhelmed and didn't know where to start. The app gave me a step-by-step plan. I went from barely functioning to feeling strong and confident.",
@@ -1684,7 +1684,7 @@ ${
                   className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                   onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/register")
+                    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                     appUrl.searchParams.set("email", quizState.email)
                     appUrl.searchParams.set("name", quizState.name)
                     appUrl.searchParams.set("score", score.toString())
@@ -1801,7 +1801,7 @@ ${
                   className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
                   style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
                   onClick={() => {
-                    const appUrl = new URL("https://catalystmomofficial.com/signup")
+                    const appUrl = new URL("https://catalystmomofficial.com/dashboard")
                     appUrl.searchParams.set("name", quizState.name)
                     appUrl.searchParams.set("email", quizState.email)
                     appUrl.searchParams.set("score", score.toString())
