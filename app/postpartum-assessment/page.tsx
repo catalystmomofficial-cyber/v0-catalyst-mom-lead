@@ -2384,7 +2384,6 @@ function MediumScorerContent({
               </p>
             </div>
           </div>
-            )}
 
             {/* No Time Objection - 15 mins/day highlight */}
             {(quizState.biggestObstacle?.toLowerCase().includes("time") || 
