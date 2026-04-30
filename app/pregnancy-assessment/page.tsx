@@ -327,7 +327,7 @@ export default function PregnancyAssessment() {
         // Store the assessment ID for results page and add results_url to Omnisend custom properties
         if (data && data[0]) {
           sessionStorage.setItem("pregnancy_assessment_id", data[0].id)
-          const resultsUrl = `https://catalystmom.online/results/${data[0].id}`
+          const resultsUrl = `https://catalystmomofficial.com/dashboard?assessment_id=${data[0].id}`
           await addContactToOmnisend({
             email: quizState.email,
             firstName: quizState.name,

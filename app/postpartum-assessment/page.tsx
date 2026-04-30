@@ -1124,7 +1124,7 @@ export default function PostpartumAssessment() {
           weeks_postpartum: quizState.weeksPostpartum,
           primary_goal: quizState.primaryGoal,
           birth_experience: quizState.birthExperience, // Added from updates
-          results_url: `https://catalystmom.online/results/${"data.id"}`, // Added results URL - Placeholder for now, will be replaced by actual ID
+          results_url: `https://catalystmomofficial.com/dashboard`, // Added results URL - Will be updated with actual ID after insertion
         }
 
         // Send to Omnisend
@@ -1176,7 +1176,7 @@ export default function PostpartumAssessment() {
         if (supabaseData && supabaseData[0]) {
           sessionStorage.setItem("postpartum_assessment_id", supabaseData[0].id)
           // Update the results_url with the actual ID
-          customProperties.results_url = `https://catalystmom.online/results/${supabaseData[0].id}`
+          customProperties.results_url = `https://catalystmomofficial.com/dashboard?assessment_id=${supabaseData[0].id}`
           // Re-send to Omnisend with updated URL (optional, depending on Omnisend's update capabilities)
           await addContactToOmnisend({
             email: quizState.email,
