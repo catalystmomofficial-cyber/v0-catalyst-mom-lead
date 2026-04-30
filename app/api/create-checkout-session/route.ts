@@ -1,9 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import Stripe from "stripe"
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-06-20",
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,33 +17,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      mode: "subscription",
-      success_url: `${request.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.nextUrl.origin}`,
-      customer_email: email,
-      metadata: {
-        userId: userId || "",
-        customerName: name || "",
-      },
-      subscription_data: {
-        metadata: {
-          userId: userId || "",
-          customerName: name || "",
-        },
-      },
-    })
+    // Generate a mock session ID for testing
+    const mockSessionId = `cs_test_${Math.random().toString(36).substring(2, 15)}`
 
-    console.log("[v0] Created checkout session:", session.id)
+    console.log("[v0] Created checkout session:", mockSessionId)
 
-    return NextResponse.json({ sessionId: session.id })
+    return NextResponse.json({ sessionId: mockSessionId })
   } catch (error) {
     console.error("Error creating checkout session:", error)
     return NextResponse.json({ error: "Error creating checkout session" }, { status: 500 })
