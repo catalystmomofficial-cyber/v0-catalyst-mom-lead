@@ -2016,13 +2016,12 @@ function HighScorerContent({
                   Avoided complications
                 </p>
               </div>
-          </div>
+            </div>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
           {/* End CTA Section */}
-        </div>
 
           {/* Testimonials */}
           <div className="space-y-4">
