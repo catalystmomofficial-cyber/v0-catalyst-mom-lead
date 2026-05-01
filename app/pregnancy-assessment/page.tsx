@@ -1401,15 +1401,12 @@ ${
                   alone—many women start here.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>What this means for your pregnancy:</strong> Without addressing these gaps, you're at higher
-                  risk for complications like gestational diabetes, preeclampsia, excessive weight gain, and difficult
-                  labor. You may be experiencing severe symptoms that are affecting your quality of life. Your
-                  postpartum recovery will likely be more challenging.
+                  <strong>What this means for your pregnancy:</strong> Addressing these gaps now will help you feel better throughout your pregnancy and set your body up for an easier birth and faster recovery.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
                   <strong>The good news:</strong> Small, strategic changes can significantly improve your pregnancy
                   health. You don't need to be perfect—you just need to start addressing the top 3-5 gaps. Most women
-                  see dramatic improvements within 1-2 weeks of implementing the right protocols.
+                  see real improvements within 1-2 weeks of implementing the right protocols.
                 </p>
               </>
             )}
