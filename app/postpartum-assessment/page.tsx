@@ -2109,6 +2109,7 @@ function HighScorerContent({
     </div>
   )
 }
+export default PostpartumAssessment;
 
 function MediumScorerContent({
   score,
