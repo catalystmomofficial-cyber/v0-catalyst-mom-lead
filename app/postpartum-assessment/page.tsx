@@ -2016,11 +2016,13 @@ function HighScorerContent({
                   Avoided complications
                 </p>
               </div>
-            </div>
-            <p className="text-center mt-4 font-semibold" style={{ color: "#A15C2F" }}>
-              Current availability: 3 spots open this month
+          </div>
+            <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
+              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
+          {/* End CTA Section */}
+        </div>
 
           {/* Testimonials */}
           <div className="space-y-4">
@@ -2101,7 +2103,7 @@ function HighScorerContent({
                 : "Join the Catalyst Mom App Now - $29/month"}
             </Button>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Cancel anytime—no contracts.
             </p>
           </div>
         </div>
