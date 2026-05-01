@@ -2022,7 +2022,6 @@ function HighScorerContent({
             </p>
           </div>
           {/* End CTA Section */}
-        </div>
 
           {/* Testimonials */}
           <div className="space-y-4">
