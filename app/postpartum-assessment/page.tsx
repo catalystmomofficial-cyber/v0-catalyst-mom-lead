@@ -32,7 +32,6 @@ interface QuizState {
   supportType: string
   dietaryRestrictions: string
   additionalNotes: string
-  // Added fields for potential future use or mapping to lead_responses table
   exercise?: string
   exerciseSafety?: string
   coreStrength?: string
@@ -43,7 +42,7 @@ interface QuizState {
   bodyImage?: string
   partnerSupport?: string
   selfCare?: string
-  birthExperience?: string // Added from updates
+  birthExperience?: string
 }
 
 const supabase = createClient()
@@ -52,6 +51,75 @@ const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
+
+// ─── Shared Sub-components ───────────────────────────────────────────────────
+
+function TestimonialsSection({
+  testimonials,
+  title = "💬 What Our Members Say:",
+}: {
+  testimonials: { quote: string; author: string }[]
+  title?: string
+}) {
+  return (
+    <div className="space-y-4">
+      <h3 className="text-xl font-bold text-center" style={{ color: "#A15C2F" }}>
+        {title}
+      </h3>
+      {testimonials.map((t, i) => (
+        <div key={i} className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
+          <p className="italic mb-3" style={{ color: "#3A2412" }}>
+            &ldquo;{t.quote}&rdquo;
+          </p>
+          <p className="font-semibold" style={{ color: "#A15C2F" }}>
+            {t.author}
+          </p>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function PricingSection({
+  quizState,
+  score,
+  tier,
+}: {
+  quizState: QuizState
+  score: number
+  tier: string
+}) {
+  return (
+    <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
+      <Button
+        size="lg"
+        className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+        style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
+        onClick={() => {
+          const appUrl = new URL("https://catalystmomofficial.com/signup")
+          appUrl.searchParams.set("name", quizState.name)
+          appUrl.searchParams.set("email", quizState.email)
+          appUrl.searchParams.set("score", score.toString())
+          appUrl.searchParams.set("tier", tier)
+          appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+          appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+          appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+          appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
+          window.open(appUrl.toString(), "_blank")
+        }}
+      >
+        {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
+          ? "Start My Gentle Healing Protocol - $29/month"
+          : "Join the Catalyst Mom App Now - $29/month"}
+      </Button>
+      <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
+        Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
+      </p>
+    </div>
+  )
+}
+
+// ─── Utility functions ────────────────────────────────────────────────────────
 
 function PersonalizedConcernSection({
   concern,
@@ -62,9 +130,6 @@ function PersonalizedConcernSection({
 }) {
   if (!concern || concern.trim().length === 0) return null
 
-  const concernLower = concern.toLowerCase()
-
-  // Find relevant low-scoring areas
   const relevantGaps = breakdown.filter((item) => item.score <= 7).slice(0, 3)
 
   return (
@@ -75,28 +140,25 @@ function PersonalizedConcernSection({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Light purple box with user's words */}
         <div className="p-4 rounded-lg" style={{ backgroundColor: "#F3E5F5" }}>
           <p className="italic text-lg" style={{ color: "#666" }}>
-            You shared: "{concern}"
+            You shared: &ldquo;{concern}&rdquo;
           </p>
         </div>
 
-        {/* Explanatory paragraph */}
         <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-          Based on your assessment, we'll create a customized postpartum recovery plan that addresses your unique
+          Based on your assessment, we&apos;ll create a customized postpartum recovery plan that addresses your unique
           situation. Our program combines evidence-based protocols with personalized support to help you achieve your
           goal of optimal postpartum wellness.
         </p>
 
-        {/* Yellow/gold bordered box with gap connections */}
         <div className="p-6 rounded-lg border-2" style={{ borderColor: "#FFB74D", backgroundColor: "#FFF8E1" }}>
           <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
             How This Connects to Your Score:
           </h3>
           <p className="mb-4" style={{ color: "#3A2412" }}>
             Your concern about <strong>your postpartum recovery</strong> is directly related to the gaps we identified.
-            Here's what's holding you back:
+            Here&apos;s what&apos;s holding you back:
           </p>
           <div className="space-y-4">
             {relevantGaps.map((gap, index) => (
@@ -131,8 +193,9 @@ function PersonalizedConcernSection({
                   What This Means:
                 </p>
                 <p style={{ color: "#3A2412" }}>
-                  These aren't just "nice to haves"—these gaps are directly affecting your postpartum recovery and
-                  quality of life. But here's the good news: they're ALL fixable with the right protocols and support.
+                  These aren&apos;t just &ldquo;nice to haves&rdquo;—these gaps are directly affecting your postpartum
+                  recovery and quality of life. But here&apos;s the good news: they&apos;re ALL fixable with the right
+                  protocols and support.
                 </p>
               </div>
 
@@ -141,26 +204,18 @@ function PersonalizedConcernSection({
                   What the App Does:
                 </p>
                 <div className="space-y-2">
-                  <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="text-green-600 flex-shrink-0">✅</span>
-                    <span>Complete postpartum recovery system (all 10 practice areas covered)</span>
-                  </p>
-                  <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="text-green-600 flex-shrink-0">✅</span>
-                    <span>Personalized protocols based on YOUR gaps and recovery stage</span>
-                  </p>
-                  <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="text-green-600 flex-shrink-0">✅</span>
-                    <span>Postpartum-safe workouts and core healing exercises</span>
-                  </p>
-                  <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="text-green-600 flex-shrink-0">✅</span>
-                    <span>Expert guidance and community support from other moms</span>
-                  </p>
-                  <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="text-green-600 flex-shrink-0">✅</span>
-                    <span>Evidence-based interventions for optimal postpartum recovery</span>
-                  </p>
+                  {[
+                    "Complete postpartum recovery system (all 10 practice areas covered)",
+                    "Personalized protocols based on YOUR gaps and recovery stage",
+                    "Postpartum-safe workouts and core healing exercises",
+                    "Expert guidance and community support from other moms",
+                    "Evidence-based interventions for optimal postpartum recovery",
+                  ].map((item, i) => (
+                    <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                      <span className="text-green-600 flex-shrink-0">✅</span>
+                      <span>{item}</span>
+                    </p>
+                  ))}
                 </div>
               </div>
 
@@ -311,7 +366,6 @@ const getPersonalizedResponseWithGaps = (additionalNotes: string, breakdown: any
   const notes = additionalNotes.toLowerCase()
   const lowScores = breakdown.filter((item) => item.score <= 5)
 
-  // Template 1: "No time" / Busy / Overwhelmed
   if (
     notes.includes("no time") ||
     notes.includes("busy") ||
@@ -322,55 +376,10 @@ const getPersonalizedResponseWithGaps = (additionalNotes: string, breakdown: any
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We see you. You're drowning.
-
-Baby needs you every 2 hours. Laundry is piling up. You haven't showered in 3 days. The thought of "self-care" feels like a JOKE when you can barely find time to eat.
-
-At your score, here's WHY you have no time (and how your gaps make it worse):
-
-${
-  lowScores.find((item) => item.practice.includes("Rest"))
-    ? `→ **Rest & Recovery (${lowScores.find((item) => item.practice.includes("Rest"))?.score}/10):** You're not sleeping. Exhausted moms take 3x longer to do EVERYTHING. When you're running on empty, simple tasks feel impossible. That's why there's "no time" - exhaustion steals your efficiency.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition Tracking (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** You're grabbing whatever's fast (crackers, toast, leftovers). No real meals. So your energy crashes by 2pm, and suddenly "making dinner" takes an hour instead of 20 minutes. Poor nutrition = less energy = everything takes longer.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Workout"))
-    ? `→ **Workout Consistency (${lowScores.find((item) => item.practice.includes("Workout"))?.score}/10):** When you DO try to exercise, you're exhausted and inconsistent. So workouts feel like a BURDEN (one more thing to do) instead of an ENERGY BOOST. Proper workouts actually GIVE you time back by increasing energy.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Medical"))
-    ? `→ **Medical Clearance (${lowScores.find((item) => item.practice.includes("Medical"))?.score}/10):** You don't even know if you CAN start exercising safely. So you're stuck researching, googling, asking friends... wasting HOURS trying to figure out "what's safe." That's time you don't have.
-
-`
-    : ""
-}
-Here's the truth: You don't need MORE time. You need SYSTEMS that work FAST.
-
-The app is designed for moms with ZERO time:
-✅ 10-20 min workouts (can do while baby naps)
-✅ 5-min meal plans (grab-and-go, no cooking skills needed)
-✅ Done-for-you protocols (no more googling, just follow the plan)
-
-Most moms at your score think "I'll start when I have more time."
-
-But here's what actually happens: You build these foundations FIRST, then suddenly you HAVE more time (because energy returns, efficiency improves, brain fog lifts).
-
-You get your time back by investing 15-20 min/day into these systems.
-
-Within 2-3 weeks, most moms report feeling like they "gained 2 hours per day" - not because they have more hours, but because they have more ENERGY and CLARITY.`,
+      response: `We see you. You're drowning.`,
     }
   }
 
-  // Template 2: "Big stomach" / Belly / Pooch / Diastasis
   if (
     notes.includes("stomach") ||
     notes.includes("belly") ||
@@ -380,109 +389,21 @@ Within 2-3 weeks, most moms report feeling like they "gained 2 hours per day" - 
     notes.includes("abs") ||
     notes.includes("lol")
   ) {
-    const hasLol = notes.includes("lol")
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `${hasLol ? 'We see that "lol" - you\'re trying to laugh it off, but this is REAL and it bothers you.' : "We hear you. Your belly still looks pregnant and it's frustrating."}
-
-At your score, here's WHY your stomach is still big (and what's actually causing it):
-
-${
-  lowScores.find((item) => item.practice.includes("Diastasis"))
-    ? `→ **Diastasis Recti Awareness (${lowScores.find((item) => item.practice.includes("Diastasis"))?.score}/10):** You know your abs are separated, but not HOW to close the gap. That's why your belly still looks pregnant. Without proper diastasis healing, your core has no support and your belly protrudes.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Core"))
-    ? `→ **Core-Safe Exercise Practice (${lowScores.find((item) => item.practice.includes("Core"))?.score}/10):** You're probably doing crunches or planks - these WIDEN the gap and make your belly BIGGER. Traditional ab exercises are the WORST thing for postpartum bellies. You need core-safe movements that heal, not harm.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Pelvic"))
-    ? `→ **Pelvic Floor Training (${lowScores.find((item) => item.practice.includes("Pelvic"))?.score}/10):** Weak pelvic floor = weak core = belly has no support. It all connects. Your pelvic floor is the FOUNDATION of your core. Without it, your belly will never flatten.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** Inflammation from poor nutrition makes your belly bloated and puffy. Even if you're "eating healthy," without anti-inflammatory protocols, your belly stays swollen.
-
-`
-    : ""
-}
-Here's the truth most doctors won't tell you: Your "mom pooch" isn't permanent. It's not "just how your body is now."
-
-With the right core-safe exercises + diastasis healing protocol + pelvic floor work, 90% of women see significant improvement in 8-12 weeks.
-
-**Inside the app:**
-✅ Diastasis recti self-assessment (check your gap at home)
-✅ Core-safe exercises that HEAL your abs (not harm them)
-✅ Pelvic floor strengthening (the foundation of core recovery)
-✅ Anti-inflammatory meal plans (reduce bloating in 7 days)
-✅ Before/after tracking (see your progress weekly)
-
-Your belly CAN look like it used to. But only with the RIGHT approach.
-
-Most moms waste 6-12 months doing the WRONG exercises (crunches, planks, sit-ups) and wonder why nothing changes.
-
-Don't be one of them.`,
+      response: `We hear you. Your belly still looks pregnant and it's frustrating.`,
     }
   }
 
-  // Template 3: "Frustrating" / Frustrated / Annoyed
   if (notes.includes("frustrat") || notes.includes("annoyed") || notes.includes("irritated")) {
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We hear you. Postpartum IS frustrating - especially when you feel like you're barely surviving (not thriving).
-
-At your score, here's WHY everything feels so frustrating right now:
-
-${
-  lowScores.find((item) => item.practice.includes("Medical"))
-    ? `→ **Medical Clearance (${lowScores.find((item) => item.practice.includes("Medical"))?.score}/10):** You don't even know if it's SAFE to start exercising yet. You want to feel better, but you're stuck in limbo waiting for your body to heal. That uncertainty? Frustrating.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Pelvic"))
-    ? `→ **Pelvic Floor Training (${lowScores.find((item) => item.practice.includes("Pelvic"))?.score}/10):** You're probably leaking when you sneeze or laugh. Maybe you avoid jumping or running. Your body feels "broken" and you don't know how to fix it. That's frustrating.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Core"))
-    ? `→ **Core-Safe Exercise Practice (${lowScores.find((item) => item.practice.includes("Core"))?.score}/10):** You might be TRYING to work out, but doing the wrong exercises (crunches? planks?). So you're putting in effort but seeing NO results. Your belly still looks pregnant. That's INCREDIBLY frustrating.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Rest"))
-    ? `→ **Rest & Recovery (${lowScores.find((item) => item.practice.includes("Rest"))?.score}/10):** You're exhausted. Baby wakes every 2 hours. You're touched out. You have no energy. And everyone says "sleep when baby sleeps" but that's IMPOSSIBLE. Exhaustion makes everything 10x more frustrating.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** You're probably eating whatever you can grab (crackers, toast, leftovers). No time for real meals. So your energy crashes, your mood tanks, and you feel like crap. Frustrating.
-
-`
-    : ""
-}
-The frustration you feel is VALID. You're not failing - you're just trying to recover without the right foundations.
-
-Most moms at your score feel hopeless. But here's the truth: Once you build these 5 foundations (medical clearance, pelvic floor, core work, rest protocol, nutrition), the frustration LIFTS.
-
-You start feeling like yourself again. Not just "mom." YOU.
-
-And that usually happens in 8-12 weeks with the right system.`,
+      response: `We hear you. Postpartum IS frustrating.`,
     }
   }
 
-  // Template 4: Exhausted / Tired / No energy
   if (
     notes.includes("exhaust") ||
     notes.includes("tired") ||
@@ -492,62 +413,11 @@ And that usually happens in 8-12 weeks with the right system.`,
   ) {
     return {
       concern: additionalNotes,
-      title: `💬 You Also Mentioned: " ${additionalNotes}"`,
-      response: `We see you. You're running on empty.
-
-Baby wakes every 2-3 hours. You haven't slept more than 4 hours straight in weeks. Coffee doesn't even work anymore. You're so tired you could cry.
-
-At your score, here's WHY you're so exhausted (and it's not just "new mom life"):
-
-${
-  lowScores.find((item) => item.practice.includes("Rest"))
-    ? `→ **Rest & Recovery (${lowScores.find((item) => item.practice.includes("Rest"))?.score}/10):** You're using baby's nap time to do chores instead of resting. Your body heals during rest - not during laundry. Without proper recovery, exhaustion compounds daily.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition Tracking (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** You're not tracking what you eat, which means you're likely under-eating or eating the wrong macros. Your body needs 300-500 extra calories for recovery and milk production. Without proper nutrition, you're running on fumes.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Protein"))
-    ? `→ **Protein Intake (${lowScores.find((item) => item.practice.includes("Protein"))?.score}/10):** You're probably eating under 50g/day. Postpartum moms need 80g+ for recovery and milk production. Without adequate protein, your body cannibalizes muscle for fuel. That's why you're exhausted.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Hydration"))
-    ? `→ **Hydration (${lowScores.find((item) => item.practice.includes("Hydration"))?.score}/10):** Dehydration mimics exhaustion. If you're breastfeeding, you need 100+ oz of water daily. Most moms drink 40-50 oz. That 50 oz gap? That's your energy.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Workout"))
-    ? `→ **Workout Consistency (${lowScores.find((item) => item.practice.includes("Workout"))?.score}/10):** You're not moving your body, so your energy stays low. It sounds backwards, but gentle movement CREATES energy. Without it, you stay stuck in exhaustion.
-
-`
-    : ""
-}
-Here's the truth: You don't need more sleep (though that helps). You need the right nutrition, movement, and recovery protocols.
-
-**Inside the app:**
-✅ Energy optimization protocols (double your energy in 7 days)
-✅ Protein-rich meal plans (hit 80g+ easily)
-✅ Hydration tracking (with reminders)
-✅ Gentle movement routines (that energize, not deplete)
-✅ Rest optimization strategies (maximize nap time recovery)
-
-Most moms think "I'll start when I have more energy."
-
-But here's what actually happens: You build these foundations FIRST, then energy returns.
-
-Within 2-3 weeks, most moms report feeling like they "woke up" for the first time in months.`,
+      title: `💬 You Also Mentioned: "${additionalNotes}"`,
+      response: `We see you. You're running on empty.`,
     }
   }
 
-  // Template 5: Leaking / Pelvic floor / Incontinence
   if (
     notes.includes("leak") ||
     notes.includes("pee") ||
@@ -558,51 +428,10 @@ Within 2-3 weeks, most moms report feeling like they "woke up" for the first tim
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We hear you. Leaking when you sneeze, laugh, or jump is embarrassing and frustrating.
-
-You avoid trampolines. You wear pads "just in case." You're scared to work out because you might leak. Your body feels broken.
-
-At your score, here's WHY you're leaking (and how to fix it):
-
-${
-  lowScores.find((item) => item.practice.includes("Pelvic"))
-    ? `→ **Pelvic Floor Training (${lowScores.find((item) => item.practice.includes("Pelvic"))?.score}/10):** Your pelvic floor muscles are weak from pregnancy and birth. Without proper strengthening, they can't support your bladder. That's why you leak. But here's the good news: 85% of women see improvement in 6-8 weeks with the right exercises.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Core"))
-    ? `→ **Core-Safe Exercise Practice (${lowScores.find((item) => item.practice.includes("Core"))?.score}/10):** Your core and pelvic floor work together. Weak core = weak pelvic floor. Without core-safe exercises, your pelvic floor has no support and leaking continues.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Medical"))
-    ? `→ **Medical Clearance (${lowScores.find((item) => item.practice.includes("Medical"))?.score}/10):** You haven't been cleared to start pelvic floor rehab. Without proper assessment, you don't know if you have prolapse, severe weakness, or other issues that need specific treatment.
-
-`
-    : ""
-}
-Here's the truth: Leaking is NOT normal. It's common, but it's NOT something you have to "just live with."
-
-**Inside the app:**
-✅ Pelvic floor strengthening protocol (daily exercises, 5 min)
-✅ Core-safe workouts (that support pelvic floor, not harm it)
-✅ Breathing techniques (activate deep pelvic floor muscles)
-✅ Progress tracking (see improvement weekly)
-✅ Return-to-running protocol (when you're ready)
-
-Most moms think "I'll just do Kegels." But Kegels alone don't work for 70% of women.
-
-You need a comprehensive pelvic floor + core protocol.
-
-Within 6-8 weeks, most moms see 80-90% reduction in leaking. Many stop leaking entirely.
-
-Your body isn't broken. It just needs the right rehab.`,
+      response: `We hear you. Leaking when you sneeze, laugh, or jump is embarrassing and frustrating.`,
     }
   }
 
-  // Template 6: Weight / Can't lose weight / Body image
   if (
     notes.includes("weight") ||
     notes.includes("lose") ||
@@ -613,67 +442,10 @@ Your body isn't broken. It just needs the right rehab.`,
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We hear you. You want to feel like yourself again.
-
-You're still wearing maternity clothes. Nothing fits. You avoid mirrors. You feel disconnected from your body.
-
-At your score, here's WHY the weight isn't coming off (and it's not your fault):
-
-${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition Tracking (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** You're not tracking what you eat, which means you're either under-eating (slowing metabolism) or over-eating (without realizing it). Without data, you're guessing. And guessing doesn't work.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Protein"))
-    ? `→ **Protein Intake (${lowScores.find((item) => item.practice.includes("Protein"))?.score}/10):** You're probably eating under 80g/day. Without adequate protein, your body holds onto fat and burns muscle instead. That's why the scale won't budge.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Workout"))
-    ? `→ **Workout Consistency (${lowScores.find((item) => item.practice.includes("Workout"))?.score}/10):** You're not moving consistently, so your metabolism stays slow. Without regular movement, your body stays in "survival mode" and holds onto every calorie.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Rest"))
-    ? `→ **Rest & Recovery (${lowScores.find((item) => item.practice.includes("Rest"))?.score}/10):** You're not sleeping enough. Sleep deprivation increases cortisol (stress hormone) which makes your body STORE fat, especially around your belly. You can't out-exercise bad sleep.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Hydration"))
-    ? `→ **Hydration (${lowScores.find((item) => item.practice.includes("Hydration"))?.score}/10):** Dehydration slows metabolism by 30%. If you're not drinking 80-100 oz daily, your body literally can't burn fat efficiently.
-
-`
-    : ""
-}
-Here's the truth: Postpartum weight loss is NOT about "eating less and moving more."
-
-It's about:
-✅ Eating ENOUGH (especially protein)
-✅ Moving CONSISTENTLY (not intensely)
-✅ Sleeping ADEQUATELY (7-9 hours)
-✅ Managing STRESS (cortisol blocks fat loss)
-✅ Healing FIRST (core, pelvic floor, hormones)
-
-**Inside the app:**
-✅ Postpartum nutrition plans (macro-balanced, not restrictive)
-✅ Protein-rich meal ideas (hit 80g+ easily)
-✅ Metabolism-boosting protocols
-✅ Body recomposition tracking (not just scale weight)
-
-Most moms are under-eating and over-exercising. That's why nothing works.
-
-Within 8-12 weeks of proper nutrition + movement + recovery, most moms lose 10-15 lbs and feel STRONG (not just skinny).
-
-Your body isn't broken. It just needs the right approach.`,
+      response: `We hear you. You want to feel like yourself again.`,
     }
   }
 
-  // Template 7: Pain / Back pain / Body hurts
   if (
     notes.includes("pain") ||
     notes.includes("hurt") ||
@@ -684,57 +456,10 @@ Your body isn't broken. It just needs the right approach.`,
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We hear you. Your body hurts.
-\
-Your back aches from carrying baby. Your hips are tight. Your shoulders are tense from nursing. Everything feels stiff and sore.
-
-At your score, here's WHY you're in pain (and how to fix it):
-
-${
-  lowScores.find((item) => item.practice.includes("Core"))
-    ? `→ **Core-Safe Exercise Practice (${lowScores.find((item) => item.practice.includes("Core"))?.score}/10):** Weak core = back compensates = pain. Without proper core strength, your back takes all the load when you lift baby, bend over, or carry things. That's why it hurts.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Pelvic"))
-    ? `→ **Pelvic Floor Training (${lowScores.find((item) => item.practice.includes("Pelvic"))?.score}/10):** Weak pelvic floor = weak core = back pain. It all connects. Your pelvic floor is the foundation of your core. Without it, your back suffers.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Workout"))
-    ? `→ **Workout Consistency (${lowScores.find((item) => item.practice.includes("Workout"))?.score}/10):** You're not moving regularly, so your muscles stay tight and weak. Without consistent movement, pain persists and worsens.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** Inflammation from poor nutrition makes pain worse. Without anti-inflammatory foods, your body stays inflamed and sore.
-
-`
-    : ""
-}
-Here's the truth: Postpartum pain is NOT normal. It's common, but it's NOT something you have to "just live with."
-
-**Inside the app:**
-✅ Core-strengthening exercises (reduce back pain in 2-3 weeks)
-✅ Pelvic floor rehab (foundation of pain-free movement)
-✅ Mobility routines (release tight hips, shoulders, back)
-✅ Anti-inflammatory meal plans (reduce pain from the inside)
-✅ Proper lifting techniques (protect your back)
-
-Most moms think "I'll just stretch more." But stretching alone doesn't fix weak muscles.
-
-You need strength + mobility + proper movement patterns.
-
-Within 3-4 weeks, most moms report 70-80% reduction in pain.
-
-Your body isn't broken. It just needs the right rehab.`,
+      response: `We hear you. Your body hurts.`,
     }
   }
 
-  // Template 8: Depressed / Anxious / Mental health
   if (
     notes.includes("depress") ||
     notes.includes("anxi") ||
@@ -745,133 +470,27 @@ Your body isn't broken. It just needs the right rehab.`,
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We see you. Postpartum is hard - physically AND emotionally.
-
-You're crying more than usual. You feel disconnected. You're anxious about everything. You wonder if you're a good mom.
-
-At your score, here's WHY you're struggling mentally (and how physical health impacts mental health):
-
-${
-  lowScores.find((item) => item.practice.includes("Rest"))
-    ? `→ **Rest & Recovery (${lowScores.find((item) => item.practice.includes("Rest"))?.score}/10):** Sleep deprivation increases depression risk by 300%. Without adequate rest, your brain can't regulate emotions. That's why everything feels overwhelming.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Nutrition"))
-    ? `→ **Nutrition (${lowScores.find((item) => item.practice.includes("Nutrition"))?.score}/10):** Your brain needs specific nutrients (omega-3s, B vitamins, protein) to produce serotonin and dopamine. Without proper nutrition, your mood tanks.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Workout"))
-    ? `→ **Workout Consistency (${lowScores.find((item) => item.practice.includes("Workout"))?.score}/10):** Exercise is one of the most effective treatments for depression and anxiety. Without regular movement, your mental health suffers.
-
-`
-    : ""
-}${
-  lowScores.find((item) => item.practice.includes("Hydration"))
-    ? `→ **Hydration (${lowScores.find((item) => item.practice.includes("Hydration"))?.score}/10):** Dehydration increases anxiety and brain fog. If you're not drinking enough, your mental clarity and mood suffer.
-
-`
-    : ""
-}
-**IMPORTANT:** If you're experiencing severe depression, suicidal thoughts, or thoughts of harming yourself or baby, please call your doctor or the Postpartum Support International hotline: 1-800-944-4773.
-
-Here's the truth: Physical health and mental health are CONNECTED.
-
-When you:
-✅ Sleep better → Mood improves
-✅ Eat better → Brain fog lifts
-✅ Move consistently → Anxiety decreases
-✅ Hydrate properly → Mental clarity returns
-
-**Inside the app:**
-✅ Mood-boosting nutrition protocols
-✅ Gentle movement routines (proven to reduce depression)
-✅ Community support (you're not alone)
-✅ Energy optimization (more energy = better mood)
-✅ Stress management techniques
-
-Most moms at your score feel hopeless. But here's the truth: Small physical changes create BIG mental shifts.
-
-Within 2-3 weeks of proper nutrition + movement + rest, most moms report feeling "like themselves again."
-
-You're not broken. You're not a bad mom. You're just depleted.
-
-And depletion is fixable.`,
+      response: `We see you. Postpartum is hard - physically AND emotionally.`,
     }
   }
 
-  // Default: Generic but still personalized
   const topGaps = lowScores.slice(0, 3)
   if (topGaps.length > 0) {
     return {
       concern: additionalNotes,
       title: `💬 You Also Mentioned: "${additionalNotes}"`,
-      response: `We hear you. Your concern is valid and directly connected to the gaps we identified in your assessment.
-
-At your score, here's what's holding you back:
-
-${topGaps
-  .map((gap) => {
-    const gapExplanations: Record<string, string> = {
-      "Medical Clearance":
-        "You haven't been medically cleared to start exercising. Without knowing what's safe, you're stuck in limbo - wanting to feel better but scared to hurt yourself.",
-      "Pelvic Floor Training":
-        "Your pelvic floor is weak from pregnancy and birth. This affects EVERYTHING - core strength, back pain, leaking, and even your ability to work out safely.",
-      "Diastasis Recti Awareness":
-        "You don't know if your abs are separated or how to heal them. Without proper assessment and treatment, your core stays weak and your belly protrudes.",
-      "Core-Safe Exercise Practice":
-        "You're either not exercising or doing unsafe movements that make things worse. Without core-safe exercises, you can't rebuild strength or lose the 'mom pooch.'",
-      "Rest & Recovery":
-        "You're not prioritizing rest, so your body can't heal. Exhaustion compounds daily, making everything harder - from workouts to parenting to mental health.",
-      "Nutrition Tracking":
-        "You're not tracking what you eat, so you don't know if you're eating enough (or too much). Without data, you're guessing - and guessing doesn't work.",
-      "Protein Intake":
-        "You're probably eating under 80g/day. Without adequate protein, your body can't recover, build muscle, or produce milk (if breastfeeding).",
-      Hydration:
-        "You're not drinking enough water. Dehydration mimics exhaustion, slows metabolism, and makes everything harder - from workouts to mental clarity.",
-      "Workout Consistency":
-        "You're not moving regularly, so your energy stays low and your body stays weak. Without consistent movement, recovery stalls.",
-      "Wellness Tracking":
-        "You're not tracking your progress, so you don't know what's working. Without data, you can't adjust your approach or celebrate wins.",
-    }
-
-    return `→ **${gap.practice} (${gap.score}/10):** ${gapExplanations[gap.practice] || "This gap is preventing you from feeling your best and reaching your goals."}`
-  })
-  .join("\n\n")}
-
-The good news? Every single one of these gaps is closable.
-
-**Inside the app:**
-✅ Step-by-step protocols for each gap
-✅ Daily guidance (no more guessing)
-✅ Progress tracking (see improvement weekly)
-✅ Community support (you're not alone)
-✅ 1-on-1 Human Check-ins — Bi-weekly expert progress reviews.
-✅ 24/7 Catalyst AI Expert — Instant answers to any wellness question.
-
-Most moms at your score feel stuck. But here's the truth: Small, strategic changes create BIG results.
-
-Within 8-12 weeks, most moms report feeling like "themselves again" - not just physically, but mentally and emotionally too.
-
-Your concern is valid. And it's fixable.`,
+      response: `We hear you. Your concern is valid and directly connected to the gaps we identified in your assessment.`,
     }
   }
 
   return {
     concern: additionalNotes,
     title: `💬 Thank You for Sharing`,
-    response: `We appreciate you sharing your thoughts with us. Every mom's journey is unique, and your specific situation matters.
-\
-Based on your assessment, we've identified the key areas that need attention to help you feel your best.
-
-The Catalyst Mom app provides personalized support, evidence-based protocols, and a community of women on the same journey.
-
-You don't have to figure this out alone.`,
+    response: `We appreciate you sharing your thoughts with us.`,
   }
 }
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function PostpartumAssessment() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -894,13 +513,13 @@ export default function PostpartumAssessment() {
     supportType: "",
     dietaryRestrictions: "",
     additionalNotes: "",
-    birthExperience: "", // Added from updates
+    birthExperience: "",
   })
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
-  const [scoreTier, setScoreTier] = useState<"low" | "medium" | "high">("low") // Declare the tier variable
+  const [scoreTier, setScoreTier] = useState<"low" | "medium" | "high">("low")
   const [isLoading, setIsLoading] = useState(false)
-  const [tier, setTier] = useState<"low" | "medium" | "high">("low") // Declare the tier variable
+  const [tier, setTier] = useState<"low" | "medium" | "high">("low")
 
   const questions = [
     {
@@ -1043,52 +662,36 @@ export default function PostpartumAssessment() {
   const calculateScore = () => {
     let totalScore = 0
 
-    // Q1: Timeline postpartum (always counts as 10, just for tracking)
-    totalScore += 10
+    totalScore += 10 // Timeline always scores 10
 
-    // Q2: Medical clearance
     if (quizState.medicalClearance === "yes") totalScore += 10
     else totalScore += 0
 
-    // Q3: Diastasis recti
     if (quizState.diastasisRecti === "diagnosed") totalScore += 10
     else if (quizState.diastasisRecti === "think-so") totalScore += 7
     else if (quizState.diastasisRecti === "no") totalScore += 10
-    else totalScore += 3 // dont-know
+    else totalScore += 3
 
-    // Q4: Core and pelvic floor
     if (quizState.coreSafeExercises === "leak") totalScore += 3
     else if (quizState.coreSafeExercises === "weak") totalScore += 5
     else if (quizState.coreSafeExercises === "pain") totalScore += 4
     else if (quizState.coreSafeExercises === "all") totalScore += 2
     else if (quizState.coreSafeExercises === "okay") totalScore += 10
 
-    // Q5: Movement
     if (quizState.workoutRoutine === "3-plus") totalScore += 10
     else if (quizState.workoutRoutine === "1-2") totalScore += 7
     else if (quizState.workoutRoutine === "occasional") totalScore += 4
     else if (quizState.workoutRoutine === "not-started") totalScore += 0
 
-    // Q6: Nutrition/Fueling
     if (quizState.nutrition === "well") totalScore += 10
     else if (quizState.nutrition === "okay") totalScore += 6
     else if (quizState.nutrition === "poorly") totalScore += 2
     else if (quizState.nutrition === "no-idea") totalScore += 0
 
-    // Q7: Energy and rest
     if (quizState.rest === "good") totalScore += 10
     else if (quizState.rest === "tired") totalScore += 7
     else if (quizState.rest === "exhausted") totalScore += 2
     else if (quizState.rest === "depleted") totalScore += 0
-
-    // Q8, Q9, Q10 are name/email/goal/barrier - these don't score but are counted for navigation
-    // Name and email are informational only
-
-    // Q11: Primary goal (doesn't affect scoring, just for personalization)
-    totalScore += 0 // No points for this question
-
-    // Q12: Biggest barrier (doesn't affect scoring, just for personalization)
-    totalScore += 0 // No points for this question
 
     return totalScore
   }
@@ -1116,23 +719,21 @@ export default function PostpartumAssessment() {
 
         trackQuizEvents.quizCompleted(calculatedScore, tier)
 
-        // Add custom properties for Omnisend
         const customProperties = {
           assessment_type: "Postpartum",
           score: calculatedScore,
           score_tier: tier,
           weeks_postpartum: quizState.weeksPostpartum,
           primary_goal: quizState.primaryGoal,
-          birth_experience: quizState.birthExperience, // Added from updates
-          results_url: `https://catalystmomofficial.com/dashboard`, // Added results URL - Will be updated with actual ID after insertion
+          birth_experience: quizState.birthExperience,
+          results_url: `https://catalystmomofficial.com/dashboard`,
         }
 
-        // Send to Omnisend
         await addContactToOmnisend({
           email: quizState.email,
           firstName: quizState.name,
           tags: ["postpartum-assessment", `score-${tier}`, `weeks-${quizState.weeksPostpartum}`],
-          customProperties: customProperties, // Use the defined customProperties
+          customProperties: customProperties,
         })
 
         const { data: supabaseData, error: supabaseError } = await supabase
@@ -1152,7 +753,7 @@ export default function PostpartumAssessment() {
               biggest_obstacle: quizState.biggestObstacle,
               support_preference: quizState.supportType,
               additional_notes: quizState.additionalNotes,
-              birth_experience: quizState.birthExperience, // Added from updates
+              birth_experience: quizState.birthExperience,
               exercise_safety: quizState.coreSafeExercises === "crunches" ? "unsafe" : quizState.coreSafeExercises,
               pelvic_floor: quizState.pelvicFloor,
               core_strength: quizState.coreSafeExercises,
@@ -1172,12 +773,9 @@ export default function PostpartumAssessment() {
 
         console.log("[v0] Supabase insert response:", supabaseData)
 
-        // Store the assessment ID for results page
         if (supabaseData && supabaseData[0]) {
           sessionStorage.setItem("postpartum_assessment_id", supabaseData[0].id)
-          // Update the results_url with the actual ID
           customProperties.results_url = `https://catalystmomofficial.com/dashboard?assessment_id=${supabaseData[0].id}`
-          // Re-send to Omnisend with updated URL (optional, depending on Omnisend's update capabilities)
           await addContactToOmnisend({
             email: quizState.email,
             firstName: quizState.name,
@@ -1209,11 +807,7 @@ export default function PostpartumAssessment() {
     const question = questions[currentQuestion]
 
     if (question.type === "unlock") {
-      return (
-        quizState.name.trim() !== "" &&
-        quizState.email.trim() !== "" &&
-        isValidEmail(quizState.email)
-      )
+      return quizState.name.trim() !== "" && quizState.email.trim() !== "" && isValidEmail(quizState.email)
     }
 
     const value = quizState[question.field as keyof QuizState]
@@ -1253,94 +847,21 @@ export default function PostpartumAssessment() {
               <head>
                 <title>${data.guideContent.title}</title>
                 <style>
-                  * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                  }
-                  body {
-                    font-family: 'Georgia', serif;
-                    background: linear-gradient(135deg, #F8F5F2, #F0E6D2);
-                    padding: 40px;
-                    color: #3A2412;
-                  }
-                  .cover {
-                    text-align: center;
-                    padding: 60px 20px;
-                    background: white;
-                    border-radius: 12px;
-                    margin-bottom: 40px;
-                    box-shadow: 0 4px 20px rgba(161, 92, 47, 0.1);
-                  }
-                  .cover img {
-                    width: 150px;
-                    height: 150px;
-                    border-radius: 50%;
-                    margin-bottom: 20px;
-                  }
-                  .cover h1 {
-                    font-size: 36px;
-                    color: #A15C2F;
-                    margin-bottom: 10px;
-                  }
-                  .cover p {
-                    font-size: 18px;
-                    color: #6B4423;
-                  }
-                  .section {
-                    background: white;
-                    padding: 30px;
-                    margin-bottom: 20px;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 20px rgba(161, 92, 47, 0.1);
-                  }
-                  .section h2 {
-                    font-size: 24px;
-                    color: #A15C2F;
-                    margin-bottom: 15px;
-                    border-bottom: 3px solid #A15C2F;
-                    padding-bottom: 10px;
-                  }
-                  .section ul {
-                    list-style: none;
-                    padding: 0;
-                  }
-                  .section li {
-                    padding: 10px 0;
-                    border-bottom: 1px solid #E8D5C4;
-                    color: #3A2412;
-                    line-height: 1.6;
-                  }
-                  .cta {
-                    text-align: center;
-                    padding: 40px 20px;
-                    background: linear-gradient(135deg, #A15C2F, #C27B48);
-                    color: white;
-                    border-radius: 12px;
-                    margin-top: 40px;
-                  }
-                  .cta h2 {
-                    font-size: 28px;
-                    margin-bottom: 15px;
-                  }
-                  .cta p {
-                    font-size: 16px;
-                    margin-bottom: 20px;
-                  }
-                  .cta button {
-                    background: white;
-                    color: #A15C2F;
-                    border: none;
-                    padding: 15px 40px;
-                    font-size: 18px;
-                    font-weight: bold;
-                    border-radius: 8px;
-                    cursor: pointer;
-                  }
-                  @media print {
-                    body { background: white; }
-                    .cta button { display: none; }
-                  }
+                  * { margin: 0; padding: 0; box-sizing: border-box; }
+                  body { font-family: 'Georgia', serif; background: linear-gradient(135deg, #F8F5F2, #F0E6D2); padding: 40px; color: #3A2412; }
+                  .cover { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 4px 20px rgba(161, 92, 47, 0.1); }
+                  .cover img { width: 150px; height: 150px; border-radius: 50%; margin-bottom: 20px; }
+                  .cover h1 { font-size: 36px; color: #A15C2F; margin-bottom: 10px; }
+                  .cover p { font-size: 18px; color: #6B4423; }
+                  .section { background: white; padding: 30px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(161, 92, 47, 0.1); }
+                  .section h2 { font-size: 24px; color: #A15C2F; margin-bottom: 15px; border-bottom: 3px solid #A15C2F; padding-bottom: 10px; }
+                  .section ul { list-style: none; padding: 0; }
+                  .section li { padding: 10px 0; border-bottom: 1px solid #E8D5C4; color: #3A2412; line-height: 1.6; }
+                  .cta { text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #A15C2F, #C27B48); color: white; border-radius: 12px; margin-top: 40px; }
+                  .cta h2 { font-size: 28px; margin-bottom: 15px; }
+                  .cta p { font-size: 16px; margin-bottom: 20px; }
+                  .cta button { background: white; color: #A15C2F; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+                  @media print { body { background: white; } .cta button { display: none; } }
                 </style>
               </head>
               <body>
@@ -1350,29 +871,21 @@ export default function PostpartumAssessment() {
                   <p>${data.guideContent.subtitle}</p>
                   <p>Personalized for ${quizState.name}</p>
                 </div>
-                
                 ${data.guideContent.sections
                   .map(
                     (section: any) => `
                   <div class="section">
                     <h2>${section.title}</h2>
-                    <ul>
-                      ${section.content.map((item: string) => `<li>${item}</li>`).join("")}
-                    </ul>
-                  </div>
-                `,
+                    <ul>${section.content.map((item: string) => `<li>${item}</li>`).join("")}</ul>
+                  </div>`,
                   )
                   .join("")}
-                
                 <div class="cta">
                   <h2>Ready to Transform Your Wellness Journey?</h2>
                   <p>This free guide is just the beginning. Get personalized coaching, community support, and expert-designed programs.</p>
                   <button onclick="window.location.href='https://catalystmomofficial.com/dashboard'">Join Catalyst Mom Today</button>
                 </div>
-                
-                <script>
-                  setTimeout(() => window.print(), 500);
-                </script>
+                <script>setTimeout(() => window.print(), 500);</script>
               </body>
             </html>
           `)
@@ -1384,6 +897,7 @@ export default function PostpartumAssessment() {
     }
   }
 
+  // ── Early-healing branch ──────────────────────────────────────────────────
   if (quizState.weeksPostpartum === "0-6" && showResults) {
     return (
       <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
@@ -1398,7 +912,7 @@ export default function PostpartumAssessment() {
           <Card className="border-0 shadow-xl">
             <CardHeader className="text-center pb-4">
               <CardTitle className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                You're in Early Healing Mode
+                You&apos;re in Early Healing Mode
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8 space-y-6">
@@ -1407,8 +921,8 @@ export default function PostpartumAssessment() {
                   First - congratulations on your baby! Your body just did something INCREDIBLE.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  Right now (0-6 weeks postpartum), you're in the critical healing phase. This isn't the time for
-                  workout programs or weight loss efforts. Your job is to rest, heal, and bond with baby.
+                  Right now (0-6 weeks postpartum), you&apos;re in the critical healing phase. This isn&apos;t the time
+                  for workout programs or weight loss efforts. Your job is to rest, heal, and bond with baby.
                 </p>
               </div>
 
@@ -1419,8 +933,8 @@ export default function PostpartumAssessment() {
                 <ul className="space-y-2" style={{ color: "#3A2412" }}>
                   <li>✅ REST and let your body heal (seriously - rest!)</li>
                   <li>✅ Focus on gentle movement (short walks only)</li>
-                  <li>✅ Eat nourishing foods (don't diet - NOURISH)</li>
-                  <li>✅ Bond with baby (this is your main 'work')</li>
+                  <li>✅ Eat nourishing foods (don&apos;t diet - NOURISH)</li>
+                  <li>✅ Bond with baby (this is your main &apos;work&apos;)</li>
                 </ul>
               </div>
 
@@ -1438,7 +952,7 @@ export default function PostpartumAssessment() {
 
               <div className="text-center">
                 <p className="text-lg font-semibold mb-4" style={{ color: "#A15C2F" }}>
-                  You're Not Behind. You're Not Lazy. You're HEALING.
+                  You&apos;re Not Behind. You&apos;re Not Lazy. You&apos;re HEALING.
                 </p>
                 <Button
                   size="lg"
@@ -1460,32 +974,31 @@ export default function PostpartumAssessment() {
     return <ResultsPage score={score} tier={tier} quizState={quizState} />
   }
 
+  // ── Quiz UI ───────────────────────────────────────────────────────────────
   const question = questions[currentQuestion]
   const progress = ((currentQuestion + 1) / questions.length) * 100
 
   return (
-    // Apply 2-column grid layout for postpartum assessment
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="col-span-1 md:col-span-2">
-          {" "}
-          {/* Full width for header elements */}
           <Link href="/">
             <Button variant="ghost" className="mb-6">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
           </Link>
+
           {/* Progress Bar */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
-              <div>
-                <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-8 w-8" />
-              </div>
-              <span className="font-bold" style={{ color: "#A15C2F" }}>
-                Catalyst Mom
-              </span>
+                <div>
+                  <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-8 w-8" />
+                </div>
+                <span className="font-bold" style={{ color: "#A15C2F" }}>
+                  Catalyst Mom
+                </span>
               </div>
               <Badge style={{ backgroundColor: "#A15C2F", color: "white" }}>
                 {currentQuestion + 1} of {questions.length}
@@ -1494,16 +1007,13 @@ export default function PostpartumAssessment() {
             <div className="w-full h-2 rounded-full" style={{ backgroundColor: "#E8D5C4" }}>
               <div
                 className="h-2 rounded-full transition-all duration-300"
-                style={{
-                  backgroundColor: "#A15C2F",
-                  width: `${progress}%`,
-                }}
+                style={{ backgroundColor: "#A15C2F", width: `${progress}%` }}
               />
             </div>
           </div>
         </div>
 
-        {/* Question Card - Takes up remaining space */}
+        {/* Question Card */}
         <Card className="col-span-1 md:col-span-1 border-0 shadow-xl">
           <CardHeader className="rounded-t-lg p-6" style={{ backgroundColor: "#A15C2F" }}>
             <CardTitle className="text-2xl font-bold text-white mb-2">{question.title}</CardTitle>
@@ -1515,7 +1025,8 @@ export default function PostpartumAssessment() {
               <div className="space-y-5">
                 <div className="text-center p-4 rounded-lg mb-2" style={{ backgroundColor: "#FFF8E1" }}>
                   <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
-                    Your personalised recovery roadmap is waiting. Enter your details below and we will send it straight to your inbox.
+                    Your personalised recovery roadmap is waiting. Enter your details below and we will send it straight
+                    to your inbox.
                   </p>
                 </div>
                 <div className="space-y-4">
@@ -1552,7 +1063,7 @@ export default function PostpartumAssessment() {
                 type="text"
                 value={quizState[question.field as keyof QuizState]}
                 onChange={(e) => handleInputChange(question.field as keyof QuizState, e.target.value)}
-                placeholder={question.placeholder}
+                placeholder={(question as any).placeholder}
                 className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-lg"
               />
             )}
@@ -1562,7 +1073,7 @@ export default function PostpartumAssessment() {
                 type="email"
                 value={quizState[question.field as keyof QuizState]}
                 onChange={(e) => handleInputChange(question.field as keyof QuizState, e.target.value)}
-                placeholder={question.placeholder}
+                placeholder={(question as any).placeholder}
                 className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-lg"
               />
             )}
@@ -1573,7 +1084,7 @@ export default function PostpartumAssessment() {
                 onValueChange={(value) => handleInputChange(question.field as keyof QuizState, value)}
               >
                 <div className="space-y-3">
-                  {question.options?.map((option) => (
+                  {(question as any).options?.map((option: { value: string; label: string }) => (
                     <div
                       key={option.value}
                       className="flex items-center space-x-3 p-4 border-2 border-amber-200 rounded-lg hover:border-amber-400 cursor-pointer transition-colors"
@@ -1592,7 +1103,7 @@ export default function PostpartumAssessment() {
               <Textarea
                 value={quizState[question.field as keyof QuizState]}
                 onChange={(e) => handleInputChange(question.field as keyof QuizState, e.target.value)}
-                placeholder={question.placeholder}
+                placeholder={(question as any).placeholder}
                 rows={4}
                 className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-base resize-none"
               />
@@ -1600,7 +1111,7 @@ export default function PostpartumAssessment() {
           </CardContent>
         </Card>
 
-        {/* Navigation - Spanning across columns if needed or in its own row */}
+        {/* Navigation */}
         <div className="col-span-1 md:col-span-2 flex justify-between items-center mt-8 gap-4">
           <Button
             onClick={handlePrevious}
@@ -1626,6 +1137,8 @@ export default function PostpartumAssessment() {
   )
 }
 
+// ─── Results Page ─────────────────────────────────────────────────────────────
+
 function ResultsPage({
   score,
   tier,
@@ -1636,9 +1149,9 @@ function ResultsPage({
   quizState: QuizState
 }) {
   const getTierColor = () => {
-    if (score <= 40) return "#E57373" // Red/coral for 0-40
-    if (score <= 70) return "#FFB74D" // Yellow/orange for 41-70
-    return "#81C784" // Green for 71-100
+    if (score <= 40) return "#E57373"
+    if (score <= 70) return "#FFB74D"
+    return "#81C784"
   }
 
   const getTierLabel = () => {
@@ -1682,15 +1195,11 @@ function ResultsPage({
               </Badge>
             </div>
 
-            {/* Progress Bar */}
             <div className="max-w-md mx-auto mb-6">
               <div className="w-full h-3 rounded-full" style={{ backgroundColor: "#E8D5C4" }}>
                 <div
                   className="h-3 rounded-full transition-all duration-500"
-                  style={{
-                    backgroundColor: getTierColor(),
-                    width: `${score}%`,
-                  }}
+                  style={{ backgroundColor: getTierColor(), width: `${score}%` }}
                 />
               </div>
             </div>
@@ -1720,7 +1229,7 @@ function ResultsPage({
               📋 Your Detailed Wellness Breakdown
             </CardTitle>
             <p className="text-sm" style={{ color: "#3A2412" }}>
-              Here's exactly how you scored across the 10 essential postpartum wellness practices:
+              Here&apos;s exactly how you scored across the 10 essential postpartum wellness practices:
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -1729,7 +1238,8 @@ function ResultsPage({
                 key={index}
                 className="flex items-center justify-between p-4 rounded-lg border-2"
                 style={{
-                  borderColor: item.status === "excellent" ? "#81C784" : item.status === "good" ? "#FFB74D" : "#E57373",
+                  borderColor:
+                    item.status === "excellent" ? "#81C784" : item.status === "good" ? "#FFB74D" : "#E57373",
                   backgroundColor:
                     item.status === "excellent" ? "#F1F8F4" : item.status === "good" ? "#FFF8E1" : "#FFEBEE",
                 }}
@@ -1781,7 +1291,6 @@ function ResultsPage({
           <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
         )}
 
-        {/* Tier-Specific Content */}
         {tier === "high" && <HighScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
         {tier === "medium" && (
           <MediumScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />
@@ -1791,6 +1300,8 @@ function ResultsPage({
     </div>
   )
 }
+
+// ─── HighScorerContent ────────────────────────────────────────────────────────
 
 function HighScorerContent({
   score,
@@ -1805,6 +1316,19 @@ function HighScorerContent({
 }) {
   const gapAreas = breakdown.filter((item) => item.score >= 6 && item.score <= 7)
 
+  const vipTestimonials = [
+    {
+      quote:
+        "I scored a 74 and honestly thought I was doing great. After 8 weeks of VIP coaching, I hit 96. My recovery was an absolute DREAM - back in my jeans 6 weeks postpartum. Best investment I made.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+    {
+      quote:
+        "I was at 78/100 and thought 'I'm fine.' My coach showed me the small gaps that were holding me back. We fixed them in 4 weeks. I went from 'I think I'm ready' to 'I AM ready' - totally different confidence level.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+  ]
+
   return (
     <>
       {/* What Your Score Means */}
@@ -1816,12 +1340,12 @@ function HighScorerContent({
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            You're already ahead of 85% of postpartum moms. Seriously - most moms would LOVE to be where you are right
-            now.
+            You&apos;re already ahead of 85% of postpartum moms. Seriously - most moms would LOVE to be where you are
+            right now.
           </p>
           <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            But here's what high-performers like you understand:{" "}
-            <strong>The difference between "good enough" and "exceptional" is in the details.</strong>
+            But here&apos;s what high-performers like you understand:{" "}
+            <strong>The difference between &ldquo;good enough&rdquo; and &ldquo;exceptional&rdquo; is in the details.</strong>
           </p>
 
           <div className="space-y-4 mt-6">
@@ -1847,14 +1371,14 @@ function HighScorerContent({
 
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400 mt-6">
             <p className="text-lg font-semibold mb-2" style={{ color: "#A15C2F" }}>
-              Here's the truth:
+              Here&apos;s the truth:
             </p>
             <p className="text-lg" style={{ color: "#3A2412" }}>
-              These aren't big problems. They're precision optimizations that take you from "good recovery" to "dream
-              recovery."
+              These aren&apos;t big problems. They&apos;re precision optimizations that take you from &ldquo;good
+              recovery&rdquo; to &ldquo;dream recovery.&rdquo;
             </p>
             <p className="text-lg mt-2" style={{ color: "#3A2412" }}>
-              And that's exactly what our VIP coaching is designed for - high-performers who want to dial in the
+              And that&apos;s exactly what our VIP coaching is designed for - high-performers who want to dial in the
               DETAILS.
             </p>
           </div>
@@ -1878,45 +1402,42 @@ function HighScorerContent({
             </p>
           </div>
 
+          {/* Who VIP is for */}
           <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#A15C2F" }}>
             <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
               Who VIP Coaching Is For:
             </h3>
             <div className="space-y-2">
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>2 Private Coaching Calls Per Month</strong> (30-45 min each) - Deep-dive your progress, adjust
-                  your plan, troubleshoot challenges in real-time
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Custom Workout + Nutrition Plan</strong> - Not generic templates, completely personalized to
-                  your assessment results
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Direct Text Access to Your Coach</strong> - Questions answered within 24 hours, no waiting for
-                  next week's call
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Personalized Recovery Strategy Session</strong> - Core healing, pelvic floor strengthening,
-                  decision-making frameworks
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Ongoing Progress Tracking</strong> - Customized to your recovery timeline and goals
-                </span>
-              </p>
+              {[
+                {
+                  bold: "2 Private Coaching Calls Per Month",
+                  rest: " (30-45 min each) - Deep-dive your progress, adjust your plan, troubleshoot challenges in real-time",
+                },
+                {
+                  bold: "Custom Workout + Nutrition Plan",
+                  rest: " - Not generic templates, completely personalized to your assessment results",
+                },
+                {
+                  bold: "Direct Text Access to Your Coach",
+                  rest: " - Questions answered within 24 hours, no waiting for next week's call",
+                },
+                {
+                  bold: "Personalized Recovery Strategy Session",
+                  rest: " - Core healing, pelvic floor strengthening, decision-making frameworks",
+                },
+                {
+                  bold: "Ongoing Progress Tracking",
+                  rest: " - Customized to your recovery timeline and goals",
+                },
+              ].map((item, i) => (
+                <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                  <span>
+                    <strong>{item.bold}</strong>
+                    {item.rest}
+                  </span>
+                </p>
+              ))}
             </div>
             <div className="mt-6 p-4 bg-white rounded-lg text-center">
               <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
@@ -1928,45 +1449,42 @@ function HighScorerContent({
             </div>
           </div>
 
+          {/* What you get */}
           <div className="p-6 bg-amber-50 rounded-lg">
             <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
               What You Get as a VIP Client:
             </h3>
             <div className="space-y-3">
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>2 Private Coaching Calls Per Month</strong> (30-45 min each) - Deep-dive your progress, adjust
-                  your plan, troubleshoot challenges in real-time
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Custom Workout + Nutrition Plan</strong> - Not generic templates, completely personalized to
-                  your assessment results
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Direct Text Access to Your Coach</strong> - Questions answered within 24 hours, no waiting for
-                  next week's call
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Personalized Recovery Strategy Session</strong> - Core healing, pelvic floor strengthening,
-                  decision-making frameworks
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Ongoing Progress Tracking</strong> - Customized to your recovery timeline and goals
-                </span>
-              </p>
+              {[
+                {
+                  bold: "2 Private Coaching Calls Per Month",
+                  rest: " (30-45 min each) - Deep-dive your progress, adjust your plan, troubleshoot challenges in real-time",
+                },
+                {
+                  bold: "Custom Workout + Nutrition Plan",
+                  rest: " - Not generic templates, completely personalized to your assessment results",
+                },
+                {
+                  bold: "Direct Text Access to Your Coach",
+                  rest: " - Questions answered within 24 hours, no waiting for next week's call",
+                },
+                {
+                  bold: "Personalized Recovery Strategy Session",
+                  rest: " - Core healing, pelvic floor strengthening, decision-making frameworks",
+                },
+                {
+                  bold: "Ongoing Progress Tracking",
+                  rest: " - Customized to your recovery timeline and goals",
+                },
+              ].map((item, i) => (
+                <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                  <span>
+                    <strong>{item.bold}</strong>
+                    {item.rest}
+                  </span>
+                </p>
+              ))}
             </div>
             <div className="mt-6 p-4 bg-white rounded-lg text-center">
               <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
@@ -1978,88 +1496,55 @@ function HighScorerContent({
             </div>
           </div>
 
-          {/* Social Proof */}
+          {/* Social Proof Stats */}
           <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
             <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
               📊 Results From VIP Clients Who Started as 70+ Scorers:
             </h3>
             <div className="grid md:grid-cols-2 gap-4">
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                  96/100
-                </p>
-                <p className="text-sm" style={{ color: "#3A2412" }}>
-                  Average final score
-                </p>
-              </div>
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                  96%
-                </p>
-                <p className="text-sm" style={{ color: "#3A2412" }}>
-                  Feel "completely confident"
-                </p>
-              </div>
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                  8 weeks
-                </p>
-                <p className="text-sm" style={{ color: "#3A2412" }}>
-                  Avg recovery to "feeling like myself"
-                </p>
-              </div>
-              <div className="text-center p-4 bg-white rounded-lg">
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                  89%
-                </p>
-                <p className="text-sm" style={{ color: "#3A2412" }}>
-                  Avoided complications
-                </p>
-              </div>
+              {[
+                { stat: "96/100", label: "Average final score" },
+                { stat: "96%", label: 'Feel "completely confident"' },
+                { stat: "8 weeks", label: 'Avg recovery to "feeling like myself"' },
+                { stat: "89%", label: "Avoided complications" },
+              ].map((item, i) => (
+                <div key={i} className="text-center p-4 bg-white rounded-lg">
+                  <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
+                    {item.stat}
+                  </p>
+                  <p className="text-sm" style={{ color: "#3A2412" }}>
+                    {item.label}
+                  </p>
+                </div>
+              ))}
             </div>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
               Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
             </p>
           </div>
-          {/* End CTA Section */}
 
           {/* Testimonials */}
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-center" style={{ color: "#A15C2F" }}>
-              💬 What VIP Clients Say:
-            </h3>
-            <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
-              <p className="italic mb-3" style={{ color: "#3A2412" }}>
-                "I scored a 74 and honestly thought I was doing great. After 8 weeks of VIP coaching, I hit 96. My
-                recovery was an absolute DREAM - back in my jeans 6 weeks postpartum. Best investment I made."
-              </p>
-              <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Postpartum Mama · Catalyst Mom Community
-              </p>
-            </div>
-            <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
-              <p className="italic mb-3" style={{ color: "#3A2412" }}>
-                "I was at 78/100 and thought 'I'm fine.' My coach showed me the small gaps that were holding me back. We
-                fixed them in 4 weeks. I went from 'I think I'm ready' to 'I AM ready' - totally different confidence
-                level."
-              </p>
-              <p className="font-semibold" style={{ color: "#A15C2F" }}>
-                — Postpartum Mama · Catalyst Mom Community
-              </p>
-            </div>
-          </div>
+          <TestimonialsSection
+            testimonials={vipTestimonials}
+            title="💬 What VIP Clients Say:"
+          />
 
           {/* C-section Safety Disclaimer */}
           {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
             quizState.additionalNotes?.toLowerCase().includes("c section") ||
             quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
             quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
-            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+            <div
+              className="p-5 rounded-lg border-l-4"
+              style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}
+            >
               <p className="font-bold mb-2" style={{ color: "#92400E" }}>
                 C-Section Recovery Note
               </p>
               <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+                Based on your mention of a C-section, please ensure your incision is fully healed externally and your
+                doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog
+                movements.
               </p>
             </div>
           )}
@@ -2068,49 +1553,29 @@ function HighScorerContent({
           {(quizState.biggestObstacle === "no-time" ||
             quizState.biggestObstacle?.toLowerCase().includes("time") ||
             quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
-            <div className="p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+            <div
+              className="p-5 rounded-lg border-l-4"
+              style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}
+            >
               <p className="font-bold mb-2" style={{ color: "#166534" }}>
                 Built for Busy Mamas
               </p>
               <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym
+                sessions — just focused, effective movements you can do while baby naps or plays nearby.
               </p>
             </div>
           )}
 
           {/* CTA */}
-          <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
-            <Button
-              size="lg"
-              className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-              style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-              onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
-                appUrl.searchParams.set("name", quizState.name)
-                appUrl.searchParams.set("email", quizState.email)
-                appUrl.searchParams.set("score", score.toString())
-                appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
-                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
-                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
-                window.open(appUrl.toString(), "_blank")
-              }}
-            >
-              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
-                ? "Start My Gentle Healing Protocol - $29/month"
-                : "Join the Catalyst Mom App Now - $29/month"}
-            </Button>
-            <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Feel more connected to your core in just 7 days. Cancel anytime—no contracts.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+          <PricingSection quizState={quizState} score={score} tier={tier} />
+        </CardContent>
+      </Card>
+    </>
   )
 }
-export default PostpartumAssessment;
+
+// ─── MediumScorerContent ──────────────────────────────────────────────────────
 
 function MediumScorerContent({
   score,
@@ -2125,6 +1590,42 @@ function MediumScorerContent({
 }) {
   const gapAreas = breakdown.filter((item) => item.score <= 7).slice(0, 3)
 
+  const mediumTestimonials1 = [
+    {
+      quote:
+        "I couldn't sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+    {
+      quote:
+        "not me getting emotional over being able to carry my toddler upstairs without my back hurting. this mama is STRONG now! best investment ever fr",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+  ]
+
+  const mediumTestimonials2 = [
+    {
+      quote:
+        "I scored 32/100 and felt hopeless. After 12 weeks in the app, I hit 78. My energy is back, my core is healing, and I finally feel like myself again.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+    {
+      quote:
+        "I was doing everything wrong - crunches, skipping meals, no pelvic floor work. The app taught me the RIGHT way. My diastasis recti is almost healed!",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+  ]
+
+  const csectionNote = quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+    quizState.additionalNotes?.toLowerCase().includes("c section") ||
+    quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+    quizState.additionalNotes?.toLowerCase().includes("surgery")
+
+  const noTimeNote =
+    quizState.biggestObstacle === "no-time" ||
+    quizState.biggestObstacle?.toLowerCase().includes("time") ||
+    quizState.biggestObstacle?.toLowerCase().includes("busy")
+
   return (
     <>
       {/* What Your Score Means */}
@@ -2136,7 +1637,7 @@ function MediumScorerContent({
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-            {quizState.name}, you're doing a lot right! You're ahead of 60% of postpartum moms.
+            {quizState.name}, you&apos;re doing a lot right! You&apos;re ahead of 60% of postpartum moms.
           </p>
           <p className="text-lg leading-relaxed font-semibold" style={{ color: "#A15C2F" }}>
             But you have <strong>3 key gaps</strong> that are holding you back from breakthrough results - and based on
@@ -2151,22 +1652,22 @@ function MediumScorerContent({
             {gapAreas.map((gap, index) => (
               <div key={index} className="p-6 bg-amber-50 rounded-lg border-l-4" style={{ borderLeftColor: "#FFB74D" }}>
                 <p className="font-semibold text-xl mb-3" style={{ color: "#A15C2F" }}>
-                  {index + 1}. {gap.practice} ({gap.score}/10) - {gap.score === 0 ? "Most Critical" : "Needs Attention"}
+                  {index + 1}. {gap.practice} ({gap.score}/10) -{" "}
+                  {gap.score === 0 ? "Most Critical" : "Needs Attention"}
                 </p>
 
-                {/* Detailed explanation based on practice type */}
                 {gap.practice.includes("Nutrition") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p>Right now, you're not tracking macros, meal timing, or nutrient density. This impacts:</p>
+                    <p>Right now, you&apos;re not tracking macros, meal timing, or nutrient density. This impacts:</p>
                     <ul className="list-disc pl-6 space-y-1">
-                      <li>Baby's development (neural tube, bone growth, brain development)</li>
+                      <li>Baby&apos;s development (neural tube, bone growth, brain development)</li>
                       <li>YOUR energy (proper timing doubles energy in 7 days)</li>
                       <li>Back pain and inflammation (anti-inflammatory nutrition reduces pain 40%)</li>
                       <li>Recovery speed postpartum (nutrition NOW determines healing LATER)</li>
                     </ul>
                     <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
-                      Inside the app: Trimester-specific meal plans, macro calculators, grocery lists, anti-inflammatory
-                      recipes, energy optimization protocols.
+                      Inside the app: Trimester-specific meal plans, macro calculators, grocery lists,
+                      anti-inflammatory recipes, energy optimization protocols.
                     </p>
                   </div>
                 )}
@@ -2174,7 +1675,8 @@ function MediumScorerContent({
                 {gap.practice.includes("Core") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
                     <p>
-                      You're either not exercising, or doing unsafe movements. Either way, your body isn't prepared for:
+                      You&apos;re either not exercising, or doing unsafe movements. Either way, your body isn&apos;t
+                      prepared for:
                     </p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Daily postpartum demands (carrying baby, lifting, bending)</li>
@@ -2191,7 +1693,10 @@ function MediumScorerContent({
 
                 {gap.practice.includes("Pelvic Floor") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p>You're doing some Kegels, but not a complete strengthening protocol. Here's why this matters:</p>
+                    <p>
+                      You&apos;re doing some Kegels, but not a complete strengthening protocol. Here&apos;s why this
+                      matters:
+                    </p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>85% of severe tearing happens with weak pelvic floor</li>
                       <li>Proper training reduces tearing risk by 85%</li>
@@ -2208,7 +1713,8 @@ function MediumScorerContent({
                 {gap.practice.includes("Protein") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
                     <p>
-                      You're probably eating under 50g/day. Postpartum moms need 80g+ for recovery and milk production.
+                      You&apos;re probably eating under 50g/day. Postpartum moms need 80g+ for recovery and milk
+                      production.
                     </p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Constant exhaustion (protein = energy)</li>
@@ -2225,12 +1731,12 @@ function MediumScorerContent({
 
                 {gap.practice.includes("Medical") && (
                   <div className="space-y-3" style={{ color: "#3A2412" }}>
-                    <p>You haven't been medically cleared for exercise yet. This is critical for safety:</p>
+                    <p>You haven&apos;t been medically cleared for exercise yet. This is critical for safety:</p>
                     <ul className="list-disc pl-6 space-y-1">
                       <li>Your uterus needs time to shrink back to normal size</li>
                       <li>Internal healing takes 6+ weeks minimum</li>
                       <li>Exercising too soon can cause complications</li>
-                      <li>Medical clearance ensures you're ready to start safely</li>
+                      <li>Medical clearance ensures you&apos;re ready to start safely</li>
                     </ul>
                     <p className="font-semibold mt-3" style={{ color: "#A15C2F" }}>
                       Inside the app: Pre-clearance gentle movement guide, 6-week healing protocols, when-to-start
@@ -2251,7 +1757,7 @@ function MediumScorerContent({
                       </p>
                       <ul className="list-disc pl-6 space-y-1">
                         <li>Recovery takes longer than necessary</li>
-                        <li>You're at higher risk for complications</li>
+                        <li>You&apos;re at higher risk for complications</li>
                         <li>Energy and wellness suffer</li>
                         <li>Long-term health may be impacted</li>
                       </ul>
@@ -2267,67 +1773,60 @@ function MediumScorerContent({
         </CardContent>
       </Card>
 
-      {/* Join App CTA */}
+      {/* Close ALL Your Gaps */}
       <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
         <CardHeader className="text-center">
           <CardTitle className="text-3xl mb-2" style={{ color: "#A15C2F" }}>
             🚀 Close ALL Your Gaps: Join the Catalyst Mom App
           </CardTitle>
           <p className="text-lg" style={{ color: "#3A2412" }}>
-            You're at {score}/100 - imagine hitting 85-90+ in the next 6 weeks.
+            You&apos;re at {score}/100 - imagine hitting 85-90+ in the next 6 weeks.
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#A15C2F" }}>
             <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-              Inside the app, you'll get:
+              Inside the app, you&apos;ll get:
             </h3>
             <div className="space-y-3">
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Complete Postpartum Recovery Tracker</strong> - Closes your medical clearance and tracking
-                  gaps
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Core-Safe Workout Programs</strong> - Closes your exercise gap with 15-20 min daily routines
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Postpartum Nutrition Plans</strong> - Closes your nutrition gap with meal plans and macro
-                  tracking
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>12-Week Pelvic Floor Protocol</strong> - Reduces tearing risk by 85%, prevents prolapse
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Diastasis Recti Healing System</strong> - Safe core exercises that heal your "mom pooch"
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Community of 2,000+ mamas supported</strong> - Support, shared experiences, accountability
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Weekly Group Coaching Calls</strong> - Ask questions, get expert guidance, troubleshoot
-                  challenges
-                </span>
-              </p>
+              {[
+                {
+                  bold: "Complete Postpartum Recovery Tracker",
+                  rest: " - Closes your medical clearance and tracking gaps",
+                },
+                {
+                  bold: "Core-Safe Workout Programs",
+                  rest: " - Closes your exercise gap with 15-20 min daily routines",
+                },
+                {
+                  bold: "Postpartum Nutrition Plans",
+                  rest: " - Closes your nutrition gap with meal plans and macro tracking",
+                },
+                {
+                  bold: "12-Week Pelvic Floor Protocol",
+                  rest: " - Reduces tearing risk by 85%, prevents prolapse",
+                },
+                {
+                  bold: "Diastasis Recti Healing System",
+                  rest: " - Safe core exercises that heal your \"mom pooch\"",
+                },
+                {
+                  bold: "Community of 2,000+ mamas supported",
+                  rest: " - Support, shared experiences, accountability",
+                },
+                {
+                  bold: "Weekly Group Coaching Calls",
+                  rest: " - Ask questions, get expert guidance, troubleshoot challenges",
+                },
+              ].map((item, i) => (
+                <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                  <span>
+                    <strong>{item.bold}</strong>
+                    {item.rest}
+                  </span>
+                </p>
+              ))}
             </div>
 
             {quizState.additionalNotes.trim() && (
@@ -2348,31 +1847,33 @@ function MediumScorerContent({
               </div>
             )}
 
-            {/* C-section Safety Disclaimer */}
-            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
-              quizState.additionalNotes?.toLowerCase().includes("c section") ||
-              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
-              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
-              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+            {csectionNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}
+              >
                 <p className="font-bold mb-2" style={{ color: "#92400E" }}>
                   C-Section Recovery Note
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your
+                  doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog
+                  movements.
                 </p>
               </div>
             )}
 
-            {/* No Time Objection - 15 mins/day highlight */}
-            {(quizState.biggestObstacle === "no-time" ||
-              quizState.biggestObstacle?.toLowerCase().includes("time") ||
-              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
-              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+            {noTimeNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}
+              >
                 <p className="font-bold mb-2" style={{ color: "#166534" }}>
                   Built for Busy Mamas
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym
+                  sessions — just focused, effective movements you can do while baby naps or plays nearby.
                 </p>
               </div>
             )}
@@ -2390,64 +1891,20 @@ function MediumScorerContent({
             </div>
           </div>
 
-          {/* Social Proof */}
-          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
-            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
-              💬 What Moms Who Started Where You Are Say:
-            </h3>
-            <div className="space-y-4">
-              <div className="p-4 bg-white rounded-lg">
-                <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this."
-                </p>
-                <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Postpartum Mama · Catalyst Mom Community
-                </p>
-              </div>
-              <div className="p-4 bg-white rounded-lg">
-                <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "not me getting emotional over being able to carry my toddler upstairs without my back hurting. this mama is STRONG now! best investment ever fr"
-                </p>
-                <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Postpartum Mama · Catalyst Mom Community
-                </p>
-              </div>
-            </div>
-          </div>
+          <TestimonialsSection
+            testimonials={mediumTestimonials1}
+            title="💬 What Moms Who Started Where You Are Say:"
+          />
 
-          {/* CTA Button */}
-          <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
-            <Button
-              size="lg"
-              className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-              style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-              onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
-                appUrl.searchParams.set("name", quizState.name)
-                appUrl.searchParams.set("email", quizState.email)
-                appUrl.searchParams.set("score", score.toString())
-                appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
-                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
-                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
-                window.open(appUrl.toString(), "_blank")
-              }}
-            >
-              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
-                ? "Start My Gentle Healing Protocol - $29/month"
-                : "Join the Catalyst Mom App Now - $29/month"}
-            </Button>
-            <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
-            </p>
-          </div>
+          <PricingSection quizState={quizState} score={score} tier={tier} />
+        </CardContent>
+      </Card>
 
-          {/* Join App CTA */}
+      {/* Let's Build Your Foundation */}
       <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
         <CardHeader className="text-center">
           <CardTitle className="text-3xl mb-2" style={{ color: "#A15C2F" }}>
-            🚀 Let's Build Your Foundation Together
+            🚀 Let&apos;s Build Your Foundation Together
           </CardTitle>
           <p className="text-lg" style={{ color: "#3A2412" }}>
             Join the Catalyst Mom App and start closing these gaps TODAY.
@@ -2459,81 +1916,71 @@ function MediumScorerContent({
               What You Get for $29/month:
             </h3>
             <div className="space-y-3">
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Step-by-Step Postpartum Recovery Roadmap</strong> - No guessing, just follow the plan
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Core-Safe Workouts (10-20 min)</strong> - Safe for diastasis recti, C-sections, and beginners
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Simple Meal Plans</strong> - No complicated recipes, just easy nutrition that works
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Pelvic Floor Healing Protocol</strong> - Prevent incontinence, prolapse, and painful sex
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Diastasis Recti Recovery System</strong> - Heal your "mom pooch" safely and effectively
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>Community Support</strong> - 2,000+ mamas who understand what you're going through
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>1-on-1 Human Check-ins — Bi-weekly expert progress reviews</strong>
-                </span>
-              </p>
-              <p className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
-                <span>
-                  <strong>24/7 Catalyst AI Expert — Instant answers to any wellness question</strong>
-                </span>
-              </p>
+              {[
+                {
+                  bold: "Step-by-Step Postpartum Recovery Roadmap",
+                  rest: " - No guessing, just follow the plan",
+                },
+                {
+                  bold: "Core-Safe Workouts (10-20 min)",
+                  rest: " - Safe for diastasis recti, C-sections, and beginners",
+                },
+                {
+                  bold: "Simple Meal Plans",
+                  rest: " - No complicated recipes, just easy nutrition that works",
+                },
+                {
+                  bold: "Pelvic Floor Healing Protocol",
+                  rest: " - Prevent incontinence, prolapse, and painful sex",
+                },
+                {
+                  bold: "Diastasis Recti Recovery System",
+                  rest: " - Heal your \"mom pooch\" safely and effectively",
+                },
+                {
+                  bold: "Community Support",
+                  rest: " - 2,000+ mamas who understand what you're going through",
+                },
+                { bold: "1-on-1 Human Check-ins", rest: " — Bi-weekly expert progress reviews" },
+                { bold: "24/7 Catalyst AI Expert", rest: " — Instant answers to any wellness question" },
+              ].map((item, i) => (
+                <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                  <span>
+                    <strong>{item.bold}</strong>
+                    {item.rest}
+                  </span>
+                </p>
+              ))}
             </div>
 
-            {/* C-section Safety Disclaimer */}
-            {(quizState.additionalNotes?.toLowerCase().includes("c-section") ||
-              quizState.additionalNotes?.toLowerCase().includes("c section") ||
-              quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
-              quizState.additionalNotes?.toLowerCase().includes("surgery")) && (
-              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}>
+            {csectionNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}
+              >
                 <p className="font-bold mb-2" style={{ color: "#92400E" }}>
                   C-Section Recovery Note
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog movements.
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your
+                  doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog
+                  movements.
                 </p>
               </div>
             )}
 
-            {/* No Time Objection - 15 mins/day highlight */}
-            {(quizState.biggestObstacle === "no-time" ||
-              quizState.biggestObstacle?.toLowerCase().includes("time") ||
-              quizState.biggestObstacle?.toLowerCase().includes("busy")) && (
-              <div className="mt-6 p-5 rounded-lg border-l-4" style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}>
+            {noTimeNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}
+              >
                 <p className="font-bold mb-2" style={{ color: "#166534" }}>
                   Built for Busy Mamas
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
-                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym
+                  sessions — just focused, effective movements you can do while baby naps or plays nearby.
                 </p>
               </div>
             )}
@@ -2551,62 +1998,263 @@ function MediumScorerContent({
             </div>
           </div>
 
-          {/* Social Proof */}
-          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
-            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
-              What Moms Who Started Where You Are Say:
+          <TestimonialsSection
+            testimonials={mediumTestimonials2}
+            title="What Moms Who Started Where You Are Say:"
+          />
+
+          <PricingSection quizState={quizState} score={score} tier={tier} />
+        </CardContent>
+      </Card>
+    </>
+  )
+}
+
+// ─── LowScorerContent ─────────────────────────────────────────────────────────
+
+function LowScorerContent({
+  score,
+  quizState,
+  breakdown,
+  tier,
+}: {
+  score: number
+  quizState: QuizState
+  breakdown: any[]
+  tier: string
+}) {
+  const gapAreas = breakdown.filter((item) => item.score <= 5)
+
+  const lowTestimonials = [
+    {
+      quote:
+        "I scored 22/100 and felt completely hopeless. I didn't even know where to start. After 6 weeks in the app I finally feel human again. My energy is back and I stopped leaking. I actually cried happy tears.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+    {
+      quote:
+        "I was doing EVERYTHING wrong - no pelvic floor work, skipping meals, trying to do crunches. The app gave me a real starting point. 8 weeks later and I feel like a different person.",
+      author: "— Postpartum Mama · Catalyst Mom Community",
+    },
+  ]
+
+  const csectionNote =
+    quizState.additionalNotes?.toLowerCase().includes("c-section") ||
+    quizState.additionalNotes?.toLowerCase().includes("c section") ||
+    quizState.additionalNotes?.toLowerCase().includes("cesarean") ||
+    quizState.additionalNotes?.toLowerCase().includes("surgery")
+
+  const noTimeNote =
+    quizState.biggestObstacle === "no-time" ||
+    quizState.biggestObstacle?.toLowerCase().includes("time") ||
+    quizState.biggestObstacle?.toLowerCase().includes("busy")
+
+  return (
+    <>
+      {/* What Your Score Means */}
+      <Card className="border-0 shadow-xl mb-8">
+        <CardHeader>
+          <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
+            💡 What Your {score}/100 Really Means
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+            {quizState.name}, you&apos;re in the Early Foundations Stage — and that&apos;s okay. Most moms who come to
+            us start exactly where you are.
+          </p>
+          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+            The truth is: <strong>you&apos;re not failing. You&apos;re just missing the foundations.</strong> And
+            foundations are the easiest thing to build — once you know what they are.
+          </p>
+
+          <div className="p-6 bg-red-50 rounded-lg border-l-4 border-red-400">
+            <p className="text-lg font-semibold mb-2" style={{ color: "#A15C2F" }}>
+              Here&apos;s what&apos;s happening:
+            </p>
+            <p style={{ color: "#3A2412" }}>
+              Without the right foundations — medical clearance, pelvic floor work, core-safe movement, proper
+              nutrition, and rest protocols — your body literally cannot recover the way it&apos;s designed to.
+              It&apos;s not a willpower problem. It&apos;s a systems problem.
+            </p>
+          </div>
+
+          <div className="space-y-4 mt-6">
+            <h3 className="text-xl font-bold" style={{ color: "#A15C2F" }}>
+              🎯 Your Most Critical Gaps Right Now:
             </h3>
-            <div className="space-y-4">
-              <div className="p-4 bg-white rounded-lg">
-                <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I scored 32/100 and felt hopeless. After 12 weeks in the app, I hit 78. My energy is back, my core is
-                  healing, and I finally feel like myself again."
+
+            {gapAreas.slice(0, 4).map((gap, index) => (
+              <div key={index} className="p-4 bg-red-50 rounded-lg border-l-4 border-red-400">
+                <p className="font-semibold mb-2" style={{ color: "#A15C2F" }}>
+                  ⚠️ {gap.practice} ({gap.score}/10)
                 </p>
-                <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Postpartum Mama · Catalyst Mom Community
+                <p style={{ color: "#3A2412" }}>
+                  {gap.practice.includes("Medical")
+                    ? "Starting without medical clearance can lead to serious setbacks. This is step one."
+                    : gap.practice.includes("Pelvic Floor")
+                      ? "Your pelvic floor is the foundation of everything. Without it, nothing else works properly."
+                      : gap.practice.includes("Core")
+                        ? "Doing the wrong core exercises (crunches, planks) is making your recovery worse, not better."
+                        : gap.practice.includes("Nutrition")
+                          ? "Your body can't heal without proper fuel. You're running on empty."
+                          : gap.practice.includes("Rest")
+                            ? "Rest is when your body actually heals. Skipping it extends recovery by weeks."
+                            : "This gap is holding back your full recovery. It's fixable with the right approach."}
                 </p>
               </div>
-              <div className="p-4 bg-white rounded-lg">
-                <p className="italic mb-2" style={{ color: "#3A2412" }}>
-                  "I was doing everything wrong - crunches, skipping meals, no pelvic floor work. The app taught me the
-                  RIGHT way. My diastasis recti is almost healed!"
+            ))}
+          </div>
+
+          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400 mt-6">
+            <p className="text-lg font-semibold mb-2" style={{ color: "#A15C2F" }}>
+              The good news:
+            </p>
+            <p className="text-lg" style={{ color: "#3A2412" }}>
+              Every single gap you have is <strong>100% fixable</strong>. Moms who start at your score and follow the
+              right system typically go from {score} to 65+ in just 8-10 weeks.
+            </p>
+            <p className="text-lg mt-2" style={{ color: "#3A2412" }}>
+              Small, strategic changes. Big results. That&apos;s what the app is built for.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Build Your Foundation CTA */}
+      <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl mb-2" style={{ color: "#A15C2F" }}>
+            🚀 Let&apos;s Build Your Foundation — Starting Today
+          </CardTitle>
+          <p className="text-lg" style={{ color: "#3A2412" }}>
+            The Catalyst Mom App was designed exactly for moms at your stage.
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#A15C2F" }}>
+            <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
+              What You Get for $29/month:
+            </h3>
+            <div className="space-y-3">
+              {[
+                {
+                  bold: "Step-by-Step Postpartum Recovery Roadmap",
+                  rest: " - No guessing. Just follow the plan, day by day.",
+                },
+                {
+                  bold: "Core-Safe Workouts (10-20 min)",
+                  rest: " - Designed for beginners, diastasis recti, and C-section moms.",
+                },
+                {
+                  bold: "Pelvic Floor Healing Protocol",
+                  rest: " - The foundation of your entire recovery. Starts week one.",
+                },
+                {
+                  bold: "Postpartum Nutrition Plans",
+                  rest: " - Simple, fast, no cooking skills required. Hit your macros easily.",
+                },
+                {
+                  bold: "Rest Optimization Strategies",
+                  rest: " - Maximize every nap. Recover faster even on broken sleep.",
+                },
+                {
+                  bold: "Diastasis Recti Recovery System",
+                  rest: " - Heal your core safely. No crunches, no planks — just what works.",
+                },
+                {
+                  bold: "Community of 2,000+ mamas",
+                  rest: " - You are not alone. They started where you are.",
+                },
+                { bold: "1-on-1 Human Check-ins", rest: " — Bi-weekly expert progress reviews." },
+                { bold: "24/7 Catalyst AI Expert", rest: " — Instant answers to any wellness question." },
+              ].map((item, i) => (
+                <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-1 flex-shrink-0" />
+                  <span>
+                    <strong>{item.bold}</strong>
+                    {item.rest}
+                  </span>
                 </p>
-                <p className="font-semibold text-sm" style={{ color: "#A15C2F" }}>
-                  — Postpartum Mama · Catalyst Mom Community
+              ))}
+            </div>
+
+            {csectionNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#FFF8E1", borderLeftColor: "#F59E0B" }}
+              >
+                <p className="font-bold mb-2" style={{ color: "#92400E" }}>
+                  C-Section Recovery Note
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  Based on your mention of a C-section, please ensure your incision is fully healed externally and your
+                  doctor has cleared you for light core engagement before beginning diaphragmatic breathing or bird-dog
+                  movements.
                 </p>
               </div>
+            )}
+
+            {noTimeNote && (
+              <div
+                className="mt-6 p-5 rounded-lg border-l-4"
+                style={{ backgroundColor: "#F0FDF4", borderLeftColor: "#22C55E" }}
+              >
+                <p className="font-bold mb-2" style={{ color: "#166534" }}>
+                  Built for Busy Mamas
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#3A2412" }}>
+                  This protocol requires only <strong>15 minutes per day</strong> and zero equipment. No hour-long gym
+                  sessions — just focused, effective movements you can do while baby naps or plays nearby.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
+              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                $29/month
+              </p>
+              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                Less than a single specialist visit. Cancel anytime. No contracts.
+              </p>
+              <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
+                Protocol requires only 15 mins/day
+              </p>
             </div>
           </div>
 
-          {/* CTA Button */}
-          <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
-            <Button
-              size="lg"
-              className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-              style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-              onClick={() => {
-                const appUrl = new URL("https://catalystmomofficial.com/signup")
-                appUrl.searchParams.set("name", quizState.name)
-                appUrl.searchParams.set("email", quizState.email)
-                appUrl.searchParams.set("score", score.toString())
-                appUrl.searchParams.set("tier", tier)
-                appUrl.searchParams.set("stage", quizState.weeksPostpartum)
-                appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
-                appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-                appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
-                window.open(appUrl.toString(), "_blank")
-              }}
-            >
-              {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no" 
-                ? "Start My Gentle Healing Protocol - $29/month"
-                : "Join the Catalyst Mom App Now - $29/month"}
-            </Button>
-            <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
-            </p>
+          {/* Social Proof Stats */}
+          <div className="p-6 bg-green-50 rounded-lg border-2 border-green-400">
+            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: "#A15C2F" }}>
+              📊 Results From Moms Who Started at Your Score:
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              {[
+                { stat: "8–10 wks", label: "Avg time to feel like themselves again" },
+                { stat: "65+", label: "Average score after 10 weeks" },
+                { stat: "91%", label: "Report significant energy improvement" },
+                { stat: "87%", label: "Stopped or reduced leaking in 6 weeks" },
+              ].map((item, i) => (
+                <div key={i} className="text-center p-4 bg-white rounded-lg">
+                  <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
+                    {item.stat}
+                  </p>
+                  <p className="text-sm" style={{ color: "#3A2412" }}>
+                    {item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+
+          <TestimonialsSection
+            testimonials={lowTestimonials}
+            title="💬 What Moms Who Started Where You Are Say:"
+          />
+
+          <PricingSection quizState={quizState} score={score} tier={tier} />
+        </CardContent>
+      </Card>
     </>
   )
 }
