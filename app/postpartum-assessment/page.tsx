@@ -2105,7 +2105,6 @@ function HighScorerContent({
               Feel more connected to your core in just 7 days. Cancel anytime—no contracts.
             </p>
           </div>
-        </div>
       </div>
     </div>
   )
