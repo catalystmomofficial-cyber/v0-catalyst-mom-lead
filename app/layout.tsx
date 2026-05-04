@@ -45,6 +45,11 @@ export const metadata: Metadata = {
     images: [{ url: "/catalyst-mom-logo.png" }],
     type: "website",
   },
+
+  // ── Google Search Console Verification ────────────────────────────────────
+  verification: {
+    google: "n3DXAb7YRBuwfdBfxxF3ql3hL8hiInJhdfQEAKlSzBw",
+  },
 }
 
 // ── Root Layout ───────────────────────────────────────────────────────────────
