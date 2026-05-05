@@ -49,6 +49,7 @@ export const metadata: Metadata = {
   // ── Google Search Console Verification ────────────────────────────────────
   verification: {
     google: "n3DXAb7YRBuwfdBfxxF3ql3hL8hiInJhdfQEAKlSzBw",
+    pinterest: "d3a94222e2c42a4c9aa3045bd246f18e",
   },
 }
 
