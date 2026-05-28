@@ -101,7 +101,7 @@ function PricingSection({
           appUrl.searchParams.set("email", quizState.email)
           appUrl.searchParams.set("score", score.toString())
           appUrl.searchParams.set("tier", tier)
-          appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+          appUrl.searchParams.set("stage", "postpartum")
           appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
           appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
           appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")

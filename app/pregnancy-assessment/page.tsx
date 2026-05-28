@@ -402,7 +402,7 @@ function PricingCTA({
     url.searchParams.set("email", quizState.email)
     url.searchParams.set("score", score.toString())
     url.searchParams.set("tier", tier)
-    url.searchParams.set("stage", quizState.trimester)
+    url.searchParams.set("stage", "pregnant")
     url.searchParams.set("primary_goal", quizState.primaryGoal)
     url.searchParams.set("biggest_obstacle", quizState.biggestObstacle || "")
     url.searchParams.set("birth_experience", "")
