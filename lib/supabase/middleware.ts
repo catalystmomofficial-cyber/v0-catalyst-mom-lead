@@ -7,15 +7,16 @@ export async function updateSession(request: NextRequest) {
   })
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
   // If environment variables are not available, just return the response
-  if (!supabaseUrl || !supabasePublishableKey) {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.log("[v0] Supabase env vars not available in middleware, skipping auth check")
     return supabaseResponse
   }
 
   try {
-    const supabase = createServerClient(supabaseUrl, supabasePublishableKey, {
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
         getAll() {
           return request.cookies.getAll()
@@ -32,7 +33,7 @@ export async function updateSession(request: NextRequest) {
 
     await supabase.auth.getUser()
   } catch (error) {
-    // Silently handle middleware auth errors
+    console.log("[v0] Supabase middleware error:", error)
   }
 
   return supabaseResponse

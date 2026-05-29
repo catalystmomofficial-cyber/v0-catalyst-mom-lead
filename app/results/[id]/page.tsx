@@ -5,7 +5,6 @@ import { notFound } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DownloadResults } from "@/components/download-results"
 
 export const dynamic = "force-dynamic"
 
@@ -135,22 +134,7 @@ function TTCResults({ score, tier, quizState }: { score: number; tier: string; q
               {tier === "medium" && "You're building momentum! There are key gaps to address for breakthrough results."}
               {tier === "low" && "There's significant opportunity to improve your fertility health."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="ttc"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "You're on the right track! You've got solid foundations with room to optimize."
-                    : tier === "medium"
-                      ? "You're building momentum! There are key gaps to address for breakthrough results."
-                      : "There's significant opportunity to improve your fertility health."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
@@ -207,22 +191,7 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
               {tier === "medium" && "You're building momentum! You've got solid foundations but key gaps exist."}
               {tier === "low" && "You're experiencing common pregnancy challenges that we can help you fix."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="pregnancy"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "Congratulations! You're in the top 15% of pregnant women."
-                    : tier === "medium"
-                      ? "You're building momentum! You've got solid foundations but key gaps exist."
-                      : "You're experiencing common pregnancy challenges that we can help you fix."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
@@ -279,22 +248,7 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
               {tier === "medium" && "You've got some solid foundations in place!"}
               {tier === "low" && "You're experiencing some common challenges keeping you from feeling your best."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="postpartum"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "Wow! You're doing SO much right - you're in the TOP 15%."
-                    : tier === "medium"
-                      ? "You've got some solid foundations in place!"
-                      : "You're experiencing some common challenges keeping you from feeling your best."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
