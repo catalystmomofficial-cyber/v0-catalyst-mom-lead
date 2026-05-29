@@ -11,7 +11,6 @@ export async function updateSession(request: NextRequest) {
 
   // If environment variables are not available, just return the response
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.log("[v0] Supabase env vars not available in middleware, skipping auth check")
     return supabaseResponse
   }
 
@@ -33,7 +32,7 @@ export async function updateSession(request: NextRequest) {
 
     await supabase.auth.getUser()
   } catch (error) {
-    console.log("[v0] Supabase middleware error:", error)
+    // Silently handle middleware auth errors
   }
 
   return supabaseResponse
