@@ -175,13 +175,19 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
       high: `📊 Your Path to True Functional Strength: You are ready to feel strong again, which is amazing! However, trying to jump straight into traditional weighted squats, overhead presses, or running with a core foundation at this tier is like trying to build a brick house on quicksand. The app is locking out high-pressure movements for now. Your starting routine focuses entirely on stabilizing your hips, glutes, and inner pelvic wall so you can build the unbreakable foundation needed for heavy lifting without injury.`,
       medium: `📊 Your Path to True Functional Strength: Your structural foundation is coming back online. Your dashboard is introducing resistance bands and bodyweight progressive loads, ensuring your inner core matches your outer muscle strength step-for-step.`,
       low: `📊 Your Path to True Functional Strength: Your core and pelvic alignment are ready for external load resistance. The app opens your full strength pathways, allowing you to lift heavier and progress safely.`
+    },
+    'full-body': {
+      high: `📊 Your Path to True Functional Strength: You are ready to feel strong again, which is amazing! However, trying to jump straight into traditional weighted squats, overhead presses, or running with a core foundation at this tier is like trying to build a brick house on quicksand. The app is locking out high-pressure movements for now. Your starting routine focuses entirely on stabilizing your hips, glutes, and inner pelvic wall so you can build the unbreakable foundation needed for heavy lifting without injury.`,
+      medium: `📊 Your Path to True Functional Strength: Your structural foundation is coming back online. Your dashboard is introducing resistance bands and bodyweight progressive loads, ensuring your inner core matches your outer muscle strength step-for-step.`,
+      low: `📊 Your Path to True Functional Strength: Your core and pelvic alignment are ready for external load resistance. The app opens your full strength pathways, allowing you to lift heavier and progress safely.`
     }
   }
 
   const checkoutButtons = {
     'heal-dr': 'Heal My Core & Close The Ab Gap — $29/month',
     'weight-loss': 'Drop the Pooch & Reclaim My Energy — $29/month',
-    'strength': 'Rebuild My Postpartum Strength Safely — $29/month'
+    'strength': 'Rebuild My Postpartum Strength Safely — $29/month',
+    'full-body': 'Rebuild My Postpartum Strength Safely — $29/month'
   }
 
   // --- 2. Extract and Sanitize Assessment Variables ---
@@ -190,9 +196,8 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
     ? "Mama" 
     : rawName.trim()
 
-  const primaryGoal: 'heal-dr' | 'weight-loss' | 'strength' = quizState.primary_goal || 'heal-dr'
+  const primaryGoal: 'heal-dr' | 'weight-loss' | 'strength' | 'full-body' = quizState.primary_goal || quizState.primaryGoal || 'heal-dr'
   
-  // Calculate specific score bracket tier for content variations
   let scoreBracket: 'high' | 'medium' | 'low' = 'medium'
   if (score <= 40) scoreBracket = 'high'
   else if (score > 70) scoreBracket = 'low'
@@ -200,7 +205,6 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
   const activeGoalHook = goalHooks[primaryGoal]?.[scoreBracket] || goalHooks['heal-dr']['medium']
   const activeButtonText = checkoutButtons[primaryGoal] || 'Join the Catalyst Mom App Now — $29/month'
 
-  // Handle explicit concern text blocks and intercept DR shorthand
   const userConcern = quizState.userConcern || quizState.concern || ""
   let activeConcernHook = `💬 Your Specific Postpartum Journey: You shared: "${userConcern}". Your concern is directly related to the deep structural core gaps we identified. Addressing it using our safe, step-by-step recovery system will help you feel stronger and recover faster.`
   
@@ -240,12 +244,12 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
               </Badge>
             </div>
             
-            <div className="space-y-4 my-6 text-left max-w-2xl mx-auto p-4 bg-white/50 rounded-xl border border-brown-100">
-              <p className="text-md leading-relaxed style={{ color: '#3A2412' }}">
+            <div className="space-y-4 my-6 text-left max-w-2xl mx-auto p-4 bg-white/50 rounded-xl border border-stone-200">
+              <p className="text-md leading-relaxed" style={{ color: '#3A2412' }}>
                 {activeGoalHook}
               </p>
               {userConcern && (
-                <p className="text-md leading-relaxed pt-2 border-t border-dashed border-gray-300 style={{ color: '#3A2412' }}">
+                <p className="text-md leading-relaxed pt-2 border-t border-dashed border-gray-300" style={{ color: '#3A2412' }}>
                   {activeConcernHook}
                 </p>
               )}
