@@ -5,7 +5,6 @@ import { notFound } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { DownloadResults } from "@/components/download-results"
 
 export const dynamic = "force-dynamic"
 
@@ -18,7 +17,6 @@ export default async function ResultsPage({ params }: { params: { id: string } }
     notFound()
   }
 
-  // Parse the special_notes JSON which contains the full quiz state and scores
   let quizState: any = {}
   try {
     quizState = JSON.parse(response.special_notes || "{}")
@@ -29,10 +27,6 @@ export default async function ResultsPage({ params }: { params: { id: string } }
   const score = quizState.score || 0
   const tier = quizState.scoreTier || "low"
 
-  // Determine assessment type
-  // TTC has cycleTracking
-  // Pregnancy has weeksPregnant
-  // Postpartum has weeksPostpartum
   const isTTC = quizState.cycleTracking !== undefined
   const isPregnancy = quizState.weeksPregnant !== undefined
   const isPostpartum = quizState.weeksPostpartum !== undefined
@@ -52,7 +46,6 @@ export default async function ResultsPage({ params }: { params: { id: string } }
   return <div>Unknown assessment type</div>
 }
 
-// --- TTC Results Component ---
 function TTCResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
   const getTierColor = () => {
     if (score <= 40) return "#E57373"
@@ -65,51 +58,6 @@ function TTCResults({ score, tier, quizState }: { score: number; tier: string; q
     if (score <= 70) return "Building Momentum Stage"
     return "Thriving & Ready Stage"
   }
-
-  // Re-implement getDetailedBreakdown for TTC
-  const getDetailedBreakdown = () => {
-    return [
-      {
-        practice: "Cycle Tracking",
-        score:
-          quizState.cycleTracking === "yes-app"
-            ? 10
-            : quizState.cycleTracking === "sometimes"
-              ? 5
-              : quizState.cycleTracking === "irregular"
-                ? 3
-                : 0,
-        maxScore: 10,
-        status:
-          quizState.cycleTracking === "yes-app"
-            ? "excellent"
-            : quizState.cycleTracking === "sometimes"
-              ? "good"
-              : "needs-attention",
-      },
-      // ... (We'll simplify for brevity but keep key logic)
-      // For a robust implementation, we'd copy the full logic.
-      // I'll map the rest broadly to ensure it works without 1000 lines of code duplication if possible,
-      // but to match the exact view, I should copy the logic.
-      {
-        practice: "Ovulation Awareness",
-        score: quizState.ovulationAwareness === "yes" ? 10 : 5,
-        maxScore: 10,
-        status: quizState.ovulationAwareness === "yes" ? "excellent" : "needs-attention",
-      },
-      {
-        practice: "Fertility Nutrition",
-        score: quizState.fertilityNutrition === "yes" ? 10 : 5,
-        maxScore: 10,
-        status: quizState.fertilityNutrition === "yes" ? "excellent" : "needs-attention",
-      },
-      // ... Adding placeholders for the rest to prevent token overflow while showing the concept
-      // In a real refactor, these should be shared utilities.
-    ]
-  }
-
-  // For the sake of this task, I will render the main scorecard which is what matters most for the "record".
-  // The full detailed breakdown logic is quite long. I will implement a simplified version that renders the key scores available in quizState.
 
   return (
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
@@ -135,22 +83,7 @@ function TTCResults({ score, tier, quizState }: { score: number; tier: string; q
               {tier === "medium" && "You're building momentum! There are key gaps to address for breakthrough results."}
               {tier === "low" && "There's significant opportunity to improve your fertility health."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="ttc"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "You're on the right track! You've got solid foundations with room to optimize."
-                    : tier === "medium"
-                      ? "You're building momentum! There are key gaps to address for breakthrough results."
-                      : "There's significant opportunity to improve your fertility health."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
@@ -169,7 +102,6 @@ function TTCResults({ score, tier, quizState }: { score: number; tier: string; q
   )
 }
 
-// --- Pregnancy Results Component ---
 function PregnancyResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
   const getTierColor = () => {
     if (score <= 40) return "#E57373"
@@ -207,22 +139,7 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
               {tier === "medium" && "You're building momentum! You've got solid foundations but key gaps exist."}
               {tier === "low" && "You're experiencing common pregnancy challenges that we can help you fix."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="pregnancy"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "Congratulations! You're in the top 15% of pregnant women."
-                    : tier === "medium"
-                      ? "You're building momentum! You've got solid foundations but key gaps exist."
-                      : "You're experiencing common pregnancy challenges that we can help you fix."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
@@ -241,7 +158,6 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
   )
 }
 
-// --- Postpartum Results Component ---
 function PostpartumResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
   const getTierColor = () => {
     if (score <= 40) return "#E57373"
@@ -279,22 +195,7 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
               {tier === "medium" && "You've got some solid foundations in place!"}
               {tier === "low" && "You're experiencing some common challenges keeping you from feeling your best."}
             </p>
-            <div className="mt-8 flex flex-col gap-4">
-              <DownloadResults
-                assessmentType="postpartum"
-                score={score}
-                tier={tier}
-                quizState={quizState}
-                tierColor={getTierColor()}
-                tierLabel={getTierLabel()}
-                tierDescription={
-                  tier === "high"
-                    ? "Wow! You're doing SO much right - you're in the TOP 15%."
-                    : tier === "medium"
-                      ? "You've got some solid foundations in place!"
-                      : "You're experiencing some common challenges keeping you from feeling your best."
-                }
-              />
+            <div className="mt-8">
               <Button
                 size="lg"
                 className="w-full md:w-auto text-white px-6 py-3 font-bold rounded-xl shadow-lg"
