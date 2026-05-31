@@ -158,6 +158,11 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
   )
 }
 
+'use client'
+
+import { useEffect } from 'react'
+import { saveAssessment } from '@/app/actions/assessments'
+
 function PostpartumResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
   // --- 1. Sanitize User Name Input ---
   const rawName = quizState.userName || quizState.name || ""
@@ -173,6 +178,30 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
   let scoreBracket: 'high' | 'medium' | 'low' = 'medium'
   if (score <= 40) scoreBracket = 'high'
   else if (score > 70) scoreBracket = 'low'
+
+  // --- Save Assessment Data ---
+  useEffect(() => {
+    const saveData = async () => {
+      try {
+        await saveAssessment({
+          user_name: cleanName,
+          primary_goal: primaryGoal,
+          score: score,
+          tier: scoreBracket,
+          user_concern: userConcern || undefined,
+          medical_clearance: quizState.medicalClearance,
+          diastasis_recti: quizState.diastasisRecti,
+          pelvic_floor: quizState.pelvicFloor,
+          nutrition_protein: quizState.nutritionProtein,
+        })
+        console.log('[v0] Assessment saved successfully')
+      } catch (error) {
+        console.error('[v0] Failed to save assessment:', error)
+      }
+    }
+
+    saveData()
+  }, [])
 
   // --- 4. Goal-Based Action Plan Hooks ---
   const getGoalHook = () => {
