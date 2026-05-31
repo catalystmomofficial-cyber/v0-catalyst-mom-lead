@@ -1,10 +1,12 @@
 "use client"
 
+import { useEffect } from 'react'
 import { createClient } from "@/lib/supabase/client"
 import { notFound } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { saveAssessment } from "@/app/actions/assessments"
 
 export const dynamic = "force-dynamic"
 
@@ -157,11 +159,6 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
     </div>
   )
 }
-
-'use client'
-
-import { useEffect } from 'react'
-import { saveAssessment } from '@/app/actions/assessments'
 
 function PostpartumResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
   // --- 1. Sanitize User Name Input ---
