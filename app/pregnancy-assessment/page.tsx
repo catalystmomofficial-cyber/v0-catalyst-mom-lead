@@ -9,7 +9,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 
@@ -53,8 +52,6 @@ interface Testimonial {
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
-const supabase = createClient()
 
 const isValidEmail = (email: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
