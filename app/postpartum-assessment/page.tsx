@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
-
+import { createClient } from "@/lib/supabase/client"
+const supabase = createClient()
 interface QuizState {
   name: string
   email: string
