@@ -30,16 +30,43 @@ export default async function ResultsPage({ params }: { params: { id: string } }
   const isPregnancy = quizState.weeksPregnant !== undefined
   const isPostpartum = quizState.weeksPostpartum !== undefined
 
+  // Save assessment server-side for postpartum
+  if (isPostpartum) {
+    const rawName = quizState.userName || quizState.name || ""
+    const cleanName = (rawName.trim().length < 2 || /^[bcdfghjklmnpqrstvwxyz]+$/i.test(rawName.trim()) || rawName.toLowerCase() === 'none')
+      ? "Mama"
+      : rawName.trim()
+    const primaryGoal = quizState.primary_goal || quizState.primaryGoal || 'full-body'
+    const userConcern = quizState.userConcern || quizState.concern || ""
+    let scoreBracket: 'high' | 'medium' | 'low' = 'medium'
+    if (score <= 40) scoreBracket = 'high'
+    else if (score > 70) scoreBracket = 'low'
+
+    try {
+      await saveAssessment({
+        user_name: cleanName,
+        primary_goal: primaryGoal,
+        score: score,
+        tier: scoreBracket,
+        user_concern: userConcern || undefined,
+        medical_clearance: quizState.medicalClearance,
+        diastasis_recti: quizState.diastasisRecti,
+        pelvic_floor: quizState.pelvicFloor,
+        nutrition_protein: quizState.nutritionProtein,
+      })
+    } catch (error) {
+      console.error('[v0] Failed to save assessment:', error)
+    }
+
+    return <PostpartumResults score={score} tier={tier} quizState={quizState} />
+  }
+
   if (isTTC) {
     return <TTCResults score={score} tier={tier} quizState={quizState} />
   }
 
   if (isPregnancy) {
     return <PregnancyResults score={score} tier={tier} quizState={quizState} />
-  }
-
-  if (isPostpartum) {
-    return <PostpartumResults score={score} tier={tier} quizState={quizState} />
   }
 
   return <div>Unknown assessment type</div>
@@ -158,76 +185,34 @@ function PregnancyResults({ score, tier, quizState }: { score: number; tier: str
 }
 
 function PostpartumResults({ score, tier, quizState }: { score: number; tier: string; quizState: any }) {
-  // --- 1. Sanitize User Name Input ---
   const rawName = quizState.userName || quizState.name || ""
-  const cleanName = (rawName.trim().length < 2 || /^[bcdfghjklmnpqrstvwxyz]+$/i.test(rawName.trim()) || rawName.toLowerCase() === 'none') 
-    ? "Mama" 
+  const cleanName = (rawName.trim().length < 2 || /^[bcdfghjklmnpqrstvwxyz]+$/i.test(rawName.trim()) || rawName.toLowerCase() === 'none')
+    ? "Mama"
     : rawName.trim()
 
-  // --- 2. Extract Assessment Variables ---
   const primaryGoal: 'heal-dr' | 'weight-loss' | 'strength' | 'full-body' = quizState.primary_goal || quizState.primaryGoal || 'full-body'
   const userConcern = quizState.userConcern || quizState.concern || ""
-  
-  // --- 3. Determine Score Bracket (HIGH: 0-40, MEDIUM: 41-70, LOW: 71-100) ---
+
   let scoreBracket: 'high' | 'medium' | 'low' = 'medium'
   if (score <= 40) scoreBracket = 'high'
   else if (score > 70) scoreBracket = 'low'
 
-  // --- Save Assessment Data ---
-  useEffect(() => {
-    const saveData = async () => {
-      try {
-        await saveAssessment({
-          user_name: cleanName,
-          primary_goal: primaryGoal,
-          score: score,
-          tier: scoreBracket,
-          user_concern: userConcern || undefined,
-          medical_clearance: quizState.medicalClearance,
-          diastasis_recti: quizState.diastasisRecti,
-          pelvic_floor: quizState.pelvicFloor,
-          nutrition_protein: quizState.nutritionProtein,
-        })
-        console.log('[v0] Assessment saved successfully')
-      } catch (error) {
-        console.error('[v0] Failed to save assessment:', error)
-      }
-    }
-
-    saveData()
-  }, [])
-
-  // --- 4. Goal-Based Action Plan Hooks ---
   const getGoalHook = () => {
     if (primaryGoal === 'heal-dr') {
-      if (scoreBracket === 'high') {
-        return `Your assessment shows a core baseline that needs immediate, gentle attention. Traditional gym exercises (like crunches, planks, or heavy twisting) will actually force your abdominal walls further apart and make the "mom pooch" look more prominent. The Catalyst Mom App has unlocked your specialized Knit-Healing Layer 1 Protocol. These are daily, zero-strain 15-minute foundational movements designed to close the gap safely from the inside out before you move to heavy full-body training.`
-      } else if (scoreBracket === 'medium') {
-        return `You have a solid starting foundation, but your core walls still lack the intra-abdominal support to handle everyday straining. The app has set your dashboard to Layer 2 Core Stabilization, focusing on knitting the deep transverse abdominis muscles together so you can lift your baby and move without core doming or back pain.`
-      } else {
-        return `Great work keeping your core engaged! Your dashboard is configured for Advanced Core Integration, protecting your alignment during functional, everyday movements while safely toning the outer layers.`
-      }
-    } else if (primaryGoal === 'weight-loss') {
-      if (scoreBracket === 'high') {
-        return `Trying to lose weight by cutting calories or doing intense cardio right now will backfire. When your body is fighting exhaustion and healing internal tissues, extreme stress patterns crash your metabolism and stall weight loss. The app focuses on your foundational recovery first: simple, zero-prep protein frameworks and nervous-system-calming movements that naturally lower cortisol and trigger sustainable fat loss without draining your energy.`
-      } else if (scoreBracket === 'medium') {
-        return `To trigger safe fat loss while protecting your healing tissues, your dashboard focuses on efficient, low-impact metabolic circuits paired with high-protein postpartum food structures. No extreme tracking required.`
-      } else {
-        return `Your energy systems are stable. Your dashboard will safely advance your workout intensity to lean muscle preservation and active conditioning blocks.`
-      }
-    } else if (primaryGoal === 'strength' || primaryGoal === 'full-body') {
-      if (scoreBracket === 'high') {
-        return `You are ready to feel strong again, which is amazing! However, trying to jump straight into traditional weighted squats, overhead presses, or running with a core foundation at this tier is like trying to build a brick house on quicksand. The app is locking out high-pressure movements for now. Your starting routine focuses entirely on stabilizing your hips, glutes, and inner pelvic wall so you can build the unbreakable foundation needed for heavy lifting without injury.`
-      } else if (scoreBracket === 'medium') {
-        return `Your structural foundation is coming back online. Your dashboard is introducing resistance bands and bodyweight progressive loads, ensuring your inner core matches your outer muscle strength step-for-step.`
-      } else {
-        return `Your core and pelvic alignment are ready for external load resistance. The app opens your full strength pathways, allowing you to lift heavier and progress safely.`
-      }
+      if (scoreBracket === 'high') return `Your assessment shows a core baseline that needs immediate, gentle attention. Traditional gym exercises (like crunches, planks, or heavy twisting) will actually force your abdominal walls further apart and make the "mom pooch" look more prominent. The Catalyst Mom App has unlocked your specialized Knit-Healing Layer 1 Protocol. These are daily, zero-strain 15-minute foundational movements designed to close the gap safely from the inside out before you move to heavy full-body training.`
+      if (scoreBracket === 'medium') return `You have a solid starting foundation, but your core walls still lack the intra-abdominal support to handle everyday straining. The app has set your dashboard to Layer 2 Core Stabilization, focusing on knitting the deep transverse abdominis muscles together so you can lift your baby and move without core doming or back pain.`
+      return `Great work keeping your core engaged! Your dashboard is configured for Advanced Core Integration, protecting your alignment during functional, everyday movements while safely toning the outer layers.`
     }
-    return `Your assessment shows promising foundations. The app will guide your personalized recovery path.`
+    if (primaryGoal === 'weight-loss') {
+      if (scoreBracket === 'high') return `Trying to lose weight by cutting calories or doing intense cardio right now will backfire. When your body is fighting exhaustion and healing internal tissues, extreme stress patterns crash your metabolism and stall weight loss. The app focuses on your foundational recovery first: simple, zero-prep protein frameworks and nervous-system-calming movements that naturally lower cortisol and trigger sustainable fat loss without draining your energy.`
+      if (scoreBracket === 'medium') return `To trigger safe fat loss while protecting your healing tissues, your dashboard focuses on efficient, low-impact metabolic circuits paired with high-protein postpartum food structures. No extreme tracking required.`
+      return `Your energy systems are stable. Your dashboard will safely advance your workout intensity to lean muscle preservation and active conditioning blocks.`
+    }
+    if (scoreBracket === 'high') return `You are ready to feel strong again, which is amazing! However, trying to jump straight into traditional weighted squats, overhead presses, or running with a core foundation at this tier is like trying to build a brick house on quicksand. The app is locking out high-pressure movements for now. Your starting routine focuses entirely on stabilizing your hips, glutes, and inner pelvic wall so you can build the unbreakable foundation needed for heavy lifting without injury.`
+    if (scoreBracket === 'medium') return `Your structural foundation is coming back online. Your dashboard is introducing resistance bands and bodyweight progressive loads, ensuring your inner core matches your outer muscle strength step-for-step.`
+    return `Your core and pelvic alignment are ready for external load resistance. The app opens your full strength pathways, allowing you to lift heavier and progress safely.`
   }
 
-  // --- 5. Check for Diastasis Recti Concern & Override Message ---
   const getDiastasisMessage = () => {
     const concernLower = userConcern.toLowerCase()
     if (['dr', 'diastasis', 'gap', 'pooch', 'ab separation'].some(keyword => concernLower.includes(keyword))) {
@@ -236,12 +221,10 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
     return null
   }
 
-  // --- 6. Dynamic Button Text ---
   const getButtonText = () => {
     if (primaryGoal === 'heal-dr') return 'Heal My Core & Close The Ab Gap — $29/month'
     if (primaryGoal === 'weight-loss') return 'Drop the Pooch & Reclaim My Energy — $29/month'
-    if (primaryGoal === 'strength' || primaryGoal === 'full-body') return 'Rebuild My Postpartum Strength Safely — $29/month'
-    return 'Join the Catalyst Mom App Now — $29/month'
+    return 'Rebuild My Postpartum Strength Safely — $29/month'
   }
 
   const getTierColor = () => {
@@ -277,7 +260,7 @@ function PostpartumResults({ score, tier, quizState }: { score: number; tier: st
                 {getTierLabel()}
               </Badge>
             </div>
-            
+
             <div className="space-y-4 my-6 text-left max-w-2xl mx-auto p-4 bg-white/50 rounded-xl border border-stone-200">
               <p className="text-md leading-relaxed font-semibold mb-2" style={{ color: '#3A2412' }}>
                 📊 Your {primaryGoal === 'heal-dr' ? 'Deep Core Action Plan' : primaryGoal === 'weight-loss' ? 'Postpartum Metabolic Recovery' : 'Path to True Functional Strength'}:
