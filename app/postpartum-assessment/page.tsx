@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 
@@ -43,6 +44,8 @@ interface QuizState {
   selfCare?: string
   birthExperience?: string
 }
+
+const supabase = createClient()
 
 const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
