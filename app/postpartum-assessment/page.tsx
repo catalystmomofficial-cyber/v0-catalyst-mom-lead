@@ -66,52 +66,52 @@ function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
   return [
     {
       practice: "Medical Clearance",
-      score: qs.medicalClearance === "yes" ? 10 : qs.medicalClearance === "soon" ? 5 : 0,
+      score: qs.medicalClearance === "Yes" ? 10 : qs.medicalClearance === "Soon - expecting it" ? 5 : 0,
       maxScore: 10,
     },
     {
       practice: "Core Strength",
-      score: qs.coreStrength === "yes" ? 10 : qs.coreStrength === "sometimes" ? 5 : qs.coreStrength === "dont-know" ? 2 : 0,
+      score: qs.coreStrength === "Yes, regularly" ? 10 : qs.coreStrength === "Sometimes" ? 5 : qs.coreStrength === "Not sure how to" ? 2 : 0,
       maxScore: 10,
     },
     {
       practice: "Pelvic Floor Training",
-      score: qs.pelvicFloor === "yes" ? 10 : qs.pelvicFloor === "sometimes" ? 5 : qs.pelvicFloor === "dont-know" ? 2 : 0,
+      score: qs.pelvicFloor === "Yes, regularly" ? 10 : qs.pelvicFloor === "Sometimes" ? 5 : qs.pelvicFloor === "Not sure how to" ? 2 : 0,
       maxScore: 10,
     },
     {
       practice: "Diastasis Recti Recovery",
-      score: qs.diastasisRecti === "none" ? 10 : qs.diastasisRecti === "aware" ? 5 : qs.diastasisRecti === "struggling" ? 0 : 0,
+      score: qs.diastasisRecti === "No separation" ? 10 : qs.diastasisRecti === "Aware but managing" ? 5 : qs.diastasisRecti === "Struggling with it" ? 0 : 0,
       maxScore: 10,
     },
     {
       practice: "Postpartum Nutrition",
-      score: qs.nutrition === "yes" ? 10 : qs.nutrition === "sometimes" ? 5 : qs.nutrition === "trying" ? 3 : 0,
+      score: qs.nutrition === "Yes, focused on recovery" ? 10 : qs.nutrition === "Sometimes - doing my best" ? 5 : qs.nutrition === "Trying but struggling" ? 3 : 0,
       maxScore: 10,
     },
     {
       practice: "Supplementation",
-      score: qs.supplementation === "yes" ? 10 : qs.supplementation === "some" ? 5 : qs.supplementation === "unsure" ? 2 : 0,
+      score: qs.supplementation === "Yes, complete protocol" ? 10 : qs.supplementation === "Some supplements" ? 5 : qs.supplementation === "Unsure what to take" ? 2 : 0,
       maxScore: 10,
     },
     {
       practice: "Sleep Quality",
-      score: qs.sleep === "yes" ? 10 : qs.sleep === "mostly" ? 7 : 0,
+      score: qs.sleep === "Yes, mostly" ? 10 : qs.sleep === "Mostly, but interrupted" ? 7 : 0,
       maxScore: 10,
     },
     {
       practice: "Energy & Recovery",
-      score: qs.energy === "good" ? 10 : qs.energy === "fair" ? 5 : 0,
+      score: qs.energy === "Good" ? 10 : qs.energy === "Fair - some days are hard" ? 5 : 0,
       maxScore: 10,
     },
     {
       practice: "Mood & Mental Health",
-      score: qs.mood === "good" ? 10 : qs.mood === "mixed" ? 5 : qs.mood === "struggling" ? 0 : 0,
+      score: qs.mood === "Good" ? 10 : qs.mood === "Mixed - good and tough days" ? 5 : qs.mood === "Struggling - feels heavy" ? 0 : 0,
       maxScore: 10,
     },
     {
       practice: "Wellness Tracking",
-      score: qs.tracking === "yes" ? 10 : qs.tracking === "some" ? 5 : 0,
+      score: qs.tracking === "Yes, regularly" ? 10 : qs.tracking === "Sometimes" ? 5 : 0,
       maxScore: 10,
     },
   ]
@@ -141,12 +141,6 @@ export default function PostpartumAssessmentPage() {
     { id: "energy", label: "How's your energy level?", type: "radio", required: true, options: ["Good", "Fair - some days are hard", "Low - exhausted most days", "Varies wildly"] },
     { id: "sleep", label: "Are you getting quality sleep?", type: "radio", required: true, options: ["Yes, mostly", "Mostly, but interrupted", "No - baby sleep deprivation", "No - insomnia"] },
     { id: "mood", label: "How's your mood and mental health?", type: "radio", required: true, options: ["Good", "Mixed - good and tough days", "Struggling - feels heavy", "Concerning - seeking help"] },
-    { id: "nutrition", label: "Are you eating in a way that supports healing?", type: "radio", required: true, options: ["Yes, focused on recovery", "Sometimes - doing my best", "Trying but struggling", "No - survival mode eating"] },
-    { id: "supplementation", label: "Are you taking postpartum recovery supplements?", type: "radio", required: true, options: ["Yes, complete protocol", "Some supplements", "Unsure what to take", "No"] },
-    { id: "exercise", label: "What's your current exercise approach?", type: "radio", required: true, options: ["Structured workouts", "Gentle walking/movement", "Not exercising yet", "Avoiding exercise"] },
-    { id: "primaryGoal", label: "What's your primary postpartum goal?", type: "radio", required: true, options: ["Heal my core / Close the gap (diastasis)", "Weight loss / Reclaim my body", "Rebuild strength safely", "Improve energy & mood"] },
-    { id: "biggestObstacle", label: "What's your biggest obstacle right now?", type: "text", required: false },
-    { id: "additionalNotes", label: "Anything else we should know?", type: "textarea", required: false },
   ]
 
   const handleInputChange = (field: string, value: string) => {
@@ -209,8 +203,6 @@ export default function PostpartumAssessmentPage() {
             score_tier: tier,
             weeks_postpartum: quizState.weeksPostpartum,
             biggest_obstacle: quizState.biggestObstacle,
-            support_preference: quizState.supportType,
-            additional_notes: quizState.additionalNotes,
             medical_clearance: quizState.medicalClearance,
             core_strength: quizState.coreStrength,
             pelvic_floor: quizState.pelvicFloor,
@@ -224,7 +216,7 @@ export default function PostpartumAssessmentPage() {
         })
         .select()
 
-      if (supabaseError) console.error("[supabase] insert error:", supabaseError)
+      if (supabaseError) console.error("[v0] Supabase error:", supabaseError)
 
       if (data?.[0]) {
         sessionStorage.setItem("postpartum_assessment_id", data[0].id)
