@@ -103,22 +103,6 @@ function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
 
 const questions = [
   {
-    id: "name",
-    field: "name",
-    type: "text",
-    title: "What's your name?",
-    subtitle: "So we can personalize your results",
-    placeholder: "Your first name",
-  },
-  {
-    id: "email",
-    field: "email",
-    type: "email",
-    title: "What's your email address?",
-    subtitle: "We'll send your personalized postpartum plan here",
-    placeholder: "your@email.com",
-  },
-  {
     id: "weeksPostpartum",
     field: "weeksPostpartum",
     type: "radio",
@@ -217,6 +201,22 @@ const questions = [
       { value: "not-yet", label: "Not yet — waiting for clearance" },
       { value: "no", label: "No — too exhausted / unsure what's safe" },
     ],
+  },
+  {
+    id: "name",
+    field: "name",
+    type: "text",
+    title: "Almost there! What is your first name?",
+    subtitle: "So we can personalize your postpartum recovery score",
+    placeholder: "Enter your first name",
+  },
+  {
+    id: "email",
+    field: "email",
+    type: "email",
+    title: "Where should we send your personalized results?",
+    subtitle: "We'll email your full postpartum assessment breakdown",
+    placeholder: "your@email.com",
   },
   {
     id: "primaryGoal",
