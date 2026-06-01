@@ -552,6 +552,13 @@ export default function TTCAssessment() {
         biggest_obstacle: quizState.biggestObstacle,
         cycle_tracking: quizState.cycleTracking,
         ovulation_awareness: quizState.ovulationAwareness,
+        fertility_nutrition: quizState.fertilityNutrition,
+        supplementation: quizState.supplementation,
+        stress: quizState.stress,
+        sleep: quizState.sleep,
+        alcohol: quizState.alcohol,
+        smoking: quizState.smoking,
+        support_type: quizState.supportType,
       }
 
       try {

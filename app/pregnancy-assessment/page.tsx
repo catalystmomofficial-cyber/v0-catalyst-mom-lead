@@ -637,8 +637,16 @@ export default function PregnancyAssessment() {
         score_tier: tier,
         trimester: quizState.trimester,
         weeks_pregnant: weeksPregnantNum,
-        weeksUntilBirth,
+        weeks_until_birth: weeksUntilBirth,
         primary_goal: quizState.primaryGoal,
+        biggest_obstacle: quizState.biggestObstacle,
+        prenatal_care: quizState.prenatalCare,
+        nutrition: quizState.nutrition,
+        supplementation: quizState.supplementation,
+        stress: quizState.stress,
+        sleep: quizState.sleep,
+        pelvic_floor: quizState.pelvicFloor,
+        support_type: quizState.supportType,
       }
 
       try {
