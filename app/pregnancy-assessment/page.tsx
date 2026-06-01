@@ -867,6 +867,18 @@ function PregnancyResultsPage({
   const getTierLabel = () =>
     score <= 40 ? "Early Foundations Stage" : score <= 70 ? "Building Momentum Stage" : "Thriving & Ready Stage"
 
+  const pregnancyProtocolSteps = [
+    { label: "Prenatal Nutrition Foundation", done: true },
+    { label: "Safe Exercise Modifications", done: true },
+    { label: "Pelvic Floor Prep Programme", done: false },
+    { label: "Birth Prep Breathing Protocol", done: false },
+    { label: "Trimester-by-Trimester Plan", done: false },
+    { label: "Postpartum Transition Guide", done: false },
+  ]
+  const completedSteps = pregnancyProtocolSteps.filter((s) => s.done).length
+  const totalSteps = pregnancyProtocolSteps.length
+  const pctDone = Math.round((completedSteps / totalSteps) * 100)
+
   return (
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="max-w-4xl mx-auto">
@@ -877,9 +889,9 @@ function PregnancyResultsPage({
         </Link>
 
         {/* Score Circle */}
-        <Card className="border-0 shadow-xl mb-8">
+        <Card className="border-0 shadow-xl mb-6">
           <CardContent className="p-8 text-center">
-            <div className="mb-6">
+            <div className="mb-4">
               <div
                 className="w-32 h-32 rounded-full mx-auto flex items-center justify-center mb-4"
                 style={{ backgroundColor: getTierColor() }}
@@ -893,6 +905,67 @@ function PregnancyResultsPage({
                 {getTierLabel()}
               </Badge>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Zeigarnik Hook + Above-fold CTA */}
+        <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                style={{ backgroundColor: getTierColor() }}
+              >
+                {pctDone}%
+              </div>
+              <div>
+                <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
+                  Your personalised pregnancy plan is {pctDone}% built.
+                </p>
+                <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                  Complete your setup inside the app to unlock the full protocol.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-2 mb-5">
+              {pregnancyProtocolSteps.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-lg"
+                  style={{
+                    backgroundColor: step.done ? "#F1F8F4" : "#F8F5F2",
+                    filter: step.done ? "none" : "blur(3px)",
+                    userSelect: step.done ? "auto" : "none",
+                  }}
+                >
+                  {step.done ? (
+                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                      <span className="text-white text-sm">✓</span>
+                    </div>
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 flex-shrink-0" style={{ borderColor: "#A15C2F" }} />
+                  )}
+                  <span className="font-medium" style={{ color: "#3A2412" }}>{step.label}</span>
+                  {!step.done && (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded" style={{ backgroundColor: "#E8D5C4", color: "#A15C2F" }}>
+                      LOCKED
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-sm font-semibold mb-4" style={{ color: "#A15C2F" }}>
+              👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your trimester &amp; goals
+            </p>
+            <PricingCTA
+              quizState={quizState}
+              score={score}
+              tier={tier}
+              heading=""
+              subheading=""
+              buttonLabel="Start My Pregnancy Wellness Plan — $29/month"
+              footnote="Feel better in your body in just 7 days. Cancel anytime. No contracts."
+            />
           </CardContent>
         </Card>
 
