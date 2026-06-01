@@ -552,14 +552,25 @@ export default function TTCAssessment() {
         biggest_obstacle: quizState.biggestObstacle,
         cycle_tracking: quizState.cycleTracking,
         ovulation_awareness: quizState.ovulationAwareness,
+        fertility_nutrition: quizState.fertilityNutrition,
+        supplementation: quizState.supplementation,
+        stress: quizState.stress,
+        sleep: quizState.sleep,
+        alcohol: quizState.alcohol,
+        smoking: quizState.smoking,
+        support_type: quizState.supportType,
       }
 
-      await addContactToOmnisend({
-        email: quizState.email,
-        firstName: quizState.name,
-        tags: ["ttc-assessment", `score-${tier}`],
-        customProperties,
-      })
+      try {
+        await addContactToOmnisend({
+          email: quizState.email,
+          firstName: quizState.name,
+          tags: ["ttc-assessment", `score-${tier}`],
+          customProperties,
+        })
+      } catch (omnisendError) {
+        console.error("[omnisend] first call error:", omnisendError)
+      }
 
       // ── Lead Capture: 'leads' table per RULES.md ────────────────────────────
       const { data, error: supabaseError } = await supabase
@@ -784,6 +795,18 @@ function TTCResultsPage({
     ],
   }
 
+  const ttcProtocolSteps = [
+    { label: "Cycle Tracking Setup", done: true },
+    { label: "Fertile Window Mapping", done: true },
+    { label: "Fertility Nutrition Blueprint", done: false },
+    { label: "Supplement Protocol", done: false },
+    { label: "Stress & Sleep Reset", done: false },
+    { label: "Ovulation Precision Plan", done: false },
+  ]
+  const completedSteps = ttcProtocolSteps.filter((s) => s.done).length
+  const totalSteps = ttcProtocolSteps.length
+  const pctDone = Math.round((completedSteps / totalSteps) * 100)
+
   return (
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="max-w-4xl mx-auto">
@@ -794,9 +817,9 @@ function TTCResultsPage({
         </Link>
 
         {/* Score Display */}
-        <Card className="border-0 shadow-xl mb-8">
+        <Card className="border-0 shadow-xl mb-6">
           <CardContent className="p-8 text-center">
-            <div className="mb-6">
+            <div className="mb-4">
               <div
                 className="w-32 h-32 rounded-full mx-auto flex items-center justify-center mb-4"
                 style={{ backgroundColor: getTierColor() }}
@@ -815,6 +838,62 @@ function TTCResultsPage({
               {tier === "medium" && "You're building momentum! There are key gaps to address for stronger results."}
               {tier === "low" && "There's real opportunity to optimize your fertility health — and the right support makes all the difference."}
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Zeigarnik Hook + Above-fold CTA */}
+        <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                style={{ backgroundColor: getTierColor() }}
+              >
+                {pctDone}%
+              </div>
+              <div>
+                <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
+                  Your personalised fertility plan is {pctDone}% built.
+                </p>
+                <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                  Complete your setup inside the app to unlock the full protocol.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-2 mb-5">
+              {ttcProtocolSteps.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-lg"
+                  style={{
+                    backgroundColor: step.done ? "#F1F8F4" : "#F8F5F2",
+                    filter: step.done ? "none" : "blur(3px)",
+                    userSelect: step.done ? "auto" : "none",
+                  }}
+                >
+                  {step.done ? (
+                    <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 flex-shrink-0" style={{ borderColor: "#A15C2F" }} />
+                  )}
+                  <span className="font-medium" style={{ color: "#3A2412" }}>{step.label}</span>
+                  {!step.done && (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded" style={{ backgroundColor: "#E8D5C4", color: "#A15C2F" }}>
+                      LOCKED
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-sm font-semibold mb-4" style={{ color: "#A15C2F" }}>
+              👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your score &amp; goals
+            </p>
+            <PricingCTA
+              quizState={quizState}
+              score={score}
+              tier={tier}
+              label="Start My Fertility Optimisation Plan — $29/month"
+            />
           </CardContent>
         </Card>
 

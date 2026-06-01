@@ -78,6 +78,82 @@ function TestimonialsSection({
   )
 }
 
+// ─── Name Sanitizer ───────────────────────────────────────────────────────────
+// Returns "Mama" if the name is blank, only consonants, or "none"
+function sanitizeName(name: string): string {
+  const trimmed = name.trim().toLowerCase()
+  if (!trimmed || trimmed === "none") return "Mama"
+  // Only consonants = no vowels at all
+  if (!/[aeiou]/i.test(trimmed)) return "Mama"
+  return name.trim()
+}
+
+// ─── DR Shorthand Detector ────────────────────────────────────────────────────
+function containsDRKeywords(text: string): boolean {
+  const lower = text.toLowerCase()
+  return /\bdr\b|diastasis|gap|pooch|separation/.test(lower)
+}
+
+// ─── Goal + Tier Action Plan ──────────────────────────────────────────────────
+function GoalActionPlan({ primaryGoal, tier }: { primaryGoal: string; tier: string }) {
+  const plans: Record<string, Record<string, { title: string; body: string }>> = {
+    "heal-dr": {
+      low: {
+        title: "📊 Your Deep Core Action Plan",
+        body: "Your assessment shows a core baseline that needs immediate, gentle attention. Traditional gym exercises (like crunches, planks, or heavy twisting) will actually force your abdominal walls further apart and make the \"mom pooch\" look more prominent. The Catalyst Mom App has unlocked your specialized Knit-Healing Layer 1 Protocol. These are daily, zero-strain 15-minute foundational movements designed to close the gap safely from the inside out before you move to heavy full-body training.",
+      },
+      medium: {
+        title: "📊 Your Deep Core Action Plan",
+        body: "You have a solid starting foundation, but your core walls still lack the intra-abdominal support to handle everyday straining. The app has set your dashboard to Layer 2 Core Stabilization, focusing on knitting the deep transverse abdominis muscles together so you can lift your baby and move without core doming or back pain.",
+      },
+      high: {
+        title: "📊 Your Deep Core Action Plan",
+        body: "Great work keeping your core engaged! Your dashboard is configured for Advanced Core Integration, protecting your alignment during functional, everyday movements while safely toning the outer layers.",
+      },
+    },
+    "weight-loss": {
+      low: {
+        title: "📊 Your Postpartum Metabolic Recovery",
+        body: "Trying to lose weight by cutting calories or doing intense cardio right now will backfire. When your body is fighting exhaustion and healing internal tissues, extreme stress patterns crash your metabolism and stall weight loss. The app focuses on your foundational recovery first: simple, zero-prep protein frameworks and nervous-system-calming movements that naturally lower cortisol and trigger sustainable fat loss without draining your energy.",
+      },
+      medium: {
+        title: "📊 Your Postpartum Metabolic Recovery",
+        body: "To trigger safe fat loss while protecting your healing tissues, your dashboard focuses on efficient, low-impact metabolic circuits paired with high-protein postpartum food structures. No extreme tracking required.",
+      },
+      high: {
+        title: "📊 Your Postpartum Metabolic Recovery",
+        body: "Your energy systems are stable. Your dashboard will safely advance your workout intensity to lean muscle preservation and active conditioning blocks.",
+      },
+    },
+    strength: {
+      low: {
+        title: "📊 Your Path to True Functional Strength",
+        body: "You are ready to feel strong again, which is amazing! However, trying to jump straight into traditional weighted squats, overhead presses, or running with a core foundation at this tier is like trying to build a brick house on quicksand. The app is locking out high-pressure movements for now. Your starting routine focuses entirely on stabilizing your hips, glutes, and inner pelvic wall so you can build the unbreakable foundation needed for heavy lifting without injury.",
+      },
+      medium: {
+        title: "📊 Your Path to True Functional Strength",
+        body: "Your structural foundation is coming back online. Your dashboard is introducing resistance bands and bodyweight progressive loads, ensuring your inner core matches your outer muscle strength step-for-step.",
+      },
+      high: {
+        title: "📊 Your Path to True Functional Strength",
+        body: "Your core and pelvic alignment are ready for external load resistance. The app opens your full strength pathways, allowing you to lift heavier and progress safely.",
+      },
+    },
+  }
+
+  const plan = plans[primaryGoal]?.[tier]
+  if (!plan) return null
+
+  return (
+    <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
+      <CardContent className="p-8">
+        <h3 className="text-xl font-bold mb-3" style={{ color: "#A15C2F" }}>{plan.title}</h3>
+        <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>{plan.body}</p>
+      </CardContent>
+    </Card>
+  )
+}
+
 function PricingSection({
   quizState,
   score,
@@ -87,6 +163,14 @@ function PricingSection({
   score: number
   tier: string
 }) {
+  const getButtonLabel = () => {
+    if (quizState.primaryGoal === "heal-dr") return "Heal My Core & Close The Ab Gap — $29/month"
+    if (quizState.primaryGoal === "weight-loss") return "Drop the Pooch & Reclaim My Energy — $29/month"
+    if (quizState.primaryGoal === "strength") return "Rebuild My Postpartum Strength Safely — $29/month"
+    if (quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "not-yet") return "Start My Gentle Healing Protocol — $29/month"
+    return "Join the Catalyst Mom App Now — $29/month"
+  }
+
   return (
     <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
       <Button
@@ -106,18 +190,40 @@ function PricingSection({
           window.open(appUrl.toString(), "_blank")
         }}
       >
-        {quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "no"
-          ? "Start My Gentle Healing Protocol - $29/month"
-          : "Join the Catalyst Mom App Now - $29/month"}
+        {getButtonLabel()}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
+        Feel more connected to your core in just 7 days. Cancel anytime. No contracts. Protocol requires only 15 mins/day.
       </p>
     </div>
   )
 }
 
 // ─── Utility functions ────────────────────────────────────────────────────────
+
+function getGapCopy(practice: string, score: number): string {
+  if (practice === "Medical Clearance" && score === 0)
+    return "You haven't gotten the official green light yet, and that is completely okay! Our program features an exclusive \"Early Days\" protocol designed specifically for moms who are still waiting for their 6-week checkup. It focuses on gentle, zero-strain recovery so you can safely start healing without risking injury."
+  if (practice === "Diastasis Recti Awareness" && score <= 5)
+    return "You have some awareness of your core separation, which is a fantastic head start. In the app, we will pinpoint exactly how many finger-widths your gap is and provide targeted, daily 15-minute movements designed specifically to knit those abdominal walls back together safely — no crunches allowed."
+  if (practice === "Pelvic Floor Training" && score === 0)
+    return "Sneezing, laughing, or jumping shouldn't come with anxiety. A 0/10 means your pelvic muscles need targeted recovery. The app introduces a daily 5-minute deep-breathing connection protocol that fixes the root cause, helping 87% of our moms stop leaking within 6 weeks."
+  if ((practice === "Nutrition Tracking" || practice === "Protein Intake") && score === 0)
+    return "Your body cannot knit an abdominal gap or repair deep tissues without the right building blocks. The app skips complex macro counting and gives you fast, high-protein postpartum meal frameworks requiring zero advanced cooking skills."
+  if (practice.includes("Exercise") || practice.includes("Workout"))
+    return "You're not yet doing postpartum-safe movements. Without proper form and core engagement your body isn't recovering optimally — and the wrong exercises can set your recovery back weeks."
+  if (practice.includes("Nutrition") || practice.includes("Protein"))
+    return "Postpartum healing is a rebuild job. Without the right fuel your body can't repair tissue, close a gap, or sustain your energy through the day."
+  if (practice.includes("Pelvic"))
+    return "Without dedicated pelvic floor work, leaking, prolapse risk, and pelvic pressure will persist. Early intervention is far easier than late-stage correction."
+  if (practice.includes("Core"))
+    return "Your deep core muscles need specific healing sequences — not generic ab work. Skipping this phase leads to back pain, poor posture, and a persistent mom pooch."
+  if (practice.includes("Rest"))
+    return "Your body only repairs and rebuilds during rest. Running on empty slows every other area of your recovery simultaneously."
+  if (practice.includes("Hydration"))
+    return "Dehydration slows tissue repair, drops milk supply, and is one of the most overlooked reasons postpartum moms feel foggy and fatigued all day."
+  return "Addressing this gap will directly accelerate your recovery timeline and how quickly you feel like yourself again."
+}
 
 function PersonalizedConcernSection({
   concern,
@@ -127,6 +233,24 @@ function PersonalizedConcernSection({
   breakdown: any[]
 }) {
   if (!concern || concern.trim().length === 0) return null
+
+  // If DR keywords detected — show dedicated DR block instead of generic concern
+  if (containsDRKeywords(concern)) {
+    return (
+      <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
+        <CardHeader>
+          <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
+            💬 Your Diastasis Recti Recovery
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+            You shared that you are dealing with <strong>Diastasis Recti (ab separation)</strong>. Trying to fix a core gap with traditional workouts like crunches or planks will actually push your abdominal walls further apart and make the &ldquo;mom pooch&rdquo; worse. Inside the Catalyst Mom App, your 15-minute daily protocol skips the dangerous movements entirely. We focus exclusively on deep transverse abdominis (TVA) knit-healing exercises designed to draw those muscles back together, flatten your belly from the inside out, and safely rebuild your core strength.
+          </p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   const relevantGaps = breakdown.filter((item) => item.score <= 7).slice(0, 3)
 
@@ -144,20 +268,10 @@ function PersonalizedConcernSection({
           </p>
         </div>
 
-        <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-          Based on your assessment, we&apos;ll create a customized postpartum recovery plan that addresses your unique
-          situation. Our program combines evidence-based protocols with personalized support to help you achieve your
-          goal of optimal postpartum wellness.
-        </p>
-
         <div className="p-6 rounded-lg border-2" style={{ borderColor: "#FFB74D", backgroundColor: "#FFF8E1" }}>
           <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
             How This Connects to Your Score:
           </h3>
-          <p className="mb-4" style={{ color: "#3A2412" }}>
-            Your concern about <strong>your postpartum recovery</strong> is directly related to the gaps we identified.
-            Here&apos;s what&apos;s holding you back:
-          </p>
           <div className="space-y-4">
             {relevantGaps.map((gap, index) => (
               <div key={index} className="flex items-start gap-3">
@@ -167,17 +281,7 @@ function PersonalizedConcernSection({
                     {gap.practice} ({gap.score}/10):
                   </p>
                   <p style={{ color: "#3A2412" }}>
-                    {gap.practice.includes("Exercise")
-                      ? "You're not doing postpartum-safe movements. Without proper form and core engagement, your body isn't recovering optimally and you may experience pain or weakness."
-                      : gap.practice.includes("Nutrition")
-                        ? "Your nutrition isn't optimized for postpartum recovery. Proper eating supports healing, energy levels, and milk production if breastfeeding."
-                        : gap.practice.includes("Pelvic")
-                          ? "Without pelvic floor work, you may experience incontinence, prolapse risk, or painful sex. Prevention and strengthening are critical for recovery."
-                          : gap.practice.includes("Core")
-                            ? "Your core needs specific healing exercises. Without proper core work, you may have back pain, poor posture, or a persistent 'mom pooch.'"
-                            : gap.practice.includes("Rest")
-                              ? "You're not prioritizing rest and recovery. Your body heals during rest - without it, recovery is slower and you'll feel exhausted."
-                              : `This gap is affecting your postpartum recovery. Addressing it will help you feel better faster.`}
+                    {getGapCopy(gap.practice, gap.score)}
                   </p>
                 </div>
               </div>
@@ -722,7 +826,15 @@ export default function PostpartumAssessment() {
           score: calculatedScore,
           score_tier: tier,
           weeks_postpartum: quizState.weeksPostpartum,
+          medical_clearance: quizState.medicalClearance,
+          diastasis_recti: quizState.diastasisRecti,
+          core_pelvic_floor: quizState.coreSafeExercises,
+          movement: quizState.workoutRoutine,
+          nutrition: quizState.nutrition,
+          energy_recovery: quizState.rest,
           primary_goal: quizState.primaryGoal,
+          biggest_obstacle: quizState.biggestObstacle,
+          support_type: quizState.supportType,
           birth_experience: quizState.birthExperience,
           results_url: `https://catalystmomofficial.com/dashboard`,
         }
@@ -1155,6 +1267,8 @@ function ResultsPage({
   tier: "low" | "medium" | "high"
   quizState: QuizState
 }) {
+  const displayName = sanitizeName(quizState.name)
+
   const getTierColor = () => {
     if (score <= 40) return "#E57373"
     if (score <= 70) return "#FFB74D"
@@ -1162,9 +1276,9 @@ function ResultsPage({
   }
 
   const getTierLabel = () => {
-    if (score <= 40) return "Early Foundations Stage"
-    if (score <= 70) return "Building Momentum Stage"
-    return "Thriving & Ready Stage"
+    if (score <= 40) return `${displayName}, you're in the Early Foundations Stage`
+    if (score <= 70) return `${displayName}, you're in the Building Momentum Stage`
+    return `${displayName}, you're in the Thriving & Ready Stage`
   }
 
   const breakdown = getDetailedBreakdown(quizState)
@@ -1172,6 +1286,18 @@ function ResultsPage({
   const personalizedResponse = quizState.additionalNotes.trim()
     ? getPersonalizedResponseWithGaps(quizState.additionalNotes, breakdown)
     : null
+
+  const protocolSteps = [
+    { label: "Core Healing Sequence", done: true },
+    { label: "Pelvic Floor Reset", done: true },
+    { label: "Nutrition Blueprint", done: false },
+    { label: "Sleep Optimisation Plan", done: false },
+    { label: "Strength Rebuild Phase 1", done: false },
+    { label: "Postpartum Mindset Reset", done: false },
+  ]
+  const completedSteps = protocolSteps.filter((s) => s.done).length
+  const totalSteps = protocolSteps.length
+  const pctDone = Math.round((completedSteps / totalSteps) * 100)
 
   return (
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
@@ -1183,13 +1309,13 @@ function ResultsPage({
           </Button>
         </Link>
 
-        {/* Score Display */}
-        <Card className="border-0 shadow-xl mb-8">
+        {/* ── Above-the-fold: Score + Hook + CTA ── */}
+        <Card className="border-0 shadow-xl mb-6">
           <CardContent className="p-8 text-center">
             <h1 className="text-2xl font-bold mb-6" style={{ color: "#3A2412" }}>
               🎉 Your Postpartum Wellness Score
             </h1>
-            <div className="mb-6">
+            <div className="mb-4">
               <div
                 className="w-40 h-40 rounded-full mx-auto flex flex-col items-center justify-center mb-4 shadow-lg"
                 style={{ backgroundColor: getTierColor() }}
@@ -1202,7 +1328,7 @@ function ResultsPage({
               </Badge>
             </div>
 
-            <div className="max-w-md mx-auto mb-6">
+            <div className="max-w-md mx-auto mb-4">
               <div className="w-full h-3 rounded-full" style={{ backgroundColor: "#E8D5C4" }}>
                 <div
                   className="h-3 rounded-full transition-all duration-500"
@@ -1211,25 +1337,74 @@ function ResultsPage({
               </div>
             </div>
 
-            <p className="text-xl font-semibold mb-4" style={{ color: "#A15C2F" }}>
+            <p className="text-xl font-semibold mb-2" style={{ color: "#A15C2F" }}>
               {tier === "high" &&
-                "Wow! You're doing SO much right - you're in the TOP 15% of postpartum moms we assess."}
+                "Wow! You're doing SO much right — you're in the TOP 15% of postpartum moms we assess."}
               {tier === "medium" && "You've got some solid foundations in place! You're doing some things really well."}
               {tier === "low" &&
                 "You're experiencing some common challenges that are keeping you from feeling your best."}
             </p>
-
-            <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-              {tier === "high" &&
-                "You've built incredible foundations. With a few strategic refinements, you could be operating at peak wellness (90-100 range)."}
-              {tier === "medium" &&
-                "There are 3 key gaps preventing you from breakthrough results - and based on what you shared, these gaps are DIRECTLY causing your concerns."}
-              {tier === "low" && "The good news? Small, strategic changes can make a HUGE difference in how you feel."}
-            </p>
           </CardContent>
         </Card>
 
-        {/* Detailed 10-Point Breakdown */}
+        {/* ── Zeigarnik Open-Loop Hook ── */}
+        <Card className="border-0 shadow-xl mb-6 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                style={{ backgroundColor: getTierColor() }}
+              >
+                {pctDone}%
+              </div>
+              <div>
+                <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
+                  Your 8-week recovery protocol is {pctDone}% built.
+                </p>
+                <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                  Complete your setup inside the app to unlock the full plan.
+                </p>
+              </div>
+            </div>
+
+            {/* Protocol step preview — blurred after first two */}
+            <div className="space-y-2 mb-5">
+              {protocolSteps.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-lg"
+                  style={{
+                    backgroundColor: step.done ? "#F1F8F4" : "#F8F5F2",
+                    filter: step.done ? "none" : "blur(3px)",
+                    userSelect: step.done ? "auto" : "none",
+                  }}
+                >
+                  {step.done ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 flex-shrink-0" style={{ borderColor: "#A15C2F" }} />
+                  )}
+                  <span className="font-medium" style={{ color: "#3A2412" }}>
+                    {step.label}
+                  </span>
+                  {!step.done && (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded" style={{ backgroundColor: "#E8D5C4", color: "#A15C2F" }}>
+                      LOCKED
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <p className="text-center text-sm font-semibold mb-4" style={{ color: "#A15C2F" }}>
+              👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your score &amp; goals
+            </p>
+
+            <PricingSection quizState={quizState} score={score} tier={tier} />
+          </CardContent>
+        </Card>
+
+        {/* ── Full Breakdown (below the fold) ── */}
         <Card className="border-0 shadow-xl mb-8">
           <CardHeader>
             <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
@@ -1293,6 +1468,8 @@ function ResultsPage({
             </div>
           </CardContent>
         </Card>
+
+        <GoalActionPlan primaryGoal={quizState.primaryGoal} tier={tier} />
 
         {personalizedResponse && (
           <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />

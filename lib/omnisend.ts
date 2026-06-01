@@ -5,7 +5,7 @@ export interface OmnisendContact {
   firstName?: string
   lastName?: string
   tags?: string[]
-  customProperties?: Record<string, string | number>
+  customProperties?: Record<string, string | number | undefined | null>
 }
 
 export async function addContactToOmnisend(contact: OmnisendContact) {
@@ -17,10 +17,19 @@ export async function addContactToOmnisend(contact: OmnisendContact) {
   }
 
   try {
+    // Strip undefined/null values — Omnisend rejects them
+    const cleanProperties: Record<string, string | number> = {}
+    for (const [key, val] of Object.entries(contact.customProperties || {})) {
+      if (val !== undefined && val !== null && val !== "") {
+        cleanProperties[key] = typeof val === "number" ? val : String(val)
+      }
+    }
+
     console.log("[v0] Omnisend - Sending contact:", {
       email: contact.email,
       firstName: contact.firstName,
       tags: contact.tags,
+      customProperties: cleanProperties,
     })
 
     const payload = {
@@ -39,7 +48,7 @@ export async function addContactToOmnisend(contact: OmnisendContact) {
       firstName: contact.firstName || "",
       lastName: contact.lastName || "",
       tags: contact.tags || [],
-      customProperties: contact.customProperties || {},
+      customProperties: cleanProperties,
     }
 
     console.log("[v0] Omnisend - Payload:", JSON.stringify(payload, null, 2))
