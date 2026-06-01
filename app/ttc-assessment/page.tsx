@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
+import { createClient } from "@/lib/supabase/client"
+const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
 
