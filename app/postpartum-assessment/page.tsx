@@ -851,37 +851,21 @@ export default function PostpartumAssessment() {
         }
 
         const { data: supabaseData, error: supabaseError } = await supabase
-          .from("lead_responses")
+          .from("postpartum_assessments")
           .insert({
-            name: quizState.name,
+            user_name: quizState.name,
             email: quizState.email,
             primary_goal: quizState.primaryGoal,
-            activity_level: quizState.exercise || "not-specified",
-            equipment: quizState.workoutRoutine || "not-specified",
-            dietary_preferences: quizState.dietaryRestrictions || "none",
-            special_notes: JSON.stringify({
-              assessment_type: "postpartum",
-              score: calculatedScore,
-              score_tier: tier,
-              weeks_postpartum: quizState.weeksPostpartum,
-              biggest_obstacle: quizState.biggestObstacle,
-              support_preference: quizState.supportType,
-              additional_notes: quizState.additionalNotes,
-              birth_experience: quizState.birthExperience,
-              exercise_safety: quizState.coreSafeExercises === "crunches" ? "unsafe" : quizState.coreSafeExercises,
-              pelvic_floor: quizState.pelvicFloor,
-              core_strength: quizState.coreSafeExercises,
-              postpartum_nutrition: quizState.nutrition,
-              supplementation: quizState.proteinIntake ? "yes" : "no",
-              sleep_quality: quizState.rest,
-              stress_management: quizState.tracking,
-              body_image: quizState.diastasisRecti,
-              partner_support:
-                quizState.supportType === "done-for-you" || quizState.supportType === "1on1" ? "high" : "low",
-              self_care:
-                quizState.supportType === "self-guided" || quizState.supportType === "community" ? "moderate" : "low",
-            }),
-            created_at: new Date().toISOString(),
+            score: calculatedScore,
+            tier,
+            user_concern: quizState.additionalNotes || null,
+            medical_clearance: quizState.medicalClearance || null,
+            diastasis_recti: quizState.diastasisRecti || null,
+            pelvic_floor: quizState.coreSafeExercises || null,
+            nutrition_protein: quizState.nutrition || null,
+            weeks_postpartum: quizState.weeksPostpartum || null,
+            birth_experience: quizState.birthExperience || null,
+            biggest_obstacle: quizState.biggestObstacle || null,
           })
           .select()
 
