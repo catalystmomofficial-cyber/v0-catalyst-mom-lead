@@ -641,12 +641,16 @@ export default function PregnancyAssessment() {
         primary_goal: quizState.primaryGoal,
       }
 
-      await addContactToOmnisend({
-        email: quizState.email,
-        firstName: quizState.name,
-        tags: ["pregnancy-assessment", `score-${tier}`, `trimester-${quizState.trimester}`],
-        customProperties,
-      })
+      try {
+        await addContactToOmnisend({
+          email: quizState.email,
+          firstName: quizState.name,
+          tags: ["pregnancy-assessment", `score-${tier}`, `trimester-${quizState.trimester}`],
+          customProperties,
+        })
+      } catch (omnisendError) {
+        console.error("[omnisend] first call error:", omnisendError)
+      }
 
       // ── Lead Capture: routes to 'leads' table per RULES.md ──────────────────
       const { data, error: supabaseError } = await supabase

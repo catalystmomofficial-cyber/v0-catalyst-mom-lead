@@ -554,12 +554,16 @@ export default function TTCAssessment() {
         ovulation_awareness: quizState.ovulationAwareness,
       }
 
-      await addContactToOmnisend({
-        email: quizState.email,
-        firstName: quizState.name,
-        tags: ["ttc-assessment", `score-${tier}`],
-        customProperties,
-      })
+      try {
+        await addContactToOmnisend({
+          email: quizState.email,
+          firstName: quizState.name,
+          tags: ["ttc-assessment", `score-${tier}`],
+          customProperties,
+        })
+      } catch (omnisendError) {
+        console.error("[omnisend] first call error:", omnisendError)
+      }
 
       // ── Lead Capture: 'leads' table per RULES.md ────────────────────────────
       const { data, error: supabaseError } = await supabase
