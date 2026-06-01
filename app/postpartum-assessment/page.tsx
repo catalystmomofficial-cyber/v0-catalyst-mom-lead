@@ -45,9 +45,13 @@ interface QuizState {
   birthExperience?: string
 }
 
-const supabase = createClient()
+  const supabase = createClient()
 
-const isValidEmail = (email: string) => {
+  if (!supabase) {
+    console.error("[v0] Supabase client not initialized - check environment variables")
+  }
+
+  const isValidEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
