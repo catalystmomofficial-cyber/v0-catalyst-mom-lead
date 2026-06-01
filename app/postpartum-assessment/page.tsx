@@ -139,8 +139,8 @@ export default function PostpartumAssessmentPage() {
     { id: "energy", label: "How's your energy level?", type: "radio", required: true, options: ["Good", "Fair - some days are hard", "Low - exhausted most days", "Varies wildly"] },
     { id: "sleep", label: "Are you getting quality sleep?", type: "radio", required: true, options: ["Yes, mostly", "Mostly, but interrupted", "No - baby sleep deprivation", "No - insomnia"] },
     { id: "mood", label: "How's your mood and mental health?", type: "radio", required: true, options: ["Good", "Mixed - good and tough days", "Struggling - feels heavy", "Concerning - seeking help"] },
-    { id: "name", label: "Almost there! What's your first name?", type: "text", required: true },
-    { id: "email", label: "Where should we send your personalized results?", type: "email", required: true },
+    { id: "name", label: "What's your first name?", type: "text", required: true },
+    { id: "email", label: "What's your email?", type: "email", required: true },
   ]
 
   const handleInputChange = (field: string, value: string) => {
