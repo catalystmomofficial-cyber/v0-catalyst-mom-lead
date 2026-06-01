@@ -598,17 +598,22 @@ export default function TTCAssessment() {
       if (data?.[0]) {
         sessionStorage.setItem("ttc_assessment_id", data[0].id)
         const resultsUrl = `https://catalystmomofficial.com/dashboard?assessment_id=${data[0].id}`
-        await addContactToOmnisend({
-          email: quizState.email,
-          firstName: quizState.name,
-          tags: ["ttc-assessment", `score-${tier}`],
-          customProperties: { ...customProperties, results_url: resultsUrl },
-        })
+        try {
+          await addContactToOmnisend({
+            email: quizState.email,
+            firstName: quizState.name,
+            tags: ["ttc-assessment", `score-${tier}`],
+            customProperties: { ...customProperties, results_url: resultsUrl },
+          })
+        } catch (omnisendError) {
+          console.error("[omnisend] second call error:", omnisendError)
+        }
       }
 
       setShowResults(true)
     } catch (error) {
       console.error("[v0] Error submitting quiz:", error)
+      setShowResults(true)
     } finally {
       setIsLoading(false)
     }

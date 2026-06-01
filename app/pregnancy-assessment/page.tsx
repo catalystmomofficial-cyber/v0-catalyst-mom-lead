@@ -684,17 +684,22 @@ export default function PregnancyAssessment() {
       if (data?.[0]) {
         sessionStorage.setItem("pregnancy_assessment_id", data[0].id)
         const resultsUrl = `https://catalystmomofficial.com/dashboard?assessment_id=${data[0].id}`
-        await addContactToOmnisend({
-          email: quizState.email,
-          firstName: quizState.name,
-          tags: ["pregnancy-assessment", `score-${tier}`, `trimester-${quizState.trimester}`],
-          customProperties: { ...customProperties, results_url: resultsUrl },
-        })
+        try {
+          await addContactToOmnisend({
+            email: quizState.email,
+            firstName: quizState.name,
+            tags: ["pregnancy-assessment", `score-${tier}`, `trimester-${quizState.trimester}`],
+            customProperties: { ...customProperties, results_url: resultsUrl },
+          })
+        } catch (omnisendError) {
+          console.error("[omnisend] second call error:", omnisendError)
+        }
       }
 
       setShowResults(true)
     } catch (error) {
       console.error("[v0] Error submitting quiz:", error)
+      setShowResults(true)
     } finally {
       setIsLoading(false)
     }
