@@ -1287,6 +1287,18 @@ function ResultsPage({
     ? getPersonalizedResponseWithGaps(quizState.additionalNotes, breakdown)
     : null
 
+  const protocolSteps = [
+    { label: "Core Healing Sequence", done: true },
+    { label: "Pelvic Floor Reset", done: true },
+    { label: "Nutrition Blueprint", done: false },
+    { label: "Sleep Optimisation Plan", done: false },
+    { label: "Strength Rebuild Phase 1", done: false },
+    { label: "Postpartum Mindset Reset", done: false },
+  ]
+  const completedSteps = protocolSteps.filter((s) => s.done).length
+  const totalSteps = protocolSteps.length
+  const pctDone = Math.round((completedSteps / totalSteps) * 100)
+
   return (
     <div className="min-h-screen p-4" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="max-w-4xl mx-auto">
@@ -1297,13 +1309,13 @@ function ResultsPage({
           </Button>
         </Link>
 
-        {/* Score Display */}
-        <Card className="border-0 shadow-xl mb-8">
+        {/* ── Above-the-fold: Score + Hook + CTA ── */}
+        <Card className="border-0 shadow-xl mb-6">
           <CardContent className="p-8 text-center">
             <h1 className="text-2xl font-bold mb-6" style={{ color: "#3A2412" }}>
               🎉 Your Postpartum Wellness Score
             </h1>
-            <div className="mb-6">
+            <div className="mb-4">
               <div
                 className="w-40 h-40 rounded-full mx-auto flex flex-col items-center justify-center mb-4 shadow-lg"
                 style={{ backgroundColor: getTierColor() }}
@@ -1316,7 +1328,7 @@ function ResultsPage({
               </Badge>
             </div>
 
-            <div className="max-w-md mx-auto mb-6">
+            <div className="max-w-md mx-auto mb-4">
               <div className="w-full h-3 rounded-full" style={{ backgroundColor: "#E8D5C4" }}>
                 <div
                   className="h-3 rounded-full transition-all duration-500"
@@ -1325,25 +1337,74 @@ function ResultsPage({
               </div>
             </div>
 
-            <p className="text-xl font-semibold mb-4" style={{ color: "#A15C2F" }}>
+            <p className="text-xl font-semibold mb-2" style={{ color: "#A15C2F" }}>
               {tier === "high" &&
-                "Wow! You're doing SO much right - you're in the TOP 15% of postpartum moms we assess."}
+                "Wow! You're doing SO much right — you're in the TOP 15% of postpartum moms we assess."}
               {tier === "medium" && "You've got some solid foundations in place! You're doing some things really well."}
               {tier === "low" &&
                 "You're experiencing some common challenges that are keeping you from feeling your best."}
             </p>
-
-            <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-              {tier === "high" &&
-                "You've built incredible foundations. With a few strategic refinements, you could be operating at peak wellness (90-100 range)."}
-              {tier === "medium" &&
-                "There are 3 key gaps preventing you from breakthrough results - and based on what you shared, these gaps are DIRECTLY causing your concerns."}
-              {tier === "low" && "The good news? Small, strategic changes can make a HUGE difference in how you feel."}
-            </p>
           </CardContent>
         </Card>
 
-        {/* Detailed 10-Point Breakdown */}
+        {/* ── Zeigarnik Open-Loop Hook ── */}
+        <Card className="border-0 shadow-xl mb-6 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                style={{ backgroundColor: getTierColor() }}
+              >
+                {pctDone}%
+              </div>
+              <div>
+                <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
+                  Your 8-week recovery protocol is {pctDone}% built.
+                </p>
+                <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
+                  Complete your setup inside the app to unlock the full plan.
+                </p>
+              </div>
+            </div>
+
+            {/* Protocol step preview — blurred after first two */}
+            <div className="space-y-2 mb-5">
+              {protocolSteps.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-lg"
+                  style={{
+                    backgroundColor: step.done ? "#F1F8F4" : "#F8F5F2",
+                    filter: step.done ? "none" : "blur(3px)",
+                    userSelect: step.done ? "auto" : "none",
+                  }}
+                >
+                  {step.done ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-600 flex-shrink-0" />
+                  ) : (
+                    <div className="h-5 w-5 rounded-full border-2 flex-shrink-0" style={{ borderColor: "#A15C2F" }} />
+                  )}
+                  <span className="font-medium" style={{ color: "#3A2412" }}>
+                    {step.label}
+                  </span>
+                  {!step.done && (
+                    <span className="ml-auto text-xs font-semibold px-2 py-0.5 rounded" style={{ backgroundColor: "#E8D5C4", color: "#A15C2F" }}>
+                      LOCKED
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <p className="text-center text-sm font-semibold mb-4" style={{ color: "#A15C2F" }}>
+              👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your score &amp; goals
+            </p>
+
+            <PricingSection quizState={quizState} score={score} tier={tier} />
+          </CardContent>
+        </Card>
+
+        {/* ── Full Breakdown (below the fold) ── */}
         <Card className="border-0 shadow-xl mb-8">
           <CardHeader>
             <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
