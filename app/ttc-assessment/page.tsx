@@ -578,19 +578,10 @@ export default function TTCAssessment() {
       const { data, error: supabaseError } = await supabase
         .from("ttc_assessments")
         .insert({
-          user_name: quizState.name,
+          name: quizState.name,
           email: quizState.email,
-          primary_goal: quizState.primaryGoal,
-          score: calculatedScore,
-          tier,
-          biggest_obstacle: quizState.biggestObstacle || null,
+          primary_goal: quizState.primaryGoal || null,
           ttc_duration: quizState.ttcDuration || null,
-          cycle_tracking: quizState.cycleTracking || null,
-          ovulation_awareness: quizState.ovulationAwareness || null,
-          supplementation: quizState.supplementation || null,
-          stress: quizState.stress || null,
-          sleep: quizState.sleep || null,
-          user_concern: quizState.additionalNotes || null,
         })
         .select()
 
