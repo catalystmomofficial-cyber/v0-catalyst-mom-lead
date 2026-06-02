@@ -670,6 +670,8 @@ export default function PregnancyAssessment() {
           email: quizState.email,
           trimester: quizState.trimester || null,
           weeks_pregnant: weeksPregnantNum ? String(weeksPregnantNum) : null,
+          // integer sub-score columns omitted — they expect numeric scores
+          // which require a separate mapping from answer values
         })
         .select()
 

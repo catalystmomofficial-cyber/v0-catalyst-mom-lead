@@ -580,8 +580,15 @@ export default function TTCAssessment() {
         .insert({
           name: quizState.name,
           email: quizState.email,
-          primary_goal: quizState.primaryGoal || null,
           ttc_duration: quizState.ttcDuration || null,
+          workout_routine: quizState.workoutRoutine || null,
+          tracking: quizState.tracking || null,
+          primary_goal: quizState.primaryGoal || null,
+          biggest_obstacle: quizState.biggestObstacle || null,
+          support_type: quizState.supportType || null,
+          dietary_restrictions: quizState.dietaryRestrictions || null,
+          additional_notes: quizState.additionalNotes || null,
+          score: calculatedScore,
         })
         .select()
 
