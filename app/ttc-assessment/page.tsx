@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
+import { createClient } from "@/lib/supabase/client"
+const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
 
@@ -572,35 +574,23 @@ export default function TTCAssessment() {
         console.error("[omnisend] first call error:", omnisendError)
       }
 
-      // ── Lead Capture: 'leads' table per RULES.md ────────────────────────────
+      // ── Lead Capture: ttc_assessments table ────────────────────────────────
       const { data, error: supabaseError } = await supabase
-        .from("leads")
+        .from("ttc_assessments")
         .insert({
-          name: quizState.name,
+          user_name: quizState.name,
           email: quizState.email,
           primary_goal: quizState.primaryGoal,
-          activity_level: quizState.exercise || "not-specified",
-          equipment: quizState.workoutRoutine || "not-specified",
-          dietary_preferences: quizState.dietaryRestrictions || "none",
-          special_notes: JSON.stringify({
-            assessment_type: "ttc",
-            score: calculatedScore,
-            score_tier: tier,
-            ttc_duration: quizState.ttcDuration,
-            biggest_obstacle: quizState.biggestObstacle,
-            support_preference: quizState.supportType,
-            additional_notes: quizState.additionalNotes,
-            cycle_tracking: quizState.cycleTracking,
-            ovulation_awareness: quizState.ovulationAwareness,
-            fertility_nutrition: quizState.fertilityNutrition,
-            supplementation: quizState.supplementation,
-            stress: quizState.stress,
-            sleep: quizState.sleep,
-            alcohol: quizState.alcohol,
-            smoking: quizState.smoking,
-            tracking: quizState.tracking,
-          }),
-          created_at: new Date().toISOString(),
+          score: calculatedScore,
+          tier,
+          biggest_obstacle: quizState.biggestObstacle || null,
+          ttc_duration: quizState.ttcDuration || null,
+          cycle_tracking: quizState.cycleTracking || null,
+          ovulation_awareness: quizState.ovulationAwareness || null,
+          supplementation: quizState.supplementation || null,
+          stress: quizState.stress || null,
+          sleep: quizState.sleep || null,
+          user_concern: quizState.additionalNotes || null,
         })
         .select()
 

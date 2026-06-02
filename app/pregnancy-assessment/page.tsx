@@ -11,6 +11,8 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
+import { createClient } from "@/lib/supabase/client"
+const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -660,34 +662,23 @@ export default function PregnancyAssessment() {
         console.error("[omnisend] first call error:", omnisendError)
       }
 
-      // ── Lead Capture: routes to 'leads' table per RULES.md ──────────────────
+      // ── Lead Capture: pregnancy_assessments table ───────────────────────────
       const { data, error: supabaseError } = await supabase
-        .from("leads")
+        .from("pregnancy_assessments")
         .insert({
-          name: quizState.name,
+          user_name: quizState.name,
           email: quizState.email,
           primary_goal: quizState.primaryGoal,
-          activity_level: quizState.workoutRoutine,
-          equipment: quizState.exerciseSafety,
-          dietary_preferences: quizState.dietaryRestrictions,
-          special_notes: JSON.stringify({
-            assessment_type: "pregnancy",
-            score: calculatedScore,
-            score_tier: tier,
-            trimester: quizState.trimester,
-            weeks_pregnant: weeksPregnantNum,
-            weeks_until_birth: weeksUntilBirth,
-            biggest_obstacle: quizState.biggestObstacle,
-            support_preference: quizState.supportType,
-            additional_notes: quizState.additionalNotes,
-            prenatal_care: quizState.prenatalCare,
-            nutrition: quizState.nutrition,
-            supplementation: quizState.supplementation,
-            stress: quizState.stress,
-            sleep: quizState.sleep,
-            tracking: quizState.tracking,
-          }),
-          created_at: new Date().toISOString(),
+          score: calculatedScore,
+          tier,
+          trimester: quizState.trimester || null,
+          weeks_pregnant: weeksPregnantNum || null,
+          biggest_obstacle: quizState.biggestObstacle || null,
+          prenatal_care: quizState.prenatalCare || null,
+          supplementation: quizState.supplementation || null,
+          stress: quizState.stress || null,
+          sleep: quizState.sleep || null,
+          user_concern: quizState.additionalNotes || null,
         })
         .select()
 
