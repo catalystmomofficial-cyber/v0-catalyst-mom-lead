@@ -666,19 +666,12 @@ export default function PregnancyAssessment() {
       const { data, error: supabaseError } = await supabase
         .from("pregnancy_assessments")
         .insert({
-          user_name: quizState.name,
+          name: quizState.name,
           email: quizState.email,
-          primary_goal: quizState.primaryGoal,
-          score: calculatedScore,
-          tier,
           trimester: quizState.trimester || null,
-          weeks_pregnant: weeksPregnantNum || null,
-          biggest_obstacle: quizState.biggestObstacle || null,
-          prenatal_care: quizState.prenatalCare || null,
-          supplementation: quizState.supplementation || null,
-          stress: quizState.stress || null,
-          sleep: quizState.sleep || null,
-          user_concern: quizState.additionalNotes || null,
+          weeks_pregnant: weeksPregnantNum ? String(weeksPregnantNum) : null,
+          // integer sub-score columns omitted — they expect numeric scores
+          // which require a separate mapping from answer values
         })
         .select()
 

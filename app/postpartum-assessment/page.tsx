@@ -854,18 +854,10 @@ export default function PostpartumAssessment() {
           .from("postpartum_assessments")
           .insert({
             user_name: quizState.name,
-            email: quizState.email,
             primary_goal: quizState.primaryGoal,
             score: calculatedScore,
             tier,
             user_concern: quizState.additionalNotes || null,
-            medical_clearance: quizState.medicalClearance || null,
-            diastasis_recti: quizState.diastasisRecti || null,
-            pelvic_floor: quizState.coreSafeExercises || null,
-            nutrition_protein: quizState.nutrition || null,
-            weeks_postpartum: quizState.weeksPostpartum || null,
-            birth_experience: quizState.birthExperience || null,
-            biggest_obstacle: quizState.biggestObstacle || null,
           })
           .select()
 
