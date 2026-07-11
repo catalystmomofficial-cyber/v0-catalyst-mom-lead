@@ -12,7 +12,6 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { AIAssessmentResult } from "@/components/ai-assessment-result"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -757,6 +756,10 @@ function TTCResultsPage({
   quizState: QuizState
 }) {
   const breakdown = getDetailedBreakdown(quizState)
+  const personalizedResponse = quizState.additionalNotes.trim()
+    ? getPersonalizedResponse(quizState.additionalNotes, breakdown)
+    : null
+  const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
 
   const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
   const getTierLabel = () =>
@@ -825,32 +828,6 @@ function TTCResultsPage({
             </p>
           </CardContent>
         </Card>
-
-        {/* ── AI-Powered Personalised Assessment ── */}
-        <AIAssessmentResult
-          type="ttc"
-          answers={{
-            ttcDuration: quizState.ttcDuration,
-            cycleTracking: quizState.cycleTracking,
-            ovulationAwareness: quizState.ovulationAwareness,
-            fertilityNutrition: quizState.fertilityNutrition,
-            supplementation: quizState.supplementation,
-            stress: quizState.stress,
-            sleep: quizState.sleep,
-            exercise: quizState.exercise,
-            alcohol: quizState.alcohol,
-            smoking: quizState.smoking,
-            workoutRoutine: quizState.workoutRoutine,
-            tracking: quizState.tracking,
-            primaryGoal: quizState.primaryGoal,
-            biggestObstacle: quizState.biggestObstacle,
-            supportType: quizState.supportType,
-            dietaryRestrictions: quizState.dietaryRestrictions,
-            additionalNotes: quizState.additionalNotes,
-          }}
-          name={quizState.name}
-          tierColor={getTierColor()}
-        />
 
         {/* Zeigarnik Hook + Above-fold CTA */}
         <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -949,6 +926,123 @@ function TTCResultsPage({
                 <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>{score}/110</p>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Personalized Section */}
+        {personalizedResponse && (
+          <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
+            <CardHeader>
+              <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
+                💬 You Also Mentioned: Your Personalized TTC Journey
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="p-4 rounded-lg" style={{ backgroundColor: "#F3E5F5" }}>
+                <p className="italic text-lg" style={{ color: "#666" }}>
+                  You shared: &ldquo;{quizState.additionalNotes}&rdquo;
+                </p>
+              </div>
+              <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
+                Based on your assessment, we&apos;ll create a customized fertility optimization plan that addresses your
+                unique situation — combining evidence-based protocols with personalized support.
+              </p>
+              <div className="p-6 rounded-lg border-2" style={{ borderColor: "#FFB74D", backgroundColor: "#FFF8E1" }}>
+                <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
+                  How This Connects to Your Score:
+                </h3>
+                <div className="space-y-4">
+                  {gaps.map((gap, index) => {
+                    const exp = getDetailedGapExplanation(gap.practice)
+                    return (
+                      <div key={index} className="flex items-start gap-3">
+                        <span className="text-orange-600 font-bold text-lg flex-shrink-0">•</span>
+                        <div>
+                          <p className="font-bold" style={{ color: "#A15C2F" }}>
+                            {gap.practice} ({gap.score}/10):
+                          </p>
+                          <p style={{ color: "#3A2412" }}>{exp.whatThisMeans}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+                <div className="mt-6 pt-6 border-t-2" style={{ borderColor: "#FFB74D" }}>
+                  <p className="font-bold text-lg mb-3" style={{ color: "#A15C2F" }}>What the App Does:</p>
+                  <div className="space-y-2">
+                    {[
+                      "Complete fertility optimization system (all 10 practice areas)",
+                      "Personalized protocols based on YOUR gaps",
+                      "Daily tracking and accountability",
+                      "Expert guidance and community support",
+                      "Evidence-based interventions that work with your body",
+                    ].map((item, i) => (
+                      <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                        <span className="text-green-600 flex-shrink-0">✅</span>
+                        <span>{item}</span>
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* What Your Score Means */}
+        <Card className="border-0 shadow-xl mb-8">
+          <CardHeader>
+            <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
+              💡 What Your {score}/110 Score Really Means
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-lg" style={{ color: "#3A2412" }}>
+              {tier === "high" &&
+                `${quizState.name}, you're doing a lot right! Your foundations are solid — with a few targeted optimizations, you could be in the 90+ range.`}
+              {tier === "medium" &&
+                `${quizState.name}, you're building momentum! You have good foundations in some areas, but there are 3 key gaps worth addressing for stronger results.`}
+              {tier === "low" &&
+                `${quizState.name}, there's real opportunity here. You're experiencing common challenges that many women face — and the good news is these gaps are ALL addressable with the right support.`}
+            </p>
+
+            {tier === "low" && (
+              <div className="space-y-2">
+                {[
+                  "You may be trying to conceive without full cycle data (tracking, ovulation confirmation)",
+                  "Nutrition and supplementation have room to be more fertility-focused",
+                  "Lifestyle factors (stress, sleep, exercise) have meaningful optimization potential",
+                  "Having structured support and accountability can make a real difference",
+                ].map((point, i) => (
+                  <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
+                    <span className="font-bold" style={{ color: "#A15C2F" }}>•</span>
+                    <span>{point}</span>
+                  </p>
+                ))}
+                <p className="text-lg" style={{ color: "#3A2412" }}>
+                  Addressing these gaps gives your body the best possible support for conception — and most women
+                  see meaningful changes within 4-8 weeks of consistent implementation.
+                </p>
+              </div>
+            )}
+
+            {tier === "medium" && (
+              <p className="text-lg" style={{ color: "#3A2412" }}>
+                Closing these 3 gaps can meaningfully improve your fertility health. You&apos;re closer than you think.
+              </p>
+            )}
+
+            {tier === "high" && (
+              <>
+                <p className="text-lg" style={{ color: "#3A2412" }}>
+                  You&apos;re tracking, eating well, and managing stress. You&apos;re doing more than most. There are
+                  still 1-2 areas where precision optimization could make a real difference.
+                </p>
+                <p className="text-lg font-semibold" style={{ color: "#A15C2F" }}>
+                  At your level, it&apos;s about PRECISION, not overhaul. Small tweaks = meaningful results.
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
 
