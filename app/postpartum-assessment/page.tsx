@@ -12,6 +12,7 @@ import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
+import { AIAssessmentResult } from "@/components/ai-assessment-result"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -1259,10 +1260,6 @@ function ResultsPage({
 
   const breakdown = getDetailedBreakdown(quizState)
 
-  const personalizedResponse = quizState.additionalNotes.trim()
-    ? getPersonalizedResponseWithGaps(quizState.additionalNotes, breakdown)
-    : null
-
   const protocolSteps = [
     { label: "Core Healing Sequence", done: true },
     { label: "Pelvic Floor Reset", done: true },
@@ -1322,6 +1319,30 @@ function ResultsPage({
             </p>
           </CardContent>
         </Card>
+
+        {/* ── AI-Powered Personalised Assessment ── */}
+        <AIAssessmentResult
+          type="postpartum"
+          answers={{
+            weeksPostpartum: quizState.weeksPostpartum,
+            medicalClearance: quizState.medicalClearance,
+            diastasisRecti: quizState.diastasisRecti,
+            coreSafeExercises: quizState.coreSafeExercises,
+            pelvicFloor: quizState.pelvicFloor,
+            nutrition: quizState.nutrition,
+            proteinIntake: quizState.proteinIntake,
+            rest: quizState.rest,
+            hydration: quizState.hydration,
+            workoutRoutine: quizState.workoutRoutine,
+            primaryGoal: quizState.primaryGoal,
+            biggestObstacle: quizState.biggestObstacle,
+            supportType: quizState.supportType,
+            dietaryRestrictions: quizState.dietaryRestrictions,
+            additionalNotes: quizState.additionalNotes,
+          }}
+          name={displayName}
+          tierColor={getTierColor()}
+        />
 
         {/* ── Zeigarnik Open-Loop Hook ── */}
         <Card className="border-0 shadow-xl mb-6 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -1447,15 +1468,6 @@ function ResultsPage({
 
         <GoalActionPlan primaryGoal={quizState.primaryGoal} tier={tier} />
 
-        {personalizedResponse && (
-          <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
-        )}
-
-        {tier === "high" && <HighScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
-        {tier === "medium" && (
-          <MediumScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />
-        )}
-        {tier === "low" && <LowScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
       </div>
     </div>
   )

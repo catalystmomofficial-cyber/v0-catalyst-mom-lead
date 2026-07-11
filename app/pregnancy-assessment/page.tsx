@@ -12,6 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
+import { AIAssessmentResult } from "@/components/ai-assessment-result"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -841,11 +842,7 @@ function PregnancyResultsPage({
   quizState: QuizState
 }) {
   const breakdown = getDetailedBreakdown(quizState)
-  const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
   const testimonials = getTierTestimonials(tier)
-  const personalizedResponse = quizState.additionalNotes.trim()
-    ? getPersonalizedResponse(quizState.additionalNotes, breakdown)
-    : null
 
   const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
   const getTierLabel = () =>
@@ -891,6 +888,33 @@ function PregnancyResultsPage({
             </div>
           </CardContent>
         </Card>
+
+        {/* ── AI-Powered Personalised Assessment ── */}
+        <AIAssessmentResult
+          type="pregnancy"
+          answers={{
+            trimester: quizState.trimester,
+            weeksPregnant: quizState.weeksPregnant,
+            prenatalCare: quizState.prenatalCare,
+            exerciseSafety: quizState.exerciseSafety,
+            pelvicFloor: quizState.pelvicFloor,
+            nutrition: quizState.nutrition,
+            diastasisRecti: quizState.diastasisRecti,
+            energy: quizState.energy,
+            sleep: quizState.sleep,
+            stress: quizState.stress,
+            supplementation: quizState.supplementation,
+            workoutRoutine: quizState.workoutRoutine,
+            tracking: quizState.tracking,
+            primaryGoal: quizState.primaryGoal,
+            biggestObstacle: quizState.biggestObstacle,
+            supportType: quizState.supportType,
+            dietaryRestrictions: quizState.dietaryRestrictions,
+            additionalNotes: quizState.additionalNotes,
+          }}
+          name={quizState.name}
+          tierColor={getTierColor()}
+        />
 
         {/* Zeigarnik Hook + Above-fold CTA */}
         <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -953,68 +977,6 @@ function PregnancyResultsPage({
           </CardContent>
         </Card>
 
-        {/* What Your Score Means */}
-        <Card className="border-0 shadow-xl mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>What Your Score Means</CardTitle>
-          </CardHeader>
-          <CardContent className="p-6 space-y-4">
-            {tier === "high" && (
-              <>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>Congratulations, {quizState.name}!</strong> You&apos;re in the top 15% of pregnant women —
-                  attending prenatal care, doing pregnancy-safe exercise, eating well, managing stress, and preparing
-                  your body for labor and postpartum recovery.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>What this means for your pregnancy:</strong> You&apos;re building strong foundations that
-                  support a healthy pregnancy, easier labor preparation, and a smoother postpartum recovery.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>The opportunity:</strong> There are still 2-3 areas where optimization could make your
-                  pregnancy even better. Small improvements can be the difference between a good pregnancy and an
-                  exceptional one.
-                </p>
-              </>
-            )}
-            {tier === "medium" && (
-              <>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>{quizState.name}, you&apos;re building momentum!</strong> You&apos;ve got solid foundations
-                  in place and you&apos;re doing several things right. But there are 3-5 key gaps preventing you from
-                  feeling your best.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>What this means for your pregnancy:</strong> You may be experiencing symptoms like fatigue,
-                  nausea, or discomfort that are making pregnancy harder than it needs to be. Addressing these gaps
-                  will help you feel better day to day and set you up for an easier labor and postpartum recovery.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>The opportunity:</strong> Closing these 3-5 gaps can dramatically improve how you feel.
-                  Small, strategic changes make a huge difference.
-                </p>
-              </>
-            )}
-            {tier === "low" && (
-              <>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>{quizState.name}, you&apos;re experiencing common pregnancy challenges.</strong> You may be
-                  struggling with symptoms, unsure what&apos;s safe, or overwhelmed by conflicting advice.
-                  You&apos;re not alone — many women start here.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>What this means for your pregnancy:</strong> Addressing these gaps now will help you feel
-                  better throughout your pregnancy and set your body up for an easier birth and faster recovery.
-                </p>
-                <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>The good news:</strong> Small, strategic changes can significantly improve your pregnancy
-                  health. Most women see real improvements within 1-2 weeks of implementing the right protocols.
-                </p>
-              </>
-            )}
-          </CardContent>
-        </Card>
-
         {/* 10-Point Breakdown */}
         <Card className="border-0 shadow-xl mb-8">
           <CardHeader>
@@ -1058,118 +1020,7 @@ function PregnancyResultsPage({
           </CardContent>
         </Card>
 
-        {/* Personalized Additional Notes */}
-        {personalizedResponse && (
-          <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
-            <CardHeader>
-              <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-                💬 You Also Mentioned: Your Personalized Pregnancy Journey
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="p-4 rounded-lg" style={{ backgroundColor: "#F3E5F5" }}>
-                <p className="italic text-lg" style={{ color: "#666" }}>
-                  You shared: &ldquo;{quizState.additionalNotes}&rdquo;
-                </p>
-              </div>
-              <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                Based on your assessment, we&apos;ll create a customized pregnancy wellness plan that addresses your
-                unique situation — combining evidence-based protocols with personalized support.
-              </p>
-              <div className="p-6 rounded-lg border-2" style={{ borderColor: "#FFB74D", backgroundColor: "#FFF8E1" }}>
-                <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-                  How This Connects to Your Score:
-                </h3>
-                <div className="space-y-4">
-                  {gaps.map((gap, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <span className="text-orange-600 font-bold text-lg flex-shrink-0">•</span>
-                      <div>
-                        <p className="font-bold" style={{ color: "#A15C2F" }}>
-                          {gap.practice} ({gap.score}/10):
-                        </p>
-                        <p style={{ color: "#3A2412" }}>
-                          {getComprehensiveGapExplanation(gap.practice, gap.score).whatThisMeans}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-6 pt-6 border-t-2" style={{ borderColor: "#FFB74D" }}>
-                  <p className="font-bold text-lg mb-3" style={{ color: "#A15C2F" }}>What the App Does:</p>
-                  <div className="space-y-2">
-                    {[
-                      "Complete pregnancy wellness system (all 10 practice areas covered)",
-                      "Personalized protocols based on YOUR gaps and trimester",
-                      "Pregnancy-safe workouts and modifications",
-                      "1-on-1 Human Check-ins — Bi-weekly expert progress reviews",
-                      "24/7 Catalyst AI Expert — Instant answers to any wellness question",
-                      "Evidence-based interventions for optimal pregnancy health",
-                    ].map((item, i) => (
-                      <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                        <span className="text-green-600 flex-shrink-0">✅</span>
-                        <span>{item}</span>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Tier Content */}
-        <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
-          <CardHeader>
-            <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-              {tier === "high"
-                ? "You're in the Top 15% — Here's What's Next"
-                : tier === "medium"
-                  ? "You're Building Momentum — Let's Close the Gaps"
-                  : "Let's Build Your Foundation — Starting Today"}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <p className="text-lg" style={{ color: "#3A2412" }}>
-              {tier === "high"
-                ? `${quizState.name}, you're doing SO much right. You're ahead of 85% of pregnant women. Let's fine-tune the last few areas.`
-                : tier === "medium"
-                  ? `${quizState.name}, you've got solid foundations! You're doing many things right, but there are 3 key gaps preventing breakthrough results.`
-                  : `${quizState.name}, you're not behind — you're just missing some foundations. And foundations are the easiest thing to build once you know what they are.`}
-            </p>
-
-            <div className="space-y-6">
-              <h3 className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-                {tier === "high" ? "The 3 Optimization Opportunities:" : "Your 3 Priority Areas:"}
-              </h3>
-              {gaps.map((gap, index) => (
-                <GapCard key={gap.practice} gap={gap} index={index} />
-              ))}
-            </div>
-
-            <TestimonialsBlock testimonials={testimonials} />
-
-            <PricingCTA
-              quizState={quizState}
-              score={score}
-              tier={tier}
-              heading={tier === "high" ? "VIP Pregnancy Optimization Program" : "Join the Catalyst Mom App"}
-              subheading={
-                tier === "high"
-                  ? "For high-performing women who want exclusive 1-on-1 coaching to optimize every aspect of pregnancy, labor prep, and postpartum planning."
-                  : tier === "medium"
-                    ? "Get pregnancy-safe workouts, meal plans, symptom management protocols, labor prep, and community support — all in one app."
-                    : "A step-by-step pregnancy wellness system designed for moms who want clear guidance without the overwhelm."
-              }
-              buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Join Now - $29/month"}
-              footnote={
-                tier === "high"
-                  ? "Limited to 10 clients per month • Investment: $197/month"
-                  : "Start seeing results in 7 days • Cancel anytime • No contracts"
-              }
-            />
-          </CardContent>
-        </Card>
+        <TestimonialsBlock testimonials={testimonials} />
       </div>
     </div>
   )
