@@ -172,10 +172,10 @@ function PricingSection({
   }
 
   return (
-    <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
+    <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
       <Button
         size="lg"
-        className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+        className="w-full text-white px-6 py-4 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto"
         style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
         onClick={() => {
           const appUrl = new URL("https://catalystmomofficial.com/signup")
@@ -1286,8 +1286,8 @@ function ResultsPage({
         </Link>
 
         {/* ── Above-the-fold: Score + Hook + CTA ── */}
-        <Card className="border-0 shadow-xl mb-6">
-          <CardContent className="p-8 text-center">
+        <Card className="border-0 shadow-xl mb-6 overflow-hidden">
+          <CardContent className="p-6 text-center">
             <h1 className="text-2xl font-bold mb-6" style={{ color: "#3A2412" }}>
               🎉 Your Postpartum Wellness Score
             </h1>
@@ -1299,13 +1299,16 @@ function ResultsPage({
                 <span className="text-6xl font-bold text-white">{score}</span>
                 <span className="text-sm text-white opacity-90">/100</span>
               </div>
-              <Badge className="text-lg px-6 py-2 mb-4" style={{ backgroundColor: getTierColor(), color: "white" }}>
+              <Badge
+                className="text-base px-4 py-2 mb-4 whitespace-normal text-center break-words max-w-full inline-block"
+                style={{ backgroundColor: getTierColor(), color: "white" }}
+              >
                 {getTierLabel()}
               </Badge>
             </div>
 
-            <div className="max-w-md mx-auto mb-4">
-              <div className="w-full h-3 rounded-full" style={{ backgroundColor: "#E8D5C4" }}>
+            <div className="w-full max-w-sm mx-auto mb-4 px-2">
+              <div className="w-full h-3 rounded-full overflow-hidden" style={{ backgroundColor: "#E8D5C4" }}>
                 <div
                   className="h-3 rounded-full transition-all duration-500"
                   style={{ backgroundColor: getTierColor(), width: `${score}%` }}
