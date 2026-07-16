@@ -12,6 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
+import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -386,6 +387,7 @@ function PricingCTA({
   subheading,
   buttonLabel,
   footnote,
+  isVip = false,
 }: {
   quizState: QuizState
   score: number
@@ -394,6 +396,7 @@ function PricingCTA({
   subheading: string
   buttonLabel: string
   footnote: string
+  isVip?: boolean
 }) {
   const handleClick = () => {
     const url = new URL("https://catalystmomofficial.com/signup")
@@ -405,8 +408,17 @@ function PricingCTA({
     url.searchParams.set("primary_goal", quizState.primaryGoal)
     url.searchParams.set("biggest_obstacle", quizState.biggestObstacle || "")
     url.searchParams.set("birth_experience", "")
-    window.open(url.toString(), "_blank")
+    window.location.href = url.toString()
   }
+
+  const stackItems: StackItem[] = [
+    { label: "Personalized birth-prep & pregnancy wellness protocol", value: "$297" },
+    { label: "24/7 AI pregnancy coach — answers any time of night", value: "$97/mo", hero: true },
+    { label: "Trimester-safe workout & mobility library", value: "$149" },
+    { label: "Birth-prep breathing & positioning protocols (for an easier labor)", value: "$99" },
+    { label: "Pregnancy nutrition frameworks", value: "$79" },
+    { label: "Private mom community + weekly check-ins", value: "$30/mo" },
+  ]
 
   return (
     <div className="text-center p-8 bg-white rounded-lg border-4" style={{ borderColor: "#A15C2F" }}>
@@ -416,6 +428,16 @@ function PricingCTA({
       <p className="text-lg mb-6" style={{ color: "#3A2412" }}>
         {subheading}
       </p>
+      {isVip ? (
+        <p className="text-sm mb-3" style={{ color: "#3A2412", opacity: 0.7 }}>
+          Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own.
+        </p>
+      ) : (
+        <>
+          <ValueStack items={stackItems} total="$751" price="$29/month" />
+          <FoundingUrgency />
+        </>
+      )}
       <Button
         size="lg"
         onClick={handleClick}
@@ -427,6 +449,11 @@ function PricingCTA({
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
         {footnote}
       </p>
+      <Guarantee>
+        {isVip
+          ? "Show up for your calls and do the work for 30 days. If you don't feel real, measurable progress, we'll refund your first month in full — your coach carries the risk, not you."
+          : "Follow your protocol for 30 days. If you don't feel more prepared, more comfortable, and more in control of your pregnancy, email us and we'll refund every penny — and you keep the roadmap."}
+      </Guarantee>
     </div>
   )
 }
@@ -1164,9 +1191,10 @@ function PregnancyResultsPage({
               buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Join Now - $29/month"}
               footnote={
                 tier === "high"
-                  ? "Limited to 10 clients per month • Investment: $197/month"
+                  ? "Limited to 10 clients per month • $197/month (founding rate — rises for the next cohort)"
                   : "Start seeing results in 7 days • Cancel anytime • No contracts"
               }
+              isVip={tier === "high"}
             />
           </CardContent>
         </Card>

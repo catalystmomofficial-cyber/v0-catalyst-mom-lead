@@ -41,7 +41,7 @@ export default function StageRouter() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4" style={{ color: "#A15C2F" }}>
-            Your body has been through something extraordinary. Find out where your recovery really stands.
+            Whether you&apos;re trying to conceive, pregnant, or postpartum — find out exactly where your body&apos;s recovery really stands.
           </h1>
 
           <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-2" style={{ color: "#3A2412" }}>

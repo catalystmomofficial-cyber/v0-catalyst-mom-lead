@@ -12,6 +12,7 @@ import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
+import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -171,30 +172,47 @@ function PricingSection({
     return "Join the Catalyst Mom App Now — $29/month"
   }
 
+  const stackItems: StackItem[] = [
+    { label: "Personalized 8-week core-healing protocol (built from your score)", value: "$297" },
+    { label: "24/7 AI recovery coach — answers any time of night", value: "$97/mo", hero: true },
+    { label: "Diastasis-safe workout library (no crunches, no planks)", value: "$149" },
+    { label: "Pelvic floor recovery track — stop the leaking", value: "$99" },
+    { label: "High-protein postpartum meal frameworks", value: "$79" },
+    { label: "Private mom community + weekly check-ins", value: "$30/mo" },
+  ]
+
+  const goToSignup = () => {
+    const appUrl = new URL("https://catalystmomofficial.com/signup")
+    appUrl.searchParams.set("name", quizState.name)
+    appUrl.searchParams.set("email", quizState.email)
+    appUrl.searchParams.set("score", score.toString())
+    appUrl.searchParams.set("tier", tier)
+    appUrl.searchParams.set("stage", quizState.weeksPostpartum)
+    appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
+    appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+    appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
+    window.location.href = appUrl.toString()
+  }
+
   return (
     <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
+      <ValueStack items={stackItems} total="$751" price="$29/month" />
+      <FoundingUrgency />
       <Button
         size="lg"
         className="w-full text-white px-6 py-4 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto"
         style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-        onClick={() => {
-          const appUrl = new URL("https://catalystmomofficial.com/signup")
-          appUrl.searchParams.set("name", quizState.name)
-          appUrl.searchParams.set("email", quizState.email)
-          appUrl.searchParams.set("score", score.toString())
-          appUrl.searchParams.set("tier", tier)
-          appUrl.searchParams.set("stage", quizState.weeksPostpartum)
-          appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
-          appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-          appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
-          window.open(appUrl.toString(), "_blank")
-        }}
+        onClick={goToSignup}
       >
         {getButtonLabel()}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
         Feel more connected to your core in just 7 days. Cancel anytime. No contracts. Protocol requires only 15 mins/day.
       </p>
+      <Guarantee>
+        Do your 15-minute daily protocol for 30 days. If your core doesn&apos;t feel measurably stronger, email us and we&apos;ll
+        refund every penny — and you keep the roadmap. All the risk is on us, not you.
+      </Guarantee>
     </div>
   )
 }
@@ -1573,24 +1591,20 @@ function HighScorerContent({
             <div className="space-y-2">
               {[
                 {
-                  bold: "2 Private Coaching Calls Per Month",
-                  rest: " (30-45 min each) - Deep-dive your progress, adjust your plan, troubleshoot challenges in real-time",
+                  bold: "You want a real human in your corner",
+                  rest: " - not just an app - guiding your recovery week by week",
                 },
                 {
-                  bold: "Custom Workout + Nutrition Plan",
-                  rest: " - Not generic templates, completely personalized to your assessment results",
+                  bold: "You're ready to do the work",
+                  rest: " - 15-30 minutes a day - and want it dialed in perfectly to your body",
                 },
                 {
-                  bold: "Direct Text Access to Your Coach",
-                  rest: " - Questions answered within 24 hours, no waiting for next week's call",
+                  bold: "You've had complications or a tough birth",
+                  rest: " - C-section, tearing, prolapse, severe DR - and want expert eyes on your plan",
                 },
                 {
-                  bold: "Personalized Recovery Strategy Session",
-                  rest: " - Core healing, pelvic floor strengthening, decision-making frameworks",
-                },
-                {
-                  bold: "Ongoing Progress Tracking",
-                  rest: " - Customized to your recovery timeline and goals",
+                  bold: "You value speed",
+                  rest: " - you'd rather get it right in weeks with coaching than guess for months alone",
                 },
               ].map((item, i) => (
                 <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
@@ -1601,14 +1615,6 @@ function HighScorerContent({
                   </span>
                 </p>
               ))}
-            </div>
-            <div className="mt-6 p-4 bg-white rounded-lg text-center">
-              <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
-                Investment: $197/month
-              </p>
-              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                (3-6 month commitment for best results)
-              </p>
             </div>
           </div>
 
@@ -1650,13 +1656,20 @@ function HighScorerContent({
               ))}
             </div>
             <div className="mt-6 p-4 bg-white rounded-lg text-center">
+              <p className="text-sm mb-1" style={{ color: "#3A2412", opacity: 0.7 }}>
+                Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own.
+              </p>
               <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
-                Investment: $197/month
+                Your VIP investment: $197/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                (3-6 month commitment for best results)
+                (3-6 month commitment for best results • founding rate — rises for the next cohort)
               </p>
             </div>
+            <Guarantee>
+              Show up for your calls and do the work for 30 days. If you don&apos;t feel real, measurable progress in your
+              recovery, we&apos;ll refund your first month in full. Your coach is committed to your result — so we carry the risk.
+            </Guarantee>
           </div>
 
           {/* Social Proof Stats */}

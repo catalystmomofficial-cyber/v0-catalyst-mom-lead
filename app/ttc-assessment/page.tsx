@@ -12,6 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
+import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -370,7 +371,7 @@ function PricingCTA({
         size="lg"
         className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
         style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-        onClick={() => window.open(getUrl(), "_blank")}
+        onClick={() => { window.location.href = getUrl() }}
       >
         {label}
       </Button>
@@ -1058,11 +1059,23 @@ function TTCResultsPage({
           </CardHeader>
           <CardContent className="space-y-6">
             <AppFeatureGrid />
-            <div className="text-center p-6 bg-white rounded-lg">
-              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>$29/month</p>
-              <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than one acupuncture session. Cancel anytime. No contracts.
+            <div className="p-6 bg-white rounded-lg">
+              <ValueStack
+                items={[
+                  { label: "Personalized fertility-optimization protocol (built from your score)", value: "$297" },
+                  { label: "24/7 AI fertility coach — answers any time of night", value: "$97/mo", hero: true },
+                  { label: "Cycle-tracking & ovulation-timing system", value: "$149" },
+                  { label: "Fertility nutrition & egg-quality frameworks", value: "$99" },
+                  { label: "Stress & hormone-balance protocols", value: "$79" },
+                  { label: "Private TTC community + weekly check-ins", value: "$30/mo" },
+                ]}
+                total="$751"
+                price="$29/month"
+              />
+              <p className="text-center text-sm mb-3" style={{ color: "#3A2412", opacity: 0.7 }}>
+                That&apos;s less than one acupuncture session — for everything, every month.
               </p>
+              <FoundingUrgency />
             </div>
             <PricingCTA
               quizState={quizState}
@@ -1070,6 +1083,10 @@ function TTCResultsPage({
               tier={tier}
               label="Join the Catalyst Mom App Now - $29/month"
             />
+            <Guarantee>
+              Follow your fertility protocol for 30 days. If you don&apos;t feel more in control of your cycle and your body,
+              email us and we&apos;ll refund every penny — and you keep the roadmap.
+            </Guarantee>
           </CardContent>
         </Card>
 
