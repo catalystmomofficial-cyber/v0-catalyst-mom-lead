@@ -12,7 +12,7 @@ import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -173,8 +173,9 @@ function PricingSection({
   }
 
   const stackItems: StackItem[] = [
+    { label: "2 private 1:1 Progression Syncs/month with your dedicated postpartum recovery coach", value: "$400/mo", hero: true },
     { label: "Personalized 8-week core-healing protocol (built from your score)", value: "$297" },
-    { label: "24/7 AI recovery coach — answers any time of night", value: "$97/mo", hero: true },
+    { label: "24/7 AI recovery coach — answers any time of night", value: "$97/mo" },
     { label: "Diastasis-safe workout library (no crunches, no planks)", value: "$149" },
     { label: "Pelvic floor recovery track — stop the leaking", value: "$99" },
     { label: "High-protein postpartum meal frameworks", value: "$79" },
@@ -196,8 +197,8 @@ function PricingSection({
 
   return (
     <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
-      <ValueStack items={stackItems} total="$751" price="$29/month" />
-      <FoundingUrgency />
+      <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
+      <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
       <Button
         size="lg"
         className="w-full text-white px-6 py-4 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto"
@@ -1660,10 +1661,10 @@ function HighScorerContent({
                 Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own.
               </p>
               <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
-                Your VIP investment: $197/month
+                Ongoing coaching tier: $129/month
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                (3-6 month commitment for best results • founding rate — rises for the next cohort)
+                Grab a Charter Founder seat now and you lock the same 1:1 coaching for just $29/month — for life. Only 100 seats.
               </p>
             </div>
             <Guarantee>

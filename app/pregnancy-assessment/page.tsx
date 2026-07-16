@@ -12,7 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -412,8 +412,9 @@ function PricingCTA({
   }
 
   const stackItems: StackItem[] = [
+    { label: "2 private 1:1 Progression Syncs/month with your dedicated pregnancy & birth-prep coach", value: "$400/mo", hero: true },
     { label: "Personalized birth-prep & pregnancy wellness protocol", value: "$297" },
-    { label: "24/7 AI pregnancy coach — answers any time of night", value: "$97/mo", hero: true },
+    { label: "24/7 AI pregnancy coach — answers any time of night", value: "$97/mo" },
     { label: "Trimester-safe workout & mobility library", value: "$149" },
     { label: "Birth-prep breathing & positioning protocols (for an easier labor)", value: "$99" },
     { label: "Pregnancy nutrition frameworks", value: "$79" },
@@ -430,12 +431,13 @@ function PricingCTA({
       </p>
       {isVip ? (
         <p className="text-sm mb-3" style={{ color: "#3A2412", opacity: 0.7 }}>
-          Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own.
+          Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own — the ongoing
+          coaching tier is $129/month.
         </p>
       ) : (
         <>
-          <ValueStack items={stackItems} total="$751" price="$29/month" />
-          <FoundingUrgency />
+          <CharterScarcity coachLabel="your dedicated pregnancy & birth-prep coach" tierPrice="$129/month" />
+          <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
         </>
       )}
       <Button
@@ -1191,7 +1193,7 @@ function PregnancyResultsPage({
               buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Join Now - $29/month"}
               footnote={
                 tier === "high"
-                  ? "Limited to 10 clients per month • $197/month (founding rate — rises for the next cohort)"
+                  ? "Ongoing coaching tier: $129/month • Charter Founder seats lock the same 1:1 at $29/month for life (only 100)"
                   : "Start seeing results in 7 days • Cancel anytime • No contracts"
               }
               isVip={tier === "high"}

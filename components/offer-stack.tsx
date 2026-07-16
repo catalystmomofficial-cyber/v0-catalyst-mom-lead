@@ -8,20 +8,23 @@ export type StackItem = {
 }
 
 // ─── Value stack + anchor + founding price ──────────────────────────────────
-// Renders the à-la-carte value of everything included, anchors to a big total,
-// then reveals the founding-member price so it reads as a deal, not a cost.
+// Lists the à-la-carte value of everything included, anchors to a big total,
+// shows the regular tier price struck through, then reveals the founding price
+// so it reads as a steal, not a cost.
 export function ValueStack({
   items,
   total,
+  regularPrice,
   price = "$29/month",
 }: {
   items: StackItem[]
   total: string
+  regularPrice?: string
   price?: string
 }) {
   return (
     <div
-      className="text-left mb-5 p-4 rounded-lg"
+      className="text-left mb-4 p-4 rounded-lg"
       style={{ backgroundColor: "#F8F5F2", border: "1px solid #E8D5C4" }}
     >
       <p className="text-center font-bold mb-3" style={{ color: "#A15C2F" }}>
@@ -47,13 +50,23 @@ export function ValueStack({
         <span className="font-bold" style={{ color: "#3A2412" }}>
           Total value
         </span>
-        <span className="font-bold line-through" style={{ color: "#8A7060" }}>
+        <span className="font-bold" style={{ color: "#3A2412" }}>
           {total}
         </span>
       </div>
+      {regularPrice && (
+        <div className="mt-1 flex items-center justify-between">
+          <span className="text-sm" style={{ color: "#8A7060" }}>
+            Regular price
+          </span>
+          <span className="text-sm line-through" style={{ color: "#8A7060" }}>
+            {regularPrice}
+          </span>
+        </div>
+      )}
       <div className="mt-1 flex items-center justify-between">
         <span className="font-bold" style={{ color: "#A15C2F" }}>
-          Founding member price
+          Your founding seat
         </span>
         <span className="text-xl font-bold" style={{ color: "#A15C2F" }}>
           {price}
@@ -63,15 +76,32 @@ export function ValueStack({
   )
 }
 
-// ─── Founding-member urgency (honest scarcity — no fake countdowns) ──────────
-export function FoundingUrgency() {
+// ─── Charter Founder scarcity (honest, mechanism-backed) ────────────────────
+// Only 100 seats get the 1:1 coaching at the founding price. After that, the
+// 1:1 syncs move to the ongoing coaching tier. Real constraint (coach time),
+// not a fake countdown.
+export function CharterScarcity({
+  coachLabel = "your dedicated coach",
+  tierPrice = "$129/month",
+}: {
+  coachLabel?: string
+  tierPrice?: string
+}) {
   return (
-    <p
-      className="text-center text-xs font-semibold mb-3 px-3 py-2 rounded-lg"
-      style={{ backgroundColor: "#FFF3E0", color: "#A15C2F" }}
+    <div
+      className="mb-4 p-4 rounded-lg text-left"
+      style={{ backgroundColor: "#FFF3E0", border: "1px solid #F0C089" }}
     >
-      🔒 Founding-member pricing — locked in for life. This rate rises for the next cohort of mamas.
-    </p>
+      <p className="font-bold mb-1" style={{ color: "#A15C2F" }}>
+        🔒 The Charter Founder Membership — only 100 seats
+      </p>
+      <p className="text-sm" style={{ color: "#3A2412" }}>
+        As a founding member you lock in full app access, community events, and your
+        <strong> 2 private 1:1 Progression Syncs each month with {coachLabel}</strong> — at this price
+        <strong> forever</strong>. Once the first 100 seats are filled, the 1:1 Syncs move exclusively to
+        the {tierPrice} tier. The app stays — the founding rate on 1:1 coaching does not.
+      </p>
+    </div>
   )
 }
 

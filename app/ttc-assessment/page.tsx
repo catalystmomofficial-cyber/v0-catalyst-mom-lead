@@ -12,7 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, FoundingUrgency, Guarantee, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee } from "@/components/offer-stack"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -1060,22 +1060,24 @@ function TTCResultsPage({
           <CardContent className="space-y-6">
             <AppFeatureGrid />
             <div className="p-6 bg-white rounded-lg">
+              <CharterScarcity coachLabel="your dedicated fertility coach" tierPrice="$129/month" />
               <ValueStack
                 items={[
+                  { label: "2 private 1:1 Progression Syncs/month with your dedicated fertility coach", value: "$400/mo", hero: true },
                   { label: "Personalized fertility-optimization protocol (built from your score)", value: "$297" },
-                  { label: "24/7 AI fertility coach — answers any time of night", value: "$97/mo", hero: true },
+                  { label: "24/7 AI fertility coach — answers any time of night", value: "$97/mo" },
                   { label: "Cycle-tracking & ovulation-timing system", value: "$149" },
                   { label: "Fertility nutrition & egg-quality frameworks", value: "$99" },
                   { label: "Stress & hormone-balance protocols", value: "$79" },
                   { label: "Private TTC community + weekly check-ins", value: "$30/mo" },
                 ]}
-                total="$751"
+                total="$1,151"
+                regularPrice="$129/month"
                 price="$29/month"
               />
-              <p className="text-center text-sm mb-3" style={{ color: "#3A2412", opacity: 0.7 }}>
+              <p className="text-center text-sm mb-1" style={{ color: "#3A2412", opacity: 0.7 }}>
                 That&apos;s less than one acupuncture session — for everything, every month.
               </p>
-              <FoundingUrgency />
             </div>
             <PricingCTA
               quizState={quizState}
