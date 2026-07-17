@@ -105,6 +105,34 @@ export function CharterScarcity({
   )
 }
 
+// ─── Founder note — the real founder story, rendered ONCE per results view ──
+export function FounderNote() {
+  return (
+    <div className="mt-8 mb-4">
+      <div
+        className="p-5 rounded-lg text-left"
+        style={{ backgroundColor: "#F8F5F2", border: "1px solid #E8D5C4" }}
+      >
+        <p className="text-sm leading-relaxed italic" style={{ color: "#5C3D2E" }}>
+          &ldquo;I didn&apos;t build Catalyst Mom as a fitness expert or a tech founder. I built it as a husband who
+          watched his wife go through postpartum with no family nearby. Her parents weren&apos;t close. Mine
+          weren&apos;t either. It was just us — and I had no idea how hard it really was until I was living it with
+          her every single day. I also built it carrying grief. Watching what my own mother went through, the things
+          she silently endured — that shaped me. It made me want something different for the women in my life, and
+          eventually for every mother I&apos;ve never met. Postpartum shouldn&apos;t be something women survive alone.
+          I couldn&apos;t find anything that truly helped my wife the way she deserved to be helped. So I built it.
+          Catalyst Mom exists because love sometimes looks like doing the hard thing — building the village when there
+          isn&apos;t one. Every woman who comes through this assessment — I see my wife in her. I see my mother in
+          her. That&apos;s why we don&apos;t do generic. That&apos;s why this is personal.&rdquo;
+        </p>
+        <p className="text-sm font-semibold mt-3" style={{ color: "#A15C2F" }}>
+          — The Founder, Catalyst Mom
+        </p>
+      </div>
+    </div>
+  )
+}
+
 // ─── Risk reversal / guarantee ──────────────────────────────────────────────
 export function Guarantee({ children }: { children: ReactNode }) {
   return (

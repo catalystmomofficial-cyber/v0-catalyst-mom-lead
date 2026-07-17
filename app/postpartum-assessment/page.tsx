@@ -12,7 +12,7 @@ import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -197,6 +197,7 @@ function PricingSection({
 
   return (
     <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
+      <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
       <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
       <Button
         size="lg"
@@ -209,39 +210,10 @@ function PricingSection({
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
         Feel more connected to your core in just 7 days. Cancel anytime. No contracts. Protocol requires only 15 mins/day.
       </p>
-    </div>
-  )
-}
-
-// ─── Founder note + Charter + Guarantee — rendered once per scorer section ───
-function SectionClosing() {
-  return (
-    <div className="mt-4 space-y-4">
-      <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
       <Guarantee>
         Do your 15-minute daily protocol for 30 days. If your core doesn&apos;t feel measurably stronger, email us and
         we&apos;ll refund every penny — and you keep the roadmap. All the risk is on us, not you.
       </Guarantee>
-      <div
-        className="p-5 rounded-lg text-left"
-        style={{ backgroundColor: "#F8F5F2", border: "1px solid #E8D5C4" }}
-      >
-        <p className="text-sm leading-relaxed italic" style={{ color: "#5C3D2E" }}>
-          &ldquo;I didn&apos;t build Catalyst Mom as a fitness expert or a tech founder. I built it as a husband who
-          watched his wife go through postpartum with no family nearby. Her parents weren&apos;t close. Mine
-          weren&apos;t either. It was just us — and I had no idea how hard it really was until I was living it with
-          her every single day. I also built it carrying grief. Watching what my own mother went through, the things
-          she silently endured — that shaped me. It made me want something different for the women in my life, and
-          eventually for every mother I&apos;ve never met. Postpartum shouldn&apos;t be something women survive alone.
-          I couldn&apos;t find anything that truly helped my wife the way she deserved to be helped. So I built it.
-          Catalyst Mom exists because love sometimes looks like doing the hard thing — building the village when there
-          isn&apos;t one. Every woman who comes through this assessment — I see my wife in her. I see my mother in
-          her. That&apos;s why we don&apos;t do generic. That&apos;s why this is personal.&rdquo;
-        </p>
-        <p className="text-sm font-semibold mt-3" style={{ color: "#A15C2F" }}>
-          — The Founder, Catalyst Mom
-        </p>
-      </div>
     </div>
   )
 }
@@ -1427,7 +1399,6 @@ function ResultsPage({
             </p>
 
             <PricingSection quizState={quizState} score={score} tier={tier} />
-            <SectionClosing />
           </CardContent>
         </Card>
 
@@ -1507,6 +1478,8 @@ function ResultsPage({
           <MediumScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />
         )}
         {tier === "low" && <LowScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
+
+        <FounderNote />
       </div>
     </div>
   )
@@ -1775,7 +1748,6 @@ function HighScorerContent({
 
           {/* CTA */}
           <PricingSection quizState={quizState} score={score} tier={tier} />
-          <SectionClosing />
         </CardContent>
       </Card>
     </>
@@ -2104,7 +2076,6 @@ function MediumScorerContent({
           />
 
           <PricingSection quizState={quizState} score={score} tier={tier} />
-          <SectionClosing />
         </CardContent>
       </Card>
 
@@ -2212,7 +2183,6 @@ function MediumScorerContent({
           />
 
           <PricingSection quizState={quizState} score={score} tier={tier} />
-          <SectionClosing />
         </CardContent>
       </Card>
     </>
@@ -2462,7 +2432,6 @@ function LowScorerContent({
           />
 
           <PricingSection quizState={quizState} score={score} tier={tier} />
-          <SectionClosing />
         </CardContent>
       </Card>
     </>

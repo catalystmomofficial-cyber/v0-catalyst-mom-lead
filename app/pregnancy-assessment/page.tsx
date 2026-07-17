@@ -12,7 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -1200,6 +1200,8 @@ function PregnancyResultsPage({
             />
           </CardContent>
         </Card>
+
+        <FounderNote />
       </div>
     </div>
   )

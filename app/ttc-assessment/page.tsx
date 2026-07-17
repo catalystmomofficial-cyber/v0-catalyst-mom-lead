@@ -12,7 +12,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -1128,6 +1128,8 @@ function TTCResultsPage({
             </div>
           </CardContent>
         </Card>
+
+        <FounderNote />
       </div>
     </div>
   )
