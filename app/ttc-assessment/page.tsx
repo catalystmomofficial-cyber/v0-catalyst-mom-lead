@@ -376,7 +376,52 @@ function PricingCTA({
         {label}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        Start seeing results in 7 days. Cancel anytime. No contracts.
+        $29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts
+      </p>
+    </div>
+  )
+}
+
+// ─── Obstacle crusher — answers the #1 obstacle she told us about ────────────
+function ObstacleAnswer({ obstacle }: { obstacle: string }) {
+  const answers: Record<string, { said: string; answer: string }> = {
+    "dont-know": {
+      said: "I do not know where to start",
+      answer:
+        "That's the app's whole job: your assessment just built your starting point. From day one you get one clear protocol — cycle tracking, nutrition, lifestyle — in order, one step at a time. No more guessing where to begin.",
+    },
+    irregular: {
+      said: "Irregular cycles or a condition like PCOS",
+      answer:
+        "Then generic 'track day 14' advice was never going to work for you. Your protocol adapts to YOUR cycle data, and your 1:1 fertility coach helps you read what your body is actually doing — not what a textbook says it should do.",
+    },
+    stress: {
+      said: "Stress and the emotional weight of trying",
+      answer:
+        "The emotional weight is real — and carrying it alone makes everything harder. Your protocol includes stress and nervous-system work, and your coach and community mean the 2am worry finally has somewhere to go.",
+    },
+    "no-support": {
+      said: "No support or accountability",
+      answer:
+        "That ends today. A dedicated 1:1 coach who knows your history, biweekly check-ins, and a private community of women on the same road. You'll never be doing this alone again.",
+    },
+    overwhelmed: {
+      said: "Overwhelmed by conflicting advice online",
+      answer:
+        "One plan, one coach, zero contradictions. Your protocol is built from your assessment — not from a hundred arguing forums — so you always know exactly what to do next and can finally ignore the noise.",
+    },
+  }
+
+  const match = answers[obstacle]
+  if (!match) return null
+
+  return (
+    <div className="mb-5 p-4 rounded-lg text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
+      <p className="text-sm mb-2" style={{ color: "#8A7060" }}>
+        You told us your biggest obstacle: <em>&ldquo;{match.said}&rdquo;</em>
+      </p>
+      <p className="text-base font-medium" style={{ color: "#3A2412" }}>
+        {match.answer}
       </p>
     </div>
   )
@@ -823,9 +868,12 @@ function TTCResultsPage({
               </Badge>
             </div>
             <p className="text-lg" style={{ color: "#3A2412" }}>
-              {tier === "high" && "You're on the right track! You've got solid foundations with room to fine-tune."}
-              {tier === "medium" && "You're building momentum! There are key gaps to address for stronger results."}
-              {tier === "low" && "There's real opportunity to optimize your fertility health — and the right support makes all the difference."}
+              {tier === "high" &&
+                `${score}/110 — solid foundations. Here's what matters: fertility readiness compounds. Every fundamental you refine now stacks in your favor, cycle after cycle.`}
+              {tier === "medium" &&
+                `${score}/110 — real momentum. And here's the good news about fertility: readiness compounds. Every gap you close now keeps paying you back, cycle after cycle.`}
+              {tier === "low" &&
+                `${score}/110 — which means most of your levers are still unpulled. That's genuinely good news: fertility readiness compounds, and every fundamental you put in place from today stacks in your favor, cycle after cycle.`}
             </p>
           </CardContent>
         </Card>
@@ -881,7 +929,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Start My Fertility Optimisation Plan — $29/month"
+              label="Start My Fertility Optimisation Plan"
             />
           </CardContent>
         </Card>
@@ -1079,11 +1127,12 @@ function TTCResultsPage({
                 That&apos;s less than one acupuncture session — for everything, every month.
               </p>
             </div>
+            <ObstacleAnswer obstacle={quizState.biggestObstacle} />
             <PricingCTA
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Join the Catalyst Mom App Now - $29/month"
+              label="Claim My Founding Seat"
             />
             <Guarantee>
               Follow your fertility protocol for 30 days. If you don&apos;t feel more in control of your cycle and your body,
@@ -1120,7 +1169,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Join Now - $29/month"
+              label="Claim My Founding Seat"
             />
             <div className="mt-6 p-4 bg-amber-50 rounded-lg">
               <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>Questions?</p>

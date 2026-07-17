@@ -159,17 +159,19 @@ function PricingSection({
   quizState,
   score,
   tier,
+  condensed = false,
 }: {
   quizState: QuizState
   score: number
   tier: string
+  condensed?: boolean
 }) {
   const getButtonLabel = () => {
-    if (quizState.primaryGoal === "heal-dr") return "Heal My Core & Close The Ab Gap — $29/month"
-    if (quizState.primaryGoal === "weight-loss") return "Drop the Pooch & Reclaim My Energy — $29/month"
-    if (quizState.primaryGoal === "strength") return "Rebuild My Postpartum Strength Safely — $29/month"
-    if (quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "not-yet") return "Start My Gentle Healing Protocol — $29/month"
-    return "Join the Catalyst Mom App Now — $29/month"
+    if (quizState.primaryGoal === "heal-dr") return "Start Closing My Gap Today"
+    if (quizState.primaryGoal === "weight-loss") return "Start Reclaiming My Energy Today"
+    if (quizState.primaryGoal === "strength") return "Start Rebuilding My Strength Today"
+    if (quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "not-yet") return "Start My Gentle Healing Protocol"
+    return "Claim My Founding Seat"
   }
 
   const stackItems: StackItem[] = [
@@ -197,8 +199,17 @@ function PricingSection({
 
   return (
     <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
-      <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
-      <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
+      {!condensed && (
+        <>
+          <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
+          <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
+        </>
+      )}
+      {condensed && (
+        <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
+          Founding seat: $29/month — locked for life. Only 100 seats include the 1:1 coaching at this price.
+        </p>
+      )}
       <Button
         size="lg"
         className="w-full text-white px-6 py-4 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto"
@@ -214,6 +225,51 @@ function PricingSection({
         Do your 15-minute daily protocol for 30 days. If your core doesn&apos;t feel measurably stronger, email us and
         we&apos;ll refund every penny — and you keep the roadmap. All the risk is on us, not you.
       </Guarantee>
+    </div>
+  )
+}
+
+// ─── Obstacle crusher — answers the #1 obstacle she told us about ────────────
+function ObstacleAnswer({ obstacle }: { obstacle: string }) {
+  const answers: Record<string, { said: string; answer: string }> = {
+    "no-time": {
+      said: "I have no time — the baby takes everything",
+      answer:
+        "That's exactly why the entire protocol is 15 minutes a day — less time than one feeding. No gym, no childcare, no setup. Most moms do it on the floor next to the baby.",
+    },
+    exhausted: {
+      said: "I am too exhausted to start anything",
+      answer:
+        "Then step one isn't a workout. Your protocol starts with the energy leaks — breath, rest, and fuel — so the first thing you feel is more energy, not more demands. The movement comes after the energy does.",
+    },
+    "tried-failed": {
+      said: "I have tried things before and nothing worked",
+      answer:
+        "Generic programs fail postpartum bodies because they aren't built from your starting point. This one is built from your score — the exact gaps you just saw — and your coach adjusts it with you every two weeks. That's the difference.",
+    },
+    "dont-know": {
+      said: "I do not know what is safe for my body",
+      answer:
+        "That fear is protecting you — and it's exactly what the app removes. Every movement is postpartum-safe, sequenced for your stage, with the unsafe ones locked out until your body is ready. You never have to guess again.",
+    },
+    pain: {
+      said: "I have pain or complications holding me back",
+      answer:
+        "Then you need the careful version, not the hard version. Your protocol starts gentle and zero-strain, works around what hurts, and your 1:1 coach adapts it to your specific situation — so you progress without setbacks.",
+    },
+  }
+
+  const match = answers[obstacle]
+  if (!match) return null
+
+  return (
+    <div className="mb-5 p-4 rounded-lg text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
+      <p className="text-sm mb-2" style={{ color: "#8A7060" }}>
+        You told us your biggest obstacle: <em>&ldquo;{match.said}&rdquo;</em>
+      </p>
+      <p className="text-base font-medium" style={{ color: "#3A2412" }}>
+        {match.answer}
+      </p>
     </div>
   )
 }
@@ -1335,13 +1391,49 @@ function ResultsPage({
               </div>
             </div>
 
-            <p className="text-xl font-semibold mb-2" style={{ color: "#A15C2F" }}>
-              {tier === "high" &&
-                "Wow! You're doing SO much right — you're in the TOP 15% of postpartum moms we assess."}
-              {tier === "medium" && "You've got some solid foundations in place! You're doing some things really well."}
-              {tier === "low" &&
-                "You're experiencing some common challenges that are keeping you from feeling your best."}
-            </p>
+            {tier === "high" && (
+              <div className="max-w-xl mx-auto text-left">
+                <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
+                  {score}/100 — you&apos;re in the top 15% of postpartum moms we assess.
+                </p>
+                <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
+                  Your risk isn&apos;t collapse — it&apos;s coasting. The gap between &ldquo;mostly recovered&rdquo; and
+                  &ldquo;stronger than before pregnancy&rdquo; is precision work most moms never do, because nobody shows
+                  them what&apos;s left. Your breakdown below shows exactly what&apos;s left.
+                </p>
+              </div>
+            )}
+            {tier === "medium" && (
+              <div className="max-w-xl mx-auto text-left">
+                <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
+                  {score}/100 — real foundations, with gaps that won&apos;t close on their own.
+                </p>
+                <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
+                  Here&apos;s the part no one tells you: the gaps you leave open are the ones your body quietly builds
+                  compensation patterns around — the breath-hold when you lift, the back taking over for the core. The
+                  longer they run, the more automatic they get. Every one of them is trainable. Precision now beats
+                  repair later.
+                </p>
+              </div>
+            )}
+            {tier === "low" && (
+              <div className="max-w-xl mx-auto text-left">
+                <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
+                  Let&apos;s be honest about what {score}/100 means.
+                </p>
+                <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
+                  The foundations of your recovery — core connection, pelvic floor, fuel, rest — mostly aren&apos;t in
+                  place yet. And a disconnected core doesn&apos;t wait: every week you compensate, your body wires the
+                  patterns in deeper — the arch in your back, the brace before you lift, the leak you&apos;ve started
+                  planning around. Left alone, it doesn&apos;t plateau. It compounds.
+                </p>
+                <p className="text-base leading-relaxed mt-2 font-semibold" style={{ color: "#3A2412" }}>
+                  Now the flip side: every single one of those patterns is trainable. A {score} becomes a 40, becomes a
+                  65, becomes an 85 — on 15 minutes a day. The question isn&apos;t whether you can fix it. It&apos;s how
+                  many more weeks you let it get more automatic first.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -1398,6 +1490,7 @@ function ResultsPage({
               👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your score &amp; goals
             </p>
 
+            <ObstacleAnswer obstacle={quizState.biggestObstacle} />
             <PricingSection quizState={quizState} score={score} tier={tier} />
           </CardContent>
         </Card>
@@ -1747,7 +1840,7 @@ function HighScorerContent({
           )}
 
           {/* CTA */}
-          <PricingSection quizState={quizState} score={score} tier={tier} />
+          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
         </CardContent>
       </Card>
     </>
@@ -2075,7 +2168,7 @@ function MediumScorerContent({
             title="💬 What Moms Who Started Where You Are Say:"
           />
 
-          <PricingSection quizState={quizState} score={score} tier={tier} />
+          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
         </CardContent>
       </Card>
 
@@ -2182,7 +2275,7 @@ function MediumScorerContent({
             title="What Moms Who Started Where You Are Say:"
           />
 
-          <PricingSection quizState={quizState} score={score} tier={tier} />
+          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
         </CardContent>
       </Card>
     </>
@@ -2431,7 +2524,7 @@ function LowScorerContent({
             title="💬 What Moms Who Started Where You Are Say:"
           />
 
-          <PricingSection quizState={quizState} score={score} tier={tier} />
+          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
         </CardContent>
       </Card>
     </>

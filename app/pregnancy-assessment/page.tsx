@@ -388,6 +388,7 @@ function PricingCTA({
   buttonLabel,
   footnote,
   isVip = false,
+  condensed = false,
 }: {
   quizState: QuizState
   score: number
@@ -397,6 +398,7 @@ function PricingCTA({
   buttonLabel: string
   footnote: string
   isVip?: boolean
+  condensed?: boolean
 }) {
   const handleClick = () => {
     const url = new URL("https://catalystmomofficial.com/signup")
@@ -434,6 +436,10 @@ function PricingCTA({
           Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own — the ongoing
           coaching tier is $129/month.
         </p>
+      ) : condensed ? (
+        <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
+          Founding seat: $29/month — locked for life. Only 100 seats include the 1:1 coaching at this price.
+        </p>
       ) : (
         <>
           <CharterScarcity coachLabel="your dedicated pregnancy & birth-prep coach" tierPrice="$129/month" />
@@ -456,6 +462,51 @@ function PricingCTA({
           ? "Show up for your calls and do the work for 30 days. If you don't feel real, measurable progress, we'll refund your first month in full — your coach carries the risk, not you."
           : "Follow your protocol for 30 days. If you don't feel more prepared, more comfortable, and more in control of your pregnancy, email us and we'll refund every penny — and you keep the roadmap."}
       </Guarantee>
+    </div>
+  )
+}
+
+// ─── Obstacle crusher — answers the #1 obstacle she told us about ────────────
+function ObstacleAnswer({ obstacle }: { obstacle: string }) {
+  const answers: Record<string, { said: string; answer: string }> = {
+    "dont-know-safe": {
+      said: "I do not know what is safe during pregnancy",
+      answer:
+        "That caution is exactly right — and it's exactly what the app removes. Every workout is trimester-matched and pregnancy-safe, with anything unsuitable for your stage locked out automatically. You never have to guess again.",
+    },
+    exhausted: {
+      said: "I am too tired or nauseous to do much",
+      answer:
+        "Then your plan starts where you are, not where a fitness program thinks you should be. Gentle, short, energy-first sessions that work around nausea and fatigue — and adapt week by week as your body changes.",
+    },
+    anxiety: {
+      said: "Pregnancy anxiety and worry",
+      answer:
+        "The antidote to pregnancy anxiety is a clear plan and someone in your corner. Your protocol tells you exactly what to do each day, and your 1:1 coach is there for every 'is this normal?' moment — so worry gets replaced with readiness.",
+    },
+    "no-support": {
+      said: "I have no support or guidance",
+      answer:
+        "That ends today. You get a dedicated 1:1 coach, a daily plan built from your assessment, and a community of moms at your exact stage. You'll never be figuring this out alone again.",
+    },
+    overwhelmed: {
+      said: "Overwhelmed by conflicting advice online",
+      answer:
+        "One plan, one coach, zero contradictions. Your protocol is built from your assessment — not from a hundred arguing sources — so you always know exactly what to do next and can ignore the noise.",
+    },
+  }
+
+  const match = answers[obstacle]
+  if (!match) return null
+
+  return (
+    <div className="mb-5 p-4 rounded-lg text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
+      <p className="text-sm mb-2" style={{ color: "#8A7060" }}>
+        You told us your biggest obstacle: <em>&ldquo;{match.said}&rdquo;</em>
+      </p>
+      <p className="text-base font-medium" style={{ color: "#3A2412" }}>
+        {match.answer}
+      </p>
     </div>
   )
 }
@@ -970,13 +1021,14 @@ function PregnancyResultsPage({
             <p className="text-center text-sm font-semibold mb-4" style={{ color: "#A15C2F" }}>
               👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your trimester &amp; goals
             </p>
+            <ObstacleAnswer obstacle={quizState.biggestObstacle} />
             <PricingCTA
               quizState={quizState}
               score={score}
               tier={tier}
               heading=""
               subheading=""
-              buttonLabel="Start My Pregnancy Wellness Plan — $29/month"
+              buttonLabel="Start My Pregnancy Wellness Plan"
               footnote="Feel better in your body in just 7 days. Cancel anytime. No contracts."
             />
           </CardContent>
@@ -991,9 +1043,9 @@ function PregnancyResultsPage({
             {tier === "high" && (
               <>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>Congratulations, {quizState.name}!</strong> You&apos;re in the top 15% of pregnant women —
-                  attending prenatal care, doing pregnancy-safe exercise, eating well, managing stress, and preparing
-                  your body for labor and postpartum recovery.
+                  <strong>Congratulations, {quizState.name} — {score}/100 puts you in the top 15% of pregnant women
+                  we assess.</strong> You&apos;re attending prenatal care, doing pregnancy-safe exercise, eating well,
+                  managing stress, and preparing your body for labor and postpartum recovery.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
                   <strong>What this means for your pregnancy:</strong> You&apos;re building strong foundations that
@@ -1009,9 +1061,9 @@ function PregnancyResultsPage({
             {tier === "medium" && (
               <>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>{quizState.name}, you&apos;re building momentum!</strong> You&apos;ve got solid foundations
-                  in place and you&apos;re doing several things right. But there are 3-5 key gaps preventing you from
-                  feeling your best.
+                  <strong>{quizState.name}, at {score}/100 you&apos;re building real momentum.</strong> You&apos;ve got
+                  solid foundations in place and you&apos;re doing several things right. But there are 3-5 key gaps
+                  preventing you from feeling your best — and they&apos;re the exact gaps your prep window exists to close.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
                   <strong>What this means for your pregnancy:</strong> You may be experiencing symptoms like fatigue,
@@ -1027,17 +1079,18 @@ function PregnancyResultsPage({
             {tier === "low" && (
               <>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>{quizState.name}, you&apos;re experiencing common pregnancy challenges.</strong> You may be
-                  struggling with symptoms, unsure what&apos;s safe, or overwhelmed by conflicting advice.
-                  You&apos;re not alone — many women start here.
+                  <strong>{quizState.name}, {score}/100 is your starting line — not a verdict.</strong> You may be
+                  struggling with symptoms, unsure what&apos;s safe, or drowning in conflicting advice. Most women
+                  start exactly here — the difference is what happens next.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>What this means for your pregnancy:</strong> Addressing these gaps now will help you feel
-                  better throughout your pregnancy and set your body up for an easier birth and faster recovery.
+                  <strong>Here&apos;s what matters:</strong> you&apos;re in your prep window right now. Everything you
+                  build in it — strength, breath, positioning, fuel — is momentum your body carries straight into an
+                  easier birth and a faster recovery. This is the highest-leverage time you will ever have.
                 </p>
                 <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                  <strong>The good news:</strong> Small, strategic changes can significantly improve your pregnancy
-                  health. Most women see real improvements within 1-2 weeks of implementing the right protocols.
+                  <strong>And it moves fast:</strong> most women feel a real difference within 1-2 weeks of starting
+                  the right protocols. A {score} today is simply where the momentum starts.
                 </p>
               </>
             )}
@@ -1190,13 +1243,14 @@ function PregnancyResultsPage({
                     ? "Get pregnancy-safe workouts, meal plans, symptom management protocols, labor prep, and community support — all in one app."
                     : "A step-by-step pregnancy wellness system designed for moms who want clear guidance without the overwhelm."
               }
-              buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Join Now - $29/month"}
+              buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Claim My Founding Seat"}
               footnote={
                 tier === "high"
                   ? "Ongoing coaching tier: $129/month • Charter Founder seats lock the same 1:1 at $29/month for life (only 100)"
-                  : "Start seeing results in 7 days • Cancel anytime • No contracts"
+                  : "$29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts"
               }
               isVip={tier === "high"}
+              condensed={tier !== "high"}
             />
           </CardContent>
         </Card>

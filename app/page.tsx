@@ -44,8 +44,11 @@ export default function StageRouter() {
             Whether you&apos;re trying to conceive, pregnant, or postpartum — find out exactly where your body&apos;s recovery really stands.
           </h1>
 
-          <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-2" style={{ color: "#3A2412" }}>
+          <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-3" style={{ color: "#3A2412" }}>
             Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
+          </p>
+          <p className="text-sm sm:text-base font-semibold px-4" style={{ color: "#A15C2F" }}>
+            Trusted by 2,000+ mamas through our digital guides — now taken deeper in the Catalyst Mom App
           </p>
         </div>
 
@@ -79,10 +82,6 @@ export default function StageRouter() {
 
         {/* Social Proof */}
         <div className="text-center mb-12 sm:mb-16">
-          <p className="text-lg sm:text-xl font-semibold mb-8" style={{ color: "#A15C2F" }}>
-            After supporting over 2,000 mamas with our digital guides, we built the Catalyst Mom App to take your recovery even deeper.
-          </p>
-
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
             <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
               <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
