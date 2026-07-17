@@ -46,10 +46,16 @@ export const metadata: Metadata = {
     type: "website",
   },
 
-  // ── Google Search Console Verification ────────────────────────────────────
+  // ── Search / platform verification ────────────────────────────────────────
+  // NOTE: Next.js's `verification` only understands google/yahoo/yandex/me.
+  // Pinterest is NOT a recognized key, so it must go through `other`, which
+  // renders a raw <meta name="p:domain_verify" content="..."/> tag — exactly
+  // what Pinterest scans for when you claim the site.
   verification: {
     google: "n3DXAb7YRBuwfdBfxxF3ql3hL8hiInJhdfQEAKlSzBw",
-    pinterest: "d3a94222e2c42a4c9aa3045bd246f18e",
+    other: {
+      "p:domain_verify": "d3a94222e2c42a4c9aa3045bd246f18e",
+    },
   },
 }
 
