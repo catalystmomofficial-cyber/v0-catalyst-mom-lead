@@ -729,6 +729,8 @@ export default function PregnancyAssessment() {
         sleep: quizState.sleep,
         pelvic_floor: quizState.pelvicFloor,
         support_type: quizState.supportType,
+        exercise_safety: quizState.exerciseSafety,
+        concern: quizState.additionalNotes,
       }
 
       try {

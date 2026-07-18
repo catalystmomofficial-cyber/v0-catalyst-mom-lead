@@ -911,6 +911,7 @@ export default function PostpartumAssessment() {
           biggest_obstacle: quizState.biggestObstacle,
           support_type: quizState.supportType,
           birth_experience: quizState.birthExperience,
+          concern: quizState.additionalNotes,
           results_url: `https://catalystmomofficial.com/dashboard`,
         }
 

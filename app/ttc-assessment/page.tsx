@@ -607,6 +607,7 @@ export default function TTCAssessment() {
         alcohol: quizState.alcohol,
         smoking: quizState.smoking,
         support_type: quizState.supportType,
+        concern: quizState.additionalNotes,
       }
 
       try {
