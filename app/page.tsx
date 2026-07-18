@@ -54,7 +54,7 @@ export default function StageRouter() {
             </p>
           </div>
 
-          <div className="hidden sm:block">
+          <div>
             <AssessmentHeroMockup />
           </div>
         </div>

@@ -929,6 +929,7 @@ export default function PostpartumAssessment() {
           .from("postpartum_assessments")
           .insert({
             user_name: quizState.name,
+            email: quizState.email,
             primary_goal: quizState.primaryGoal,
             score: calculatedScore,
             tier,
@@ -936,6 +937,7 @@ export default function PostpartumAssessment() {
           })
           .select()
 
+        if (supabaseError) console.error("[supabase] insert error:", supabaseError)
         console.log("[v0] Supabase insert response:", supabaseData)
 
         if (supabaseData && supabaseData[0]) {

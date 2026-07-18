@@ -65,7 +65,7 @@ export function AssessmentHeroMockup() {
       >
         {/* Phone bezel */}
         <div
-          className="relative mx-auto w-[240px] h-[490px] rounded-[2.75rem] p-2"
+          className="relative mx-auto w-[188px] h-[384px] sm:w-[240px] sm:h-[490px] rounded-[2.25rem] sm:rounded-[2.75rem] p-1.5 sm:p-2"
           style={{
             background: "linear-gradient(160deg, #3A2412 0%, #1C120A 100%)",
             boxShadow:
@@ -78,18 +78,18 @@ export function AssessmentHeroMockup() {
             style={{ background: "linear-gradient(180deg, #FBF7F1 0%, #F3E9DB 100%)" }}
           >
             {/* Notch */}
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-20 h-5 bg-[#1C120A] rounded-full z-20" />
+            <div className="absolute top-1.5 sm:top-2 left-1/2 -translate-x-1/2 w-16 h-4 sm:w-20 sm:h-5 bg-[#1C120A] rounded-full z-20" />
 
-            <div className="relative w-full h-full pt-10 px-5 pb-6 flex flex-col">
-              <p className="text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: "#A15C2F" }}>
+            <div className="relative w-full h-full pt-7 px-4 pb-4 sm:pt-10 sm:px-5 sm:pb-6 flex flex-col">
+              <p className="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase mb-1" style={{ color: "#A15C2F" }}>
                 Your Result
               </p>
-              <p className="text-sm font-bold mb-6" style={{ color: "#3A2412" }}>
+              <p className="text-xs sm:text-sm font-bold mb-4 sm:mb-6" style={{ color: "#3A2412" }}>
                 Maternal Wellness Score
               </p>
 
               {/* Score ring */}
-              <div className="relative w-32 h-32 mx-auto mb-6">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-4 sm:mb-6">
                 <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
                   <circle cx="60" cy="60" r="54" fill="none" stroke="#E8D5C4" strokeWidth="9" />
                   <circle
@@ -106,20 +106,20 @@ export function AssessmentHeroMockup() {
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-3xl font-extrabold" style={{ color: "#3A2412" }}>
+                  <span className="text-2xl sm:text-3xl font-extrabold" style={{ color: "#3A2412" }}>
                     {ringProgress}
                   </span>
-                  <span className="text-[10px] font-semibold" style={{ color: "#8A7060" }}>
+                  <span className="text-[9px] sm:text-[10px] font-semibold" style={{ color: "#8A7060" }}>
                     out of 100
                   </span>
                 </div>
               </div>
 
-              {/* Widgets */}
-              <div className="space-y-2.5">
+              {/* Widgets — hidden on the smallest screens to avoid clutter */}
+              <div className="space-y-2.5 hidden sm:block">
                 {[
-                  { label: "Core Connection", pct: 82 },
-                  { label: "Pelvic Floor", pct: 65 },
+                  { label: "Core Connection", pct: 82, accent: "#4C8C6B", tint: "rgba(76,140,107,0.12)" },
+                  { label: "Pelvic Floor", pct: 65, accent: "#3E6FA8", tint: "rgba(62,111,168,0.12)" },
                 ].map((w) => (
                   <div
                     key={w.label}
@@ -128,9 +128,9 @@ export function AssessmentHeroMockup() {
                   >
                     <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: "rgba(161,92,47,0.12)" }}
+                      style={{ background: w.tint }}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="#A15C2F" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke={w.accent} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
@@ -141,7 +141,7 @@ export function AssessmentHeroMockup() {
                       <div className="h-1.5 w-full rounded-full mt-1" style={{ background: "#E8D5C4" }}>
                         <div
                           className="h-full rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: mounted ? `${w.pct}%` : "0%", background: "#A15C2F" }}
+                          style={{ width: mounted ? `${w.pct}%` : "0%", background: w.accent }}
                         />
                       </div>
                     </div>
@@ -153,9 +153,9 @@ export function AssessmentHeroMockup() {
         </div>
       </div>
 
-      {/* Floating glass badges */}
+      {/* Floating glass badges — hidden on the smallest screens to avoid clutter */}
       <div
-        className={`hero-badge-in hero-badge-drift absolute -left-4 top-8 sm:-left-10 rounded-2xl px-4 py-3 flex items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
+        className={`hero-badge-in hero-badge-drift hidden sm:flex absolute -left-4 top-8 sm:-left-10 rounded-2xl px-4 py-3 items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
         style={{
           background: "rgba(255,255,255,0.75)",
           border: "1px solid rgba(161,92,47,0.15)",
@@ -172,7 +172,7 @@ export function AssessmentHeroMockup() {
       </div>
 
       <div
-        className={`hero-badge-in hero-badge-drift absolute -right-4 bottom-16 sm:-right-8 rounded-2xl px-4 py-3 flex items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
+        className={`hero-badge-in hero-badge-drift hidden sm:flex absolute -right-4 bottom-16 sm:-right-8 rounded-2xl px-4 py-3 items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
         style={{
           background: "rgba(255,255,255,0.75)",
           border: "1px solid rgba(161,92,47,0.15)",
