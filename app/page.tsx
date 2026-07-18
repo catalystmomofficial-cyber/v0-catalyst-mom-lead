@@ -1,7 +1,8 @@
 "use client"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { ShimmerButton } from "@/components/ui/shimmer-button"
+import { AssessmentHeroMockup } from "@/components/home/assessment-hero-mockup"
 
 export default function StageRouter() {
   const stages = [
@@ -35,21 +36,27 @@ export default function StageRouter() {
     <div className="min-h-screen p-4 sm:p-6" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="flex items-center justify-center mb-6">
-            <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-16 w-16 sm:h-20 sm:w-20" />
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center mb-12 sm:mb-16">
+          <div className="text-center lg:text-left">
+            <div className="flex items-center justify-center lg:justify-start mb-6">
+              <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-16 w-16 sm:h-20 sm:w-20" />
+            </div>
+
+            <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4 lg:px-0" style={{ color: "#A15C2F" }}>
+              Whether you&apos;re trying to conceive, pregnant, or postpartum — find out exactly where your body&apos;s recovery really stands.
+            </h1>
+
+            <p className="text-lg sm:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed px-4 lg:px-0 mb-3" style={{ color: "#3A2412" }}>
+              Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
+            </p>
+            <p className="text-sm sm:text-base font-semibold px-4 lg:px-0" style={{ color: "#A15C2F" }}>
+              Trusted by 2,000+ mamas through our digital guides — now taken deeper in the Catalyst Mom App
+            </p>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4" style={{ color: "#A15C2F" }}>
-            Whether you&apos;re trying to conceive, pregnant, or postpartum — find out exactly where your body&apos;s recovery really stands.
-          </h1>
-
-          <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed px-4 mb-3" style={{ color: "#3A2412" }}>
-            Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
-          </p>
-          <p className="text-sm sm:text-base font-semibold px-4" style={{ color: "#A15C2F" }}>
-            Trusted by 2,000+ mamas through our digital guides — now taken deeper in the Catalyst Mom App
-          </p>
+          <div className="hidden sm:block">
+            <AssessmentHeroMockup />
+          </div>
         </div>
 
         {/* Stage Cards */}
@@ -68,12 +75,14 @@ export default function StageRouter() {
                     </p>
                   </div>
 
-                  <Button
-                    className="w-full text-white font-bold py-3 rounded-xl text-base sm:text-lg shadow-lg hover:shadow-xl transition-all"
-                    style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
+                  <ShimmerButton
+                    background="linear-gradient(135deg, #A15C2F, #C27B48)"
+                    shimmerColor="#FBEAD3"
+                    borderRadius="0.75rem"
+                    className="w-full font-bold py-3 text-base sm:text-lg shadow-lg hover:shadow-xl transition-shadow"
                   >
                     Take {stage.title} Quiz →
-                  </Button>
+                  </ShimmerButton>
                 </CardContent>
               </Card>
             </Link>
