@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import CookieBanner from "@/components/cookie-banner"
 import GoogleAnalytics from "@/components/google-analytics"
+import ClarityAnalytics from "@/components/clarity-analytics"
 import "./globals.css"
 
 // ── Fonts — unchanged ─────────────────────────────────────────────────────────
@@ -90,6 +91,11 @@ export default function RootLayout({
             Falls back silently (renders nothing) if gaId is empty or
             consent has not been given. */}
         <GoogleAnalytics gaId={gaId} />
+
+        {/* Microsoft Clarity — same consent gate as GoogleAnalytics.
+            Defaults to the Catalyst Mom Clarity project; override with
+            NEXT_PUBLIC_CLARITY_ID in Vercel if the project ever changes. */}
+        <ClarityAnalytics projectId={process.env.NEXT_PUBLIC_CLARITY_ID ?? "wbtyudqmma"} />
 
         {/* Vercel product analytics — privacy-friendly, no cookie required */}
         {process.env.NODE_ENV === "production" && <Analytics />}

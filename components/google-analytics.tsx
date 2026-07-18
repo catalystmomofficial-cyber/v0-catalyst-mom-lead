@@ -10,8 +10,8 @@ import { useEffect, useState } from "react"
  * the cookie banner.
  *
  * Cookie consent is expected to be persisted in localStorage under
- * the key "cookieConsent" with the value "true".
- * The component listens for:
+ * the key "cookie_consent" with the value "accepted" (set by
+ * <CookieBanner>). The component listens for:
  *  1. An initial localStorage read on mount
  *  2. A custom "cookieConsentUpdated" event dispatched by
  *     <CookieBanner> when the user accepts/declines
@@ -22,16 +22,16 @@ export default function GoogleAnalytics({ gaId }: { gaId: string }) {
 
   useEffect(() => {
     // ── 1. Check consent already stored from a previous visit ────
-    const stored = localStorage.getItem("cookieConsent")
-    if (stored === "true") {
+    const stored = localStorage.getItem("cookie_consent")
+    if (stored === "accepted") {
       setConsentGiven(true)
       return // No need to keep listening
     }
 
     // ── 2. Listen for the banner decision in this session ────────
     const handler = () => {
-      const updated = localStorage.getItem("cookieConsent")
-      if (updated === "true") {
+      const updated = localStorage.getItem("cookie_consent")
+      if (updated === "accepted") {
         setConsentGiven(true)
       }
     }
