@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { CheckCircle } from "lucide-react"
 
 export default function SuccessPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const sessionId = searchParams.get("session_id")
   const [isLoading, setIsLoading] = useState(true)
@@ -38,7 +39,7 @@ export default function SuccessPage() {
           features.
         </p>
         <Button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => router.push("/")}
           className="bg-[#A15C2F] hover:bg-[#8B4A26] text-white px-6 py-3 rounded-lg"
         >
           Get Started
