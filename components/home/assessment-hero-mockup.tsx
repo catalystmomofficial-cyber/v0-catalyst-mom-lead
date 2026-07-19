@@ -58,6 +58,7 @@ export function AssessmentHeroMockup() {
         aria-hidden="true"
       />
 
+      <div className={mounted ? "hero-phone-float" : ""}>
       <div
         ref={phoneRef}
         className={`relative mx-auto transition-[opacity,transform] duration-700 ease-out will-change-transform ${mounted ? "opacity-100 scale-100" : "opacity-0 scale-95 translate-y-6"}`}
@@ -115,22 +116,22 @@ export function AssessmentHeroMockup() {
                 </div>
               </div>
 
-              {/* Widgets — hidden on the smallest screens to avoid clutter */}
-              <div className="space-y-2.5 hidden sm:block">
+              {/* Widgets — sized down on mobile, same content as desktop */}
+              <div className="space-y-2 sm:space-y-2.5">
                 {[
                   { label: "Core Connection", pct: 82, accent: "#4C8C6B", tint: "rgba(76,140,107,0.12)" },
                   { label: "Pelvic Floor", pct: 65, accent: "#3E6FA8", tint: "rgba(62,111,168,0.12)" },
                 ].map((w) => (
                   <div
                     key={w.label}
-                    className="rounded-xl p-3 flex items-center gap-3"
+                    className="rounded-xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3"
                     style={{ background: "rgba(255,255,255,0.7)", border: "1px solid #E8D5C4" }}
                   >
                     <div
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0"
                       style={{ background: w.tint }}
                     >
-                      <svg className="w-4 h-4" fill="none" stroke={w.accent} viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke={w.accent} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
@@ -152,16 +153,16 @@ export function AssessmentHeroMockup() {
           </div>
         </div>
       </div>
+      </div>
 
-      {/* Floating glass badges — hidden on the smallest screens to avoid clutter */}
+      {/* Floating glass badges */}
       <div
-        className={`hero-badge-in hero-badge-drift hidden sm:flex absolute -left-4 top-8 sm:-left-10 rounded-2xl px-4 py-3 items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
+        className={`hero-badge-in hero-badge-drift absolute -left-2 top-8 sm:-left-10 rounded-2xl px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
         style={{
           background: "rgba(255,255,255,0.75)",
           border: "1px solid rgba(161,92,47,0.15)",
           boxShadow: "0 15px 35px -10px rgba(58,36,18,0.25)",
           animationDelay: "0.5s, 1.2s",
-          animationFillMode: "backwards",
         }}
       >
         <span className="text-xl" aria-hidden="true">💛</span>
@@ -172,13 +173,12 @@ export function AssessmentHeroMockup() {
       </div>
 
       <div
-        className={`hero-badge-in hero-badge-drift hidden sm:flex absolute -right-4 bottom-16 sm:-right-8 rounded-2xl px-4 py-3 items-center gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
+        className={`hero-badge-in hero-badge-drift absolute -right-2 bottom-16 sm:-right-8 rounded-2xl px-3 py-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 backdrop-blur-md ${mounted ? "" : "opacity-0"}`}
         style={{
           background: "rgba(255,255,255,0.75)",
           border: "1px solid rgba(161,92,47,0.15)",
           boxShadow: "0 15px 35px -10px rgba(58,36,18,0.25)",
           animationDelay: "0.7s, 1.4s",
-          animationFillMode: "backwards",
         }}
       >
         <span className="text-xl" aria-hidden="true">⏱️</span>

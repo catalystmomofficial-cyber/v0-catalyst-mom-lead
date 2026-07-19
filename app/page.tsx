@@ -36,27 +36,26 @@ export default function StageRouter() {
     <div className="min-h-screen p-4 sm:p-6" style={{ background: "linear-gradient(135deg, #F8F5F2, #F0E6D2)" }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center mb-12 sm:mb-16">
-          <div className="text-center lg:text-left">
-            <div className="flex items-center justify-center lg:justify-start mb-6">
-              <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-16 w-16 sm:h-20 sm:w-20" />
-            </div>
+        <div className="flex flex-col items-center text-center mb-12 sm:mb-16">
+          <img src="/catalyst-mom-logo.png" alt="Catalyst Mom" className="h-14 w-14 sm:h-16 sm:w-16 mb-6" />
 
-            <h1 className="text-3xl sm:text-5xl font-bold mb-4 leading-tight px-4 lg:px-0" style={{ color: "#A15C2F" }}>
-              Whether you&apos;re trying to conceive, pregnant, or postpartum — find out exactly where your body&apos;s recovery really stands.
-            </h1>
+          <AssessmentHeroMockup />
 
-            <p className="text-lg sm:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed px-4 lg:px-0 mb-3" style={{ color: "#3A2412" }}>
-              Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
-            </p>
-            <p className="text-sm sm:text-base font-semibold px-4 lg:px-0" style={{ color: "#A15C2F" }}>
-              Trusted by 2,000+ mamas through our digital guides — now taken deeper in the Catalyst Mom App
-            </p>
-          </div>
+          <p className="flex items-center gap-2 text-sm sm:text-base font-semibold mt-6 mb-5" style={{ color: "#A15C2F" }}>
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60" style={{ backgroundColor: "#A15C2F" }} />
+              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: "#A15C2F" }} />
+            </span>
+            Trusted by 2,000+ mamas through our digital guides
+          </p>
 
-          <div>
-            <AssessmentHeroMockup />
-          </div>
+          <p className="text-xs sm:text-sm font-bold tracking-widest uppercase mb-3" style={{ color: "#8A7060" }}>
+            TTC &middot; Pregnancy &middot; Postpartum
+          </p>
+
+          <p className="text-xl sm:text-2xl font-bold max-w-2xl leading-snug px-4" style={{ color: "#3A2412" }}>
+            Take our free 2-minute assessment designed for your stage. Get your personal Maternal Wellness Score and a roadmap built around where you actually are.
+          </p>
         </div>
 
         {/* Stage Cards */}

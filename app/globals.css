@@ -176,9 +176,24 @@
     transform: translateY(-6px);
   }
 }
+.hero-badge-in.hero-badge-drift {
+  animation: hero-badge-in 0.6s ease-out both, hero-badge-drift 4s ease-in-out infinite;
+}
+@keyframes hero-phone-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.hero-phone-float {
+  animation: hero-phone-float 5s ease-in-out infinite;
+}
 @media (prefers-reduced-motion: reduce) {
   .hero-badge-in,
-  .hero-badge-drift {
+  .hero-badge-drift,
+  .hero-phone-float {
     animation: none !important;
   }
 }
