@@ -12,6 +12,20 @@ assessment scores out of **110**. Every email below uses /110. (Trust detail —
 that reads as fertility anxiety and it's harmful. The TTC frame is **compounding**: every
 fundamental she builds stacks in her favor, cycle after cycle. Momentum, not fear.
 
+**NEW — the "You told us" personalization block:**
+The app now sends `concern_reflection` — a short AI-written sentence that genuinely responds
+to what she typed in the "anything else we should know?" question. It's empty for leads who
+left that field blank, so wrap it in an Omnisend **IF/ELSE condition block** (visual editor →
+"Condition" → Custom property → `concern_reflection` → "is not empty"). Inside the IF branch,
+place this right after the greeting in **Email 1 only** (all three tiers):
+
+```
+{{contact.custom_properties.concern_reflection}}
+```
+
+No extra wrapper text needed — the sentence already stands alone. Leads with no concern
+text skip straight to the score line, exactly as today.
+
 **CTA link template** (swap `EMAILCODE`):
 
 ```

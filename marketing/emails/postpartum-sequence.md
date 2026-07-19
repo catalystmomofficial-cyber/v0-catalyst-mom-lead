@@ -13,6 +13,21 @@ replace the single email with this 6-email chain and the delays shown.
   `[[contact.first_name|default: "Mama"]]` and `[[contact.custom_properties.score]]`.
 - No header banner on these emails. One button per email. Sign-off as written.
 
+**NEW — the "You told us" personalization block:**
+The app now sends `concern_reflection` — a short AI-written sentence that genuinely responds
+to what she typed in the "anything else we should know?" question. It's empty for leads who
+left that field blank, so it must be wrapped in an Omnisend **IF/ELSE condition block**
+(visual editor → drag a "Condition" block → "Custom property" → `concern_reflection` →
+"is not empty"). Inside the IF branch, place this paragraph right after the greeting in
+**Email 1 only** (all three tiers):
+
+```
+{{contact.custom_properties.concern_reflection}}
+```
+
+That's it — no extra wrapper text needed, the sentence is already written to stand alone.
+Leads with no concern text skip straight to the score line below, exactly as today.
+
 **CTA link template** (swap `EMAILCODE` per email as noted):
 
 ```
