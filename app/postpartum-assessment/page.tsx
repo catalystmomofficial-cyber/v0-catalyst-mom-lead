@@ -4,9 +4,8 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
+import { QuizOptionList } from "@/components/quiz/quiz-option-list"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
@@ -1264,24 +1263,12 @@ export default function PostpartumAssessment() {
             )}
 
             {question.type === "radio" && (
-              <RadioGroup
+              <QuizOptionList
+                name={question.field as string}
                 value={quizState[question.field as keyof QuizState]}
-                onValueChange={(value) => handleInputChange(question.field as keyof QuizState, value)}
-              >
-                <div className="space-y-3">
-                  {(question as any).options?.map((option: { value: string; label: string }) => (
-                    <div
-                      key={option.value}
-                      className="flex items-center space-x-3 p-4 border-2 border-amber-200 rounded-lg hover:border-amber-400 cursor-pointer transition-colors"
-                    >
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value} className="cursor-pointer flex-1 text-base">
-                        {option.label}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              </RadioGroup>
+                onChange={(value) => handleInputChange(question.field as keyof QuizState, value)}
+                options={(question as any).options ?? []}
+              />
             )}
 
             {question.type === "textarea" && (
