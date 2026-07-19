@@ -1191,7 +1191,7 @@ function TTCResultsPage({
           </CardContent>
         </Card>
 
-        <FounderNote />
+        <FounderNote stage="ttc" />
       </div>
     </div>
   )

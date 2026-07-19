@@ -1265,7 +1265,7 @@ function PregnancyResultsPage({
           </CardContent>
         </Card>
 
-        <FounderNote />
+        <FounderNote stage="pregnancy" />
       </div>
     </div>
   )

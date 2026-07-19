@@ -1585,7 +1585,7 @@ function ResultsPage({
         )}
         {tier === "low" && <LowScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
 
-        <FounderNote />
+        <FounderNote stage="postpartum" />
       </div>
     </div>
   )

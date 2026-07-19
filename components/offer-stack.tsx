@@ -106,7 +106,25 @@ export function CharterScarcity({
 }
 
 // ─── Founder note — the real founder story, rendered ONCE per results view ──
-export function FounderNote() {
+// Same true story on every stage — only the stage-specific phrase changes,
+// so it doesn't read as a copy-pasted "postpartum" line on TTC/pregnancy.
+const FOUNDER_STAGE_COPY = {
+  postpartum: {
+    wentThrough: "postpartum",
+    closingLine: "Postpartum shouldn’t be something women survive alone.",
+  },
+  pregnancy: {
+    wentThrough: "pregnancy",
+    closingLine: "Pregnancy shouldn’t be something women navigate alone.",
+  },
+  ttc: {
+    wentThrough: "trying to conceive, month after month,",
+    closingLine: "Trying to conceive shouldn’t be something women go through alone.",
+  },
+} as const
+
+export function FounderNote({ stage = "postpartum" }: { stage?: "postpartum" | "pregnancy" | "ttc" }) {
+  const { wentThrough, closingLine } = FOUNDER_STAGE_COPY[stage]
   return (
     <div className="mt-8 mb-4">
       <div
@@ -115,11 +133,11 @@ export function FounderNote() {
       >
         <p className="text-sm leading-relaxed italic" style={{ color: "#5C3D2E" }}>
           &ldquo;I didn&apos;t build Catalyst Mom as a fitness expert or a tech founder. I built it as a husband who
-          watched his wife go through postpartum with no family nearby. Her parents weren&apos;t close. Mine
+          watched his wife go through {wentThrough} with no family nearby. Her parents weren&apos;t close. Mine
           weren&apos;t either. It was just us — and I had no idea how hard it really was until I was living it with
           her every single day. I also built it carrying grief. Watching what my own mother went through, the things
           she silently endured — that shaped me. It made me want something different for the women in my life, and
-          eventually for every mother I&apos;ve never met. Postpartum shouldn&apos;t be something women survive alone.
+          eventually for every mother I&apos;ve never met. {closingLine}
           I couldn&apos;t find anything that truly helped my wife the way she deserved to be helped. So I built it.
           Catalyst Mom exists because love sometimes looks like doing the hard thing — building the village when there
           isn&apos;t one. Every woman who comes through this assessment — I see my wife in her. I see my mother in
