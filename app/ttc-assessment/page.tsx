@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -332,12 +333,15 @@ function AppFeatureGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {APP_FEATURES.map((f, i) => (
-        <div key={i} className="p-4 bg-white rounded-lg">
-          <div className="flex items-start gap-3">
-            <span className="text-green-600 text-2xl flex-shrink-0">✅</span>
-            <div>
-              <p className="font-bold mb-1" style={{ color: "#A15C2F" }}>{f.title}</p>
-              <p className="text-sm" style={{ color: "#3A2412" }}>{f.body}</p>
+        <div key={i} className="relative rounded-lg">
+          <GlowingEffect disabled={false} proximity={60} spread={25} borderWidth={2} inactiveZone={0.4} />
+          <div className="relative p-4 bg-white rounded-lg h-full">
+            <div className="flex items-start gap-3">
+              <span className="text-green-600 text-2xl flex-shrink-0">✅</span>
+              <div>
+                <p className="font-bold mb-1" style={{ color: "#A15C2F" }}>{f.title}</p>
+                <p className="text-sm" style={{ color: "#3A2412" }}>{f.body}</p>
+              </div>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { ShimmerButton } from "@/components/ui/shimmer-button"
 import { AssessmentHeroMockup } from "@/components/home/assessment-hero-mockup"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 
 export default function StageRouter() {
   const stages = [
@@ -61,8 +62,9 @@ export default function StageRouter() {
         {/* Stage Cards */}
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           {stages.map((stage) => (
-            <Link key={stage.id} href={stage.href}>
-              <Card className="border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer h-full bg-white">
+            <Link key={stage.id} href={stage.href} className="relative block h-full rounded-xl">
+              <GlowingEffect disabled={false} proximity={80} spread={30} borderWidth={2} inactiveZone={0.4} />
+              <Card className="relative border-0 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer h-full bg-white">
                 <CardContent className="p-6 sm:p-8 flex flex-col items-center text-center h-full justify-between">
                   <div>
                     <div className="text-5xl sm:text-6xl mb-4">{stage.emoji}</div>
@@ -91,40 +93,52 @@ export default function StageRouter() {
         {/* Social Proof */}
         <div className="text-center mb-12 sm:mb-16">
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6 max-w-4xl mx-auto">
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
-              <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                &ldquo;I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this.&rdquo;
-              </p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                — Postpartum Mama · Catalyst Mom Community
-              </p>
+            <div className="relative rounded-lg">
+              <GlowingEffect disabled={false} proximity={80} spread={30} borderWidth={2} inactiveZone={0.4} />
+              <div className="relative bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4 h-full" style={{ borderLeftColor: "#A15C2F" }}>
+                <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
+                  &ldquo;I couldn&apos;t sneeze without leaking and my belly still looked 5 months pregnant. Three weeks into this program my core finally feels like mine again. I actually cried during my check-in. Do not sleep on this.&rdquo;
+                </p>
+                <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
+                  — Postpartum Mama · Catalyst Mom Community
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
-              <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                &ldquo;I had been trying for 8 months and felt completely lost. I didn&apos;t even know my cycle properly — I was just guessing. This program helped me understand what my body was actually doing. Two months in, I finally felt like I had a real plan and not just hope.&rdquo;
-              </p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                — TTC Mama · Catalyst Mom Community
-              </p>
+            <div className="relative rounded-lg">
+              <GlowingEffect disabled={false} proximity={80} spread={30} borderWidth={2} inactiveZone={0.4} />
+              <div className="relative bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4 h-full" style={{ borderLeftColor: "#A15C2F" }}>
+                <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
+                  &ldquo;I had been trying for 8 months and felt completely lost. I didn&apos;t even know my cycle properly — I was just guessing. This program helped me understand what my body was actually doing. Two months in, I finally felt like I had a real plan and not just hope.&rdquo;
+                </p>
+                <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
+                  — TTC Mama · Catalyst Mom Community
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
-              <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                &ldquo;I was terrified of tearing again after my first birth. I started the birth ball protocol in my third trimester and did the breathing exercises every single day. When labour hit I actually felt prepared. My midwife was shocked at how in control I was — and I didn&apos;t tear at all this time.&rdquo;
-              </p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                — Pregnancy Mama · Catalyst Mom Community
-              </p>
+            <div className="relative rounded-lg">
+              <GlowingEffect disabled={false} proximity={80} spread={30} borderWidth={2} inactiveZone={0.4} />
+              <div className="relative bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4 h-full" style={{ borderLeftColor: "#A15C2F" }}>
+                <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
+                  &ldquo;I was terrified of tearing again after my first birth. I started the birth ball protocol in my third trimester and did the breathing exercises every single day. When labour hit I actually felt prepared. My midwife was shocked at how in control I was — and I didn&apos;t tear at all this time.&rdquo;
+                </p>
+                <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
+                  — Pregnancy Mama · Catalyst Mom Community
+                </p>
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4" style={{ borderLeftColor: "#A15C2F" }}>
-              <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
-                &ldquo;My second VBAC was completely different. After doing the low-impact exercises throughout my pregnancy, when labour finally kicked in I felt in control the whole way through. I pushed my baby out in 10 minutes. My first VBAC took over an hour of pushing. This program changed everything.&rdquo;
-              </p>
-              <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
-                — VBAC Mama · Catalyst Mom Community
-              </p>
+            <div className="relative rounded-lg">
+              <GlowingEffect disabled={false} proximity={80} spread={30} borderWidth={2} inactiveZone={0.4} />
+              <div className="relative bg-white p-4 sm:p-6 rounded-lg shadow-md border-l-4 h-full" style={{ borderLeftColor: "#A15C2F" }}>
+                <p className="text-sm sm:text-base italic mb-3" style={{ color: "#3A2412" }}>
+                  &ldquo;My second VBAC was completely different. After doing the low-impact exercises throughout my pregnancy, when labour finally kicked in I felt in control the whole way through. I pushed my baby out in 10 minutes. My first VBAC took over an hour of pushing. This program changed everything.&rdquo;
+                </p>
+                <p className="text-xs sm:text-sm font-semibold" style={{ color: "#A15C2F" }}>
+                  — VBAC Mama · Catalyst Mom Community
+                </p>
+              </div>
             </div>
           </div>
         </div>

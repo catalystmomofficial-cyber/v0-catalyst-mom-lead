@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { GlowingEffect } from "@/components/ui/glowing-effect"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -1792,13 +1793,16 @@ function HighScorerContent({
                 { stat: "8 weeks", label: 'Avg recovery to "feeling like myself"' },
                 { stat: "89%", label: "Avoided complications" },
               ].map((item, i) => (
-                <div key={i} className="text-center p-4 bg-white rounded-lg">
-                  <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                    {item.stat}
-                  </p>
-                  <p className="text-sm" style={{ color: "#3A2412" }}>
-                    {item.label}
-                  </p>
+                <div key={i} className="relative rounded-lg">
+                  <GlowingEffect disabled={false} proximity={60} spread={25} borderWidth={2} inactiveZone={0.4} />
+                  <div className="relative text-center p-4 bg-white rounded-lg">
+                    <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
+                      {item.stat}
+                    </p>
+                    <p className="text-sm" style={{ color: "#3A2412" }}>
+                      {item.label}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -2519,13 +2523,16 @@ function LowScorerContent({
                 { stat: "91%", label: "Report significant energy improvement" },
                 { stat: "87%", label: "Stopped or reduced leaking in 6 weeks" },
               ].map((item, i) => (
-                <div key={i} className="text-center p-4 bg-white rounded-lg">
-                  <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                    {item.stat}
-                  </p>
-                  <p className="text-sm" style={{ color: "#3A2412" }}>
-                    {item.label}
-                  </p>
+                <div key={i} className="relative rounded-lg">
+                  <GlowingEffect disabled={false} proximity={60} spread={25} borderWidth={2} inactiveZone={0.4} />
+                  <div className="relative text-center p-4 bg-white rounded-lg">
+                    <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
+                      {item.stat}
+                    </p>
+                    <p className="text-sm" style={{ color: "#3A2412" }}>
+                      {item.label}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
