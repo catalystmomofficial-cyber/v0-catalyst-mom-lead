@@ -13,6 +13,8 @@ import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
+import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
+import { ConcernReflectionCard } from "@/components/concern-reflection"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -561,6 +563,7 @@ export default function PregnancyAssessment() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [quizState, setQuizState] = useState<QuizState>(initialQuizState)
   const [showResults, setShowResults] = useState(false)
+  const [concernReflection, setConcernReflection] = useState<ConcernReflectionResult | null>(null)
   const [score, setScore] = useState(0)
   const [scoreTier, setScoreTier] = useState<"low" | "medium" | "high">("low")
   const [isLoading, setIsLoading] = useState(false)
@@ -710,6 +713,14 @@ export default function PregnancyAssessment() {
       setScoreTier(tier)
       trackQuizEvents.quizCompleted(calculatedScore, tier)
 
+      const reflection = await generateConcernReflection({
+        concern: quizState.additionalNotes,
+        stage: "pregnancy",
+        primaryGoal: quizState.primaryGoal,
+        biggestObstacle: quizState.biggestObstacle,
+      }).catch(() => null)
+      setConcernReflection(reflection)
+
       const weeksPregnantNum = Number.parseInt(quizState.weeksPregnant) || 0
       const weeksUntilBirth = Math.max(0, 40 - weeksPregnantNum)
 
@@ -731,6 +742,7 @@ export default function PregnancyAssessment() {
         support_type: quizState.supportType,
         exercise_safety: quizState.exerciseSafety,
         concern: quizState.additionalNotes,
+        concern_reflection: reflection && !reflection.crisis ? reflection.reflection : undefined,
       }
 
       try {
@@ -798,7 +810,7 @@ export default function PregnancyAssessment() {
   }
 
   if (showResults) {
-    return <PregnancyResultsPage score={score} tier={scoreTier} quizState={quizState} />
+    return <PregnancyResultsPage score={score} tier={scoreTier} quizState={quizState} concernReflection={concernReflection} />
   }
 
   const question = questions[currentQuestion]
@@ -916,11 +928,12 @@ export default function PregnancyAssessment() {
 // ─── Results Page ─────────────────────────────────────────────────────────────
 
 function PregnancyResultsPage({
-  score, tier, quizState,
+  score, tier, quizState, concernReflection,
 }: {
   score: number
   tier: "low" | "medium" | "high"
   quizState: QuizState
+  concernReflection: ConcernReflectionResult | null
 }) {
   const breakdown = getDetailedBreakdown(quizState)
   const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
@@ -1143,7 +1156,13 @@ function PregnancyResultsPage({
         </Card>
 
         {/* Personalized Additional Notes */}
-        {personalizedResponse && (
+        {concernReflection ? (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+          />
+        ) : personalizedResponse && (
           <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
             <CardHeader>
               <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>

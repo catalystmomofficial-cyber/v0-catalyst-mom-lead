@@ -13,6 +13,8 @@ import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
+import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
+import { ConcernReflectionCard } from "@/components/concern-reflection"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -438,6 +440,7 @@ export default function TTCAssessment() {
     biggestObstacle: "", supportType: "", dietaryRestrictions: "", additionalNotes: "",
   })
   const [showResults, setShowResults] = useState(false)
+  const [concernReflection, setConcernReflection] = useState<ConcernReflectionResult | null>(null)
   const [score, setScore] = useState(0)
   const [scoreTier, setScoreTier] = useState<"low" | "medium" | "high">("low")
   const [isLoading, setIsLoading] = useState(false)
@@ -591,6 +594,14 @@ export default function TTCAssessment() {
       setScoreTier(tier)
       trackQuizEvents.quizCompleted(calculatedScore, tier)
 
+      const reflection = await generateConcernReflection({
+        concern: quizState.additionalNotes,
+        stage: "ttc",
+        primaryGoal: quizState.primaryGoal,
+        biggestObstacle: quizState.biggestObstacle,
+      }).catch(() => null)
+      setConcernReflection(reflection)
+
       const customProperties = {
         assessment_type: "TTC",
         score: calculatedScore,
@@ -608,6 +619,7 @@ export default function TTCAssessment() {
         smoking: quizState.smoking,
         support_type: quizState.supportType,
         concern: quizState.additionalNotes,
+        concern_reflection: reflection && !reflection.crisis ? reflection.reflection : undefined,
       }
 
       try {
@@ -678,7 +690,7 @@ export default function TTCAssessment() {
   }
 
   if (showResults) {
-    return <TTCResultsPage score={score} tier={scoreTier} quizState={quizState} />
+    return <TTCResultsPage score={score} tier={scoreTier} quizState={quizState} concernReflection={concernReflection} />
   }
 
   const question = questions[currentQuestion]
@@ -796,11 +808,12 @@ export default function TTCAssessment() {
 // ─── Results Page ─────────────────────────────────────────────────────────────
 
 function TTCResultsPage({
-  score, tier, quizState,
+  score, tier, quizState, concernReflection,
 }: {
   score: number
   tier: "low" | "medium" | "high"
   quizState: QuizState
+  concernReflection: ConcernReflectionResult | null
 }) {
   const breakdown = getDetailedBreakdown(quizState)
   const personalizedResponse = quizState.additionalNotes.trim()
@@ -980,7 +993,13 @@ function TTCResultsPage({
         </Card>
 
         {/* Personalized Section */}
-        {personalizedResponse && (
+        {concernReflection ? (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+          />
+        ) : personalizedResponse && (
           <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
             <CardHeader>
               <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>

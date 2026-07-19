@@ -13,6 +13,8 @@ import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
+import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
+import { ConcernReflectionCard } from "@/components/concern-reflection"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -693,6 +695,7 @@ export default function PostpartumAssessment() {
     birthExperience: "",
   })
   const [showResults, setShowResults] = useState(false)
+  const [concernReflection, setConcernReflection] = useState<ConcernReflectionResult | null>(null)
   const [score, setScore] = useState(0)
   const [scoreTier, setScoreTier] = useState<"low" | "medium" | "high">("low")
   const [isLoading, setIsLoading] = useState(false)
@@ -896,6 +899,14 @@ export default function PostpartumAssessment() {
 
         trackQuizEvents.quizCompleted(calculatedScore, tier)
 
+        const reflection = await generateConcernReflection({
+          concern: quizState.additionalNotes,
+          stage: "postpartum",
+          primaryGoal: quizState.primaryGoal,
+          biggestObstacle: quizState.biggestObstacle,
+        }).catch(() => null)
+        setConcernReflection(reflection)
+
         const customProperties = {
           assessment_type: "Postpartum",
           score: calculatedScore,
@@ -911,6 +922,7 @@ export default function PostpartumAssessment() {
           biggest_obstacle: quizState.biggestObstacle,
           support_type: quizState.supportType,
           birth_experience: quizState.birthExperience,
+          concern_reflection: reflection && !reflection.crisis ? reflection.reflection : undefined,
           concern: quizState.additionalNotes,
           results_url: `https://catalystmomofficial.com/dashboard`,
         }
@@ -1144,7 +1156,7 @@ export default function PostpartumAssessment() {
   }
 
   if (showResults) {
-    return <ResultsPage score={score} tier={tier} quizState={quizState} />
+    return <ResultsPage score={score} tier={tier} quizState={quizState} concernReflection={concernReflection} />
   }
 
   // ── Quiz UI ───────────────────────────────────────────────────────────────
@@ -1316,10 +1328,12 @@ function ResultsPage({
   score,
   tier,
   quizState,
+  concernReflection,
 }: {
   score: number
   tier: "low" | "medium" | "high"
   quizState: QuizState
+  concernReflection: ConcernReflectionResult | null
 }) {
   const displayName = sanitizeName(quizState.name)
 
@@ -1565,8 +1579,16 @@ function ResultsPage({
 
         <GoalActionPlan primaryGoal={quizState.primaryGoal} tier={tier} />
 
-        {personalizedResponse && (
-          <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
+        {concernReflection ? (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+          />
+        ) : (
+          personalizedResponse && (
+            <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
+          )
         )}
 
         {tier === "high" && <HighScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
