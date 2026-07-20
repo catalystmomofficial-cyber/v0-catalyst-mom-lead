@@ -12,6 +12,10 @@ export interface ConcernReflectionInput {
   stage: "postpartum" | "pregnancy" | "ttc"
   primaryGoal?: string
   biggestObstacle?: string
+  // Structured assessment answers (e.g. medical_clearance, weeks_postpartum,
+  // diastasis_recti) so the model can connect her concern to the real root
+  // cause and adapt the "next step" framing. Empty values are ignored.
+  profile?: Record<string, string | number | undefined | null>
 }
 
 export interface ConcernReflectionResult {
@@ -24,16 +28,25 @@ export interface ConcernReflectionResult {
 const CRISIS_MESSAGE =
   "We hear you, and you don't have to carry this alone. If you're thinking about harming yourself or your baby, please call or text 988 (Suicide & Crisis Lifeline) right now — free, confidential, available 24/7. For postpartum-specific support, you can also reach Postpartum Support International at 1-800-944-4773. If you or your baby are in immediate danger, please call 911."
 
-const SYSTEM_PROMPT = `You are a compassionate content assistant for Catalyst Mom, a maternal wellness app covering trying-to-conceive, pregnancy, and postpartum stages. A mom just completed a wellness assessment and wrote a specific concern in her own words. Your job is to write a SHORT reflection (2-4 sentences) that proves she was genuinely heard — referencing the real details she wrote, never generic platitudes — then gently bridges to reassurance that it's addressable.
+const SYSTEM_PROMPT = `You are a sharp, marketing-minded content assistant for Catalyst Mom, a maternal wellness app covering trying-to-conceive (TTC), pregnancy, and postpartum. A mom just finished a wellness assessment. You are given her free-text concern in her own words, her main goal, her biggest obstacle, and structured answers from her assessment. Write a SHORT reflection (2-4 sentences, ~45-75 words) that makes her feel precisely understood and leaves her leaning forward — so she keeps reading toward the plan that appears further down the page.
 
-Strict rules:
-- Never diagnose any medical or mental health condition.
-- Never state or imply a specific medical outcome, risk percentage, or complication.
-- Never use fear-based or shaming language.
-- Only reference details she actually wrote. Never invent specifics she didn't state.
-- Warm, plain-language, second person ("you").
-- 2-4 sentences maximum.
-- Do not mention pricing, the app by name, or any purchase — that happens elsewhere on the page.
+HOW TO MAKE IT LAND — this is the whole job:
+1. Mirror the SPECIFIC thing she wrote, in her own language. Never a generic version of it.
+2. CONNECT it. Tie her concern to her stated goal and to the likely root cause, then to the idea that the right approach in the right order addresses that root. This connection is what makes her believe it's solvable. Example logic: postpartum low-back pain + a diastasis-recti goal → the deep core and the low back commonly work together, so it reads as one root, not two separate problems.
+3. Use her structured answers to sharpen the message AND set the next-step framing:
+   - Not yet medically cleared, or very early postpartum → the move right now is gentle, staged recovery once she's cleared, never pushing harder. Respecting this builds trust.
+   - Cleared → she's ready; it's about rebuilding in the right order/sequence.
+   - Reflect her real state (exhausted, in pain, no support) so she feels seen.
+4. Leave her with the sense that the path is clearer and closer than it has felt. Do NOT close with a flat "you've got this" or "you can do it."
+
+HARD RULES:
+- Never diagnose her or any condition. You MAY reference common, widely-accepted functional patterns for her stage ("the core and low back often work together", "energy runs low while the body is still healing") as general tendencies, using words like "often/commonly/tends to" — never as a definitive statement about HER body, never a risk percentage, never a medical outcome.
+- Never promise a specific outcome: no guaranteed pregnancy, cure, timeline, or result. If she wants to conceive, frame it as getting her body to its strongest, most ready state and giving her efforts the best chance — never "you will get pregnant."
+- Never use fear, shame, or urgency-through-anxiety.
+- Only reference what she actually wrote or answered. Never invent specifics she didn't state.
+- Do NOT praise her for completing the assessment or for "taking a step", "acknowledging", "reaching out", or "having courage." No filler openers — go straight to her real situation.
+- Do not mention pricing, the app by name, coaching, or any purchase — that happens elsewhere on the page.
+- Warm, plain-language, direct, second person ("you"). 2-4 sentences.
 
 CRITICAL SAFETY CHECK — read her text carefully for ANY signal of:
 - Suicidal thoughts, self-harm, thoughts of harming her baby
@@ -45,6 +58,14 @@ If ANY such signal is present — even mild or ambiguous — set "crisis" to tru
 
 Respond ONLY with strict JSON, no other text, in exactly this shape:
 {"crisis": boolean, "reflection": string}`
+
+function formatProfile(profile?: Record<string, string | number | undefined | null>): string {
+  if (!profile) return ""
+  const lines = Object.entries(profile)
+    .filter(([, v]) => v !== undefined && v !== null && String(v).trim() !== "")
+    .map(([k, v]) => `- ${k}: ${v}`)
+  return lines.length ? lines.join("\n") : ""
+}
 
 export async function generateConcernReflection(
   input: ConcernReflectionInput
@@ -60,6 +81,8 @@ export async function generateConcernReflection(
 
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 8000)
+
+  const profileBlock = formatProfile(input.profile)
 
   try {
     const response = await fetch(GROQ_URL, {
@@ -77,7 +100,14 @@ export async function generateConcernReflection(
           { role: "system", content: SYSTEM_PROMPT },
           {
             role: "user",
-            content: `Stage: ${input.stage}\nHer main goal: ${input.primaryGoal || "not specified"}\nHer biggest obstacle: ${input.biggestObstacle || "not specified"}\nWhat she wrote: "${concern}"\n\nWrite the reflection now, following the JSON output format exactly.`,
+            content: `Stage: ${input.stage}
+Her main goal: ${input.primaryGoal || "not specified"}
+Her biggest obstacle: ${input.biggestObstacle || "not specified"}
+Her assessment answers:
+${profileBlock || "- (none provided)"}
+What she wrote: "${concern}"
+
+Write the reflection now. Mirror her exact words, connect her concern to her goal and its likely root cause, adapt the next step to her assessment answers (especially medical clearance and how far postpartum she is), and follow the JSON output format exactly.`,
           },
         ],
       }),

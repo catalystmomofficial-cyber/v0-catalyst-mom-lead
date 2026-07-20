@@ -717,6 +717,16 @@ export default function PregnancyAssessment() {
         stage: "pregnancy",
         primaryGoal: quizState.primaryGoal,
         biggestObstacle: quizState.biggestObstacle,
+        profile: {
+          trimester: quizState.trimester,
+          weeks_pregnant: quizState.weeksPregnant,
+          exercise_safety: quizState.exerciseSafety,
+          pelvic_floor: quizState.pelvicFloor,
+          prenatal_care: quizState.prenatalCare,
+          stress: quizState.stress,
+          sleep: quizState.sleep,
+          support: quizState.supportType,
+        },
       }).catch(() => null)
       setConcernReflection(reflection)
 

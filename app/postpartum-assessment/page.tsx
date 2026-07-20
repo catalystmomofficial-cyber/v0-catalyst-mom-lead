@@ -904,6 +904,16 @@ export default function PostpartumAssessment() {
           stage: "postpartum",
           primaryGoal: quizState.primaryGoal,
           biggestObstacle: quizState.biggestObstacle,
+          profile: {
+            weeks_postpartum: quizState.weeksPostpartum,
+            medical_clearance: quizState.medicalClearance,
+            diastasis_recti: quizState.diastasisRecti,
+            core_pelvic_floor: quizState.coreSafeExercises,
+            movement: quizState.workoutRoutine,
+            energy_recovery: quizState.rest,
+            birth_experience: quizState.birthExperience,
+            support: quizState.supportType,
+          },
         }).catch(() => null)
         setConcernReflection(reflection)
 

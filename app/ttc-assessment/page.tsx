@@ -602,6 +602,15 @@ export default function TTCAssessment() {
         stage: "ttc",
         primaryGoal: quizState.primaryGoal,
         biggestObstacle: quizState.biggestObstacle,
+        profile: {
+          ttc_duration: quizState.ttcDuration,
+          cycle_tracking: quizState.cycleTracking,
+          ovulation_awareness: quizState.ovulationAwareness,
+          fertility_nutrition: quizState.fertilityNutrition,
+          stress: quizState.stress,
+          sleep: quizState.sleep,
+          support: quizState.supportType,
+        },
       }).catch(() => null)
       setConcernReflection(reflection)
 
