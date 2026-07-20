@@ -580,6 +580,11 @@ export default function PregnancyAssessment() {
       ],
     },
     {
+      id: "weeks-pregnant", title: "How many weeks pregnant are you?",
+      subtitle: "This pinpoints your timeline and how long you have to prepare",
+      type: "number", field: "weeksPregnant", placeholder: "e.g. 24",
+    },
+    {
       id: "prenatal-care", title: "Are you receiving regular prenatal care?",
       subtitle: "Medical supervision is critical during pregnancy",
       type: "radio", field: "prenatalCare",
@@ -873,6 +878,18 @@ export default function PregnancyAssessment() {
             {question.type === "email" && (
               <input
                 type="email"
+                value={quizState[question.field as keyof QuizState]}
+                onChange={(e) => handleInputChange(question.field as keyof QuizState, e.target.value)}
+                placeholder={(question as any).placeholder}
+                className="w-full p-4 border-2 border-amber-200 rounded-lg focus:border-amber-400 focus:outline-none text-lg"
+              />
+            )}
+            {question.type === "number" && (
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={40}
                 value={quizState[question.field as keyof QuizState]}
                 onChange={(e) => handleInputChange(question.field as keyof QuizState, e.target.value)}
                 placeholder={(question as any).placeholder}
