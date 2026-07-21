@@ -1506,7 +1506,7 @@ function ResultsPage({
             </p>
 
             <ObstacleAnswer obstacle={quizState.biggestObstacle} />
-            <PricingSection quizState={quizState} score={score} tier={tier} />
+            <PricingSection quizState={quizState} score={score} tier={tier} condensed />
           </CardContent>
         </Card>
 
@@ -1866,7 +1866,7 @@ function HighScorerContent({
           )}
 
           {/* CTA */}
-          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
+          <PricingSection quizState={quizState} score={score} tier={tier} />
         </CardContent>
       </Card>
     </>
@@ -2301,7 +2301,7 @@ function MediumScorerContent({
             title="What Moms Who Started Where You Are Say:"
           />
 
-          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
+          <PricingSection quizState={quizState} score={score} tier={tier} />
         </CardContent>
       </Card>
     </>
@@ -2553,7 +2553,7 @@ function LowScorerContent({
             title="💬 What Moms Who Started Where You Are Say:"
           />
 
-          <PricingSection quizState={quizState} score={score} tier={tier} condensed />
+          <PricingSection quizState={quizState} score={score} tier={tier} />
         </CardContent>
       </Card>
     </>
