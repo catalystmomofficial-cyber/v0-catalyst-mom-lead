@@ -11,7 +11,8 @@ export default function StageRouter() {
       id: "ttc",
       title: "Trying to Conceive",
       emoji: "🤰",
-      description: "Optimize your fertility and prepare your body for conception",
+      description:
+        "Stop another month of guessing from becoming another month of not knowing what your body's doing. See what it's actually telling you.",
       href: "/ttc-assessment",
       color: "#A15C2F",
     },
@@ -19,7 +20,8 @@ export default function StageRouter() {
       id: "pregnancy",
       title: "I'm Pregnant",
       emoji: "👶",
-      description: "Prepare for a safe, comfortable birth and healthy pregnancy",
+      description:
+        "Walk into labor prepared — not just hoping it goes okay, then recovering the hard way. See how ready your body really is.",
       href: "/pregnancy-assessment",
       color: "#A15C2F",
     },
@@ -27,7 +29,8 @@ export default function StageRouter() {
       id: "postpartum",
       title: "I'm Postpartum",
       emoji: "💪",
-      description: "Recover, heal your core, and reclaim your strength & energy",
+      description:
+        "Before the leaking, the back pain, and 'my body doesn't feel like mine' become permanent — find out where you stand and the way back.",
       href: "/postpartum-assessment",
       color: "#A15C2F",
     },
