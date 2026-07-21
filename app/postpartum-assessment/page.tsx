@@ -15,6 +15,7 @@ import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } f
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
+import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 const supabase = createClient()
 interface QuizState {
   name: string
@@ -1341,6 +1342,15 @@ function ResultsPage({
     return "#81C784"
   }
 
+  // Tier-aware gauge colors — the arc color must still tell the truth
+  // (green = thriving, amber = building, warm red = foundations to build).
+  const getTierGauge = () => {
+    if (score <= 40) return { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
+    if (score <= 70) return { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
+    return { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
+  }
+  const gauge = getTierGauge()
+
   const getTierLabel = () => {
     if (score <= 40) return `${displayName}, you're in the Early Foundations Stage`
     if (score <= 70) return `${displayName}, you're in the Building Momentum Stage`
@@ -1382,28 +1392,20 @@ function ResultsPage({
               🎉 Your Postpartum Wellness Score
             </h1>
             <div className="mb-4">
-              <div
-                className="w-40 h-40 rounded-full mx-auto flex flex-col items-center justify-center mb-4 shadow-lg"
-                style={{ backgroundColor: getTierColor() }}
-              >
-                <span className="text-6xl font-bold text-white">{score}</span>
-                <span className="text-sm text-white opacity-90">/100</span>
-              </div>
+              <AnimatedScoreGauge
+                value={score}
+                fromColor={gauge.from}
+                toColor={gauge.to}
+                captionColor="#8A7060"
+                size={260}
+                className="mb-4"
+              />
               <Badge
-                className="text-base px-4 py-2 mb-4 whitespace-normal text-center break-words max-w-full inline-block"
+                className="text-base px-4 py-2 mb-2 whitespace-normal text-center break-words max-w-full inline-block"
                 style={{ backgroundColor: getTierColor(), color: "white" }}
               >
                 {getTierLabel()}
               </Badge>
-            </div>
-
-            <div className="w-full max-w-sm mx-auto mb-4 px-2">
-              <div className="w-full h-3 rounded-full overflow-hidden" style={{ backgroundColor: "#E8D5C4" }}>
-                <div
-                  className="h-3 rounded-full transition-all duration-500"
-                  style={{ backgroundColor: getTierColor(), width: `${score}%` }}
-                />
-              </div>
             </div>
 
             {tier === "high" && (
