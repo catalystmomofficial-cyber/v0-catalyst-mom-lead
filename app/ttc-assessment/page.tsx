@@ -909,7 +909,7 @@ function TTCResultsPage({
                   Your personalised fertility plan is {pctDone}% built.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Complete your setup inside the app to unlock the full protocol.
+                  The locked steps are where the momentum is — cycle clarity, timing, the fundamentals that compound. Every cycle spent guessing is one that can't stack in your favor.
                 </p>
               </div>
             </div>

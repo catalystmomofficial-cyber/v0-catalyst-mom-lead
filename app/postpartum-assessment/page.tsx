@@ -1467,7 +1467,7 @@ function ResultsPage({
                   Your 8-week recovery protocol is {pctDone}% built.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Complete your setup inside the app to unlock the full plan.
+                  The locked steps are the real work — core reconnection, pelvic floor retraining. Every week you wait, the compensation patterns dig in a little deeper.
                 </p>
               </div>
             </div>

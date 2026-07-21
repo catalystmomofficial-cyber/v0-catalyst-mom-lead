@@ -59,6 +59,20 @@ If ANY such signal is present — even mild or ambiguous — set "crisis" to tru
 Respond ONLY with strict JSON, no other text, in exactly this shape:
 {"crisis": boolean, "reflection": string}`
 
+// Some moms type a non-answer in the free-text box ("No", "n/a", "nothing",
+// ".") meaning "nothing to add". Treat those exactly like a blank box so the
+// reflection never awkwardly quotes them back ("You've said 'No'…").
+const NON_ANSWERS = new Set([
+  "no", "n", "na", "n a", "none", "nothing", "nope", "nil", "nada", "nah",
+  "not really", "no thanks", "no thank you", "idk", "i don t know",
+  "not sure", "nothing else", "no comment", "all good",
+])
+
+function isNonAnswer(raw: string): boolean {
+  const s = raw.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()
+  return s === "" || NON_ANSWERS.has(s)
+}
+
 function formatProfile(profile?: Record<string, string | number | undefined | null>): string {
   if (!profile) return ""
   const lines = Object.entries(profile)
@@ -71,7 +85,7 @@ export async function generateConcernReflection(
   input: ConcernReflectionInput
 ): Promise<ConcernReflectionResult | null> {
   const concern = input.concern?.trim()
-  if (!concern) return null
+  if (!concern || isNonAnswer(concern)) return null
 
   const apiKey = process.env.GROQ_API_KEY
   if (!apiKey) {

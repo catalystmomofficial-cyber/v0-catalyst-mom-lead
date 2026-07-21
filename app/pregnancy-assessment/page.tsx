@@ -1018,7 +1018,7 @@ function PregnancyResultsPage({
                   Your personalised pregnancy plan is {pctDone}% built.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                  Complete your setup inside the app to unlock the full protocol.
+                  The locked steps are the part that actually prepares your body — the breath, the positioning, the pelvic floor work. Every week of your prep window counts.
                 </p>
               </div>
             </div>
