@@ -4,8 +4,10 @@ import { useEffect, useId, useState } from "react"
 import { cn } from "@/lib/utils"
 
 interface AnimatedScoreGaugeProps {
-  /** Score 0–100. Drives both the arc fill and the count-up number. */
+  /** Score value. Drives both the arc fill and the count-up number. */
   value?: number
+  /** Top of the scale (e.g. 100, or 110 for TTC). Arc fills to value/max. */
+  max?: number
   /** Deep end of the arc gradient + number color (tier color). */
   toColor?: string
   /** Light end of the arc gradient. Defaults to toColor. */
@@ -25,6 +27,7 @@ interface AnimatedScoreGaugeProps {
 // snaps straight to the value when the viewer prefers reduced motion.
 export function AnimatedScoreGauge({
   value = 0,
+  max = 100,
   toColor = "#A15C2F",
   fromColor,
   captionColor = "#8A7060",
@@ -42,7 +45,7 @@ export function AnimatedScoreGauge({
   const circumference = Math.PI * radius
   const height = size * 0.64
 
-  const clamped = Math.max(0, Math.min(100, value))
+  const clamped = Math.max(0, Math.min(max, value))
   const [current, setCurrent] = useState(0)
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export function AnimatedScoreGauge({
     return () => cancelAnimationFrame(raf)
   }, [clamped, durationMs])
 
-  const offset = circumference * (1 - current / 100)
+  const offset = circumference * (1 - current / max)
   const arcPath = `M ${center - radius} ${center} A ${radius} ${radius} 0 0 1 ${center + radius} ${center}`
 
   return (
@@ -122,7 +125,7 @@ export function AnimatedScoreGauge({
           {Math.round(current)}
         </span>
         <span className="font-semibold leading-none mt-1" style={{ fontSize: size * 0.06, color: captionColor }}>
-          / 100
+          / {max}
         </span>
       </div>
     </div>

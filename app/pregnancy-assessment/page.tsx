@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 const supabase = createClient()
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -961,6 +962,10 @@ function PregnancyResultsPage({
   const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
   const getTierLabel = () =>
     score <= 40 ? "Early Foundations Stage" : score <= 70 ? "Building Momentum Stage" : "Thriving & Ready Stage"
+  const gauge =
+    score <= 40 ? { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
+    : score <= 70 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
+    : { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
 
   const pregnancyProtocolSteps = [
     { label: "Prenatal Nutrition Foundation", done: true },
@@ -987,12 +992,15 @@ function PregnancyResultsPage({
         <Card className="border-0 shadow-xl mb-6">
           <CardContent className="p-8 text-center">
             <div className="mb-4">
-              <div
-                className="w-32 h-32 rounded-full mx-auto flex items-center justify-center mb-4"
-                style={{ backgroundColor: getTierColor() }}
-              >
-                <span className="text-5xl font-bold text-white">{score}</span>
-              </div>
+              <AnimatedScoreGauge
+                value={score}
+                max={100}
+                fromColor={gauge.from}
+                toColor={gauge.to}
+                captionColor="#8A7060"
+                size={260}
+                className="mb-4"
+              />
               <h1 className="text-3xl font-bold mb-2" style={{ color: "#3A2412" }}>
                 Your Pregnancy Wellness Score
               </h1>
