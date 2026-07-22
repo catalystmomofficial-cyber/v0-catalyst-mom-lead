@@ -1288,7 +1288,7 @@ function PregnancyResultsPage({
                     ? "Get pregnancy-safe workouts, meal plans, symptom management protocols, labor prep, and community support — all in one app."
                     : "A step-by-step pregnancy wellness system designed for moms who want clear guidance without the overwhelm."
               }
-              buttonLabel={tier === "high" ? "Book Your VIP Strategy Call" : "Claim My Founding Seat"}
+              buttonLabel={tier === "high" ? "Book Your 1:1 Strategy Call" : "Start My Pregnancy Wellness Plan"}
               footnote={
                 tier === "high"
                   ? "Ongoing coaching tier: $129/month • Charter Founder seats lock the same 1:1 at $29/month for life (only 100)"

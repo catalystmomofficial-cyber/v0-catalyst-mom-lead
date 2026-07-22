@@ -174,7 +174,7 @@ function PricingSection({
     if (quizState.primaryGoal === "weight-loss") return "Start Reclaiming My Energy Today"
     if (quizState.primaryGoal === "strength") return "Start Rebuilding My Strength Today"
     if (quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "not-yet") return "Start My Gentle Healing Protocol"
-    return "Claim My Founding Seat"
+    return "Start My Recovery Plan"
   }
 
   const stackItems: StackItem[] = [

@@ -1162,7 +1162,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Claim My Founding Seat"
+              label="Start My Fertility Plan"
             />
             <Guarantee>
               Follow your fertility protocol for 30 days. If you don&apos;t feel more in control of your cycle and your body,
@@ -1199,7 +1199,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Claim My Founding Seat"
+              label="Start My Fertility Plan"
             />
             <div className="mt-6 p-4 bg-amber-50 rounded-lg">
               <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>Questions?</p>
