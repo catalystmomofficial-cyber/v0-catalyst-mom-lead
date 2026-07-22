@@ -451,7 +451,7 @@ function PricingCTA({
       <Button
         size="lg"
         onClick={handleClick}
-        className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+        className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto text-center"
         style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
       >
         {buttonLabel}
