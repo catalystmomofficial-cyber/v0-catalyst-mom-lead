@@ -72,6 +72,9 @@ export function ValueStack({
           {price}
         </span>
       </div>
+      <p className="mt-3 text-xs text-center leading-snug" style={{ color: "#8A7060" }}>
+        One subscription — instead of separate apps for tracking, workouts, meal plans, and recovery. It all lives in one place.
+      </p>
     </div>
   )
 }
