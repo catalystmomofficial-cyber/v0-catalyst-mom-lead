@@ -36,6 +36,8 @@ function buildSignupUrl(quizState: QuizState, score: number, tier: string): stri
   if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
   const concern = quizState.additionalNotes?.trim()
   if (concern) url.searchParams.set("concern", concern.slice(0, 250))
+  const reflectionText = typeof window !== "undefined" ? sessionStorage.getItem("postpartum_concern_reflection") : null
+  if (reflectionText) url.searchParams.set("reflection", reflectionText.slice(0, 700))
   return url.toString()
 }
 interface QuizState {
@@ -929,6 +931,11 @@ export default function PostpartumAssessment() {
           },
         }).catch(() => null)
         setConcernReflection(reflection)
+        // Hand the reflection to the signup URL builder without needing any
+        // funnel-side database column — same transport as assessment_id.
+        if (reflection && !reflection.crisis && reflection.reflection) {
+          sessionStorage.setItem("postpartum_concern_reflection", reflection.reflection)
+        }
 
         const customProperties = {
           assessment_type: "Postpartum",
@@ -970,7 +977,6 @@ export default function PostpartumAssessment() {
             score: calculatedScore,
             tier,
             user_concern: quizState.additionalNotes || null,
-            concern_reflection: reflection && !reflection.crisis ? reflection.reflection : null,
           })
           .select()
 

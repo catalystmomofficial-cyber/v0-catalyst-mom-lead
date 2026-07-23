@@ -371,6 +371,8 @@ function buildSignupUrl(quizState: QuizState, score: number, tier: string): stri
   if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
   const concern = quizState.additionalNotes?.trim()
   if (concern) url.searchParams.set("concern", concern.slice(0, 250))
+  const reflectionText = typeof window !== "undefined" ? sessionStorage.getItem("ttc_concern_reflection") : null
+  if (reflectionText) url.searchParams.set("reflection", reflectionText.slice(0, 700))
   return url.toString()
 }
 
@@ -624,6 +626,11 @@ export default function TTCAssessment() {
         },
       }).catch(() => null)
       setConcernReflection(reflection)
+      // Hand the reflection to the signup URL builder without needing any
+      // funnel-side database column — same transport as assessment_id.
+      if (reflection && !reflection.crisis && reflection.reflection) {
+        sessionStorage.setItem("ttc_concern_reflection", reflection.reflection)
+      }
 
       const customProperties = {
         assessment_type: "TTC",
@@ -671,7 +678,6 @@ export default function TTCAssessment() {
           dietary_restrictions: quizState.dietaryRestrictions || null,
           additional_notes: quizState.additionalNotes || null,
           score: calculatedScore,
-          concern_reflection: reflection && !reflection.crisis ? reflection.reflection : null,
         })
         .select()
 

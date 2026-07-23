@@ -399,6 +399,8 @@ function buildSignupUrl(quizState: QuizState, score: number, tier: string): stri
   if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
   const concern = quizState.additionalNotes?.trim()
   if (concern) url.searchParams.set("concern", concern.slice(0, 250))
+  const reflectionText = typeof window !== "undefined" ? sessionStorage.getItem("pregnancy_concern_reflection") : null
+  if (reflectionText) url.searchParams.set("reflection", reflectionText.slice(0, 700))
   return url.toString()
 }
 
@@ -747,6 +749,11 @@ export default function PregnancyAssessment() {
         },
       }).catch(() => null)
       setConcernReflection(reflection)
+      // Hand the reflection to the signup URL builder without needing any
+      // funnel-side database column — same transport as assessment_id.
+      if (reflection && !reflection.crisis && reflection.reflection) {
+        sessionStorage.setItem("pregnancy_concern_reflection", reflection.reflection)
+      }
 
       const weeksPregnantNum = Number.parseInt(quizState.weeksPregnant) || 0
       const weeksUntilBirth = Math.max(0, 40 - weeksPregnantNum)
@@ -791,8 +798,6 @@ export default function PregnancyAssessment() {
           email: quizState.email,
           trimester: quizState.trimester || null,
           weeks_pregnant: weeksPregnantNum ? String(weeksPregnantNum) : null,
-          user_concern: quizState.additionalNotes || null,
-          concern_reflection: reflection && !reflection.crisis ? reflection.reflection : null,
           // integer sub-score columns omitted — they expect numeric scores
           // which require a separate mapping from answer values
         })
