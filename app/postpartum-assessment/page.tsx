@@ -239,8 +239,8 @@ function PricingSection({
         Feel more connected to your core in just 7 days. Cancel anytime. No contracts. Protocol requires only 15 mins/day.
       </p>
       <Guarantee>
-        Do your 15-minute daily protocol for 30 days. If your core doesn&apos;t feel measurably stronger, email us and
-        we&apos;ll refund every penny — and you keep the roadmap. All the risk is on us, not you.
+        Do your 15-minute daily protocol for 30 days. If you&apos;ve put in the work and your core honestly doesn&apos;t
+        feel measurably stronger, email us and we&apos;ll refund your payment. We only ask that you gave it a real try.
       </Guarantee>
     </div>
   )
@@ -1828,7 +1828,7 @@ function HighScorerContent({
             </div>
             <Guarantee>
               Show up for your calls and do the work for 30 days. If you don&apos;t feel real, measurable progress in your
-              recovery, we&apos;ll refund your first month in full. Your coach is committed to your result — so we carry the risk.
+              recovery, we&apos;ll refund your first month in full. Your coach is committed to your result, so we carry the risk.
             </Guarantee>
           </div>
 

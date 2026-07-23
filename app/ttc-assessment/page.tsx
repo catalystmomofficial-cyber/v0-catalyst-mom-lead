@@ -1182,8 +1182,8 @@ function TTCResultsPage({
               label="Start My Fertility Plan"
             />
             <Guarantee>
-              Follow your fertility protocol for 30 days. If you don&apos;t feel more in control of your cycle and your body,
-              email us and we&apos;ll refund every penny — and you keep the roadmap.
+              Follow your fertility protocol for 30 days. If you&apos;ve followed it and honestly don&apos;t feel more in
+              control of your cycle and your body, email us and we&apos;ll refund your payment. We only ask that you gave it a real try.
             </Guarantee>
           </CardContent>
         </Card>

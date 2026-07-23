@@ -475,8 +475,8 @@ function PricingCTA({
       </p>
       <Guarantee>
         {isVip
-          ? "Show up for your calls and do the work for 30 days. If you don't feel real, measurable progress, we'll refund your first month in full — your coach carries the risk, not you."
-          : "Follow your protocol for 30 days. If you don't feel more prepared, more comfortable, and more in control of your pregnancy, email us and we'll refund every penny — and you keep the roadmap."}
+          ? "Show up for your calls and do the work for 30 days. If you don't feel real, measurable progress, we'll refund your first month in full. Your coach carries the risk, not you."
+          : "Follow your protocol for 30 days. If you've followed it and honestly don't feel more prepared, more comfortable, and more in control of your pregnancy, email us and we'll refund your payment. We only ask that you gave it a real try."}
       </Guarantee>
     </div>
   )
