@@ -1069,6 +1069,7 @@ function PregnancyResultsPage({
               subheading=""
               buttonLabel="Start My Pregnancy Wellness Plan"
               footnote="Feel better in your body in just 7 days. Cancel anytime. No contracts."
+              condensed
             />
           </CardContent>
         </Card>
@@ -1295,7 +1296,7 @@ function PregnancyResultsPage({
                   : "$29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts"
               }
               isVip={tier === "high"}
-              condensed={tier !== "high"}
+              condensed={false}
             />
           </CardContent>
         </Card>
