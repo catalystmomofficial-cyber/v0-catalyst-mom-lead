@@ -16,6 +16,7 @@ import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/a
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
+import { StickyCta } from "@/components/sticky-cta"
 const supabase = createClient()
 // Note: Google Analytics (G-24S9C7GFLK) is injected via layout.tsx with cookie-consent gating.
 // No inline GA code is needed in this file.
@@ -353,23 +354,32 @@ function AppFeatureGrid() {
 
 // ─── Shared UI: Pricing CTA ───────────────────────────────────────────────────
 
+// Single source of truth for the signup handoff URL — every CTA (offer,
+// sticky bar, final ask) carries the same payload, including assessment_id
+// so the app can personalize her dashboard and wellness coach.
+function buildSignupUrl(quizState: QuizState, score: number, tier: string): string {
+  const url = new URL("https://catalystmomofficial.com/signup")
+  url.searchParams.set("name", quizState.name)
+  url.searchParams.set("email", quizState.email)
+  url.searchParams.set("score", score.toString())
+  url.searchParams.set("tier", tier)
+  url.searchParams.set("stage", "ttc")
+  url.searchParams.set("primary_goal", quizState.primaryGoal)
+  url.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+  url.searchParams.set("birth_experience", "")
+  const assessmentId = typeof window !== "undefined" ? sessionStorage.getItem("ttc_assessment_id") : null
+  if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
+  const concern = quizState.additionalNotes?.trim()
+  if (concern) url.searchParams.set("concern", concern.slice(0, 250))
+  return url.toString()
+}
+
 function PricingCTA({
   quizState, score, tier, label,
 }: {
   quizState: QuizState; score: number; tier: string; label: string
 }) {
-  const getUrl = () => {
-    const url = new URL("https://catalystmomofficial.com/signup")
-    url.searchParams.set("name", quizState.name)
-    url.searchParams.set("email", quizState.email)
-    url.searchParams.set("score", score.toString())
-    url.searchParams.set("tier", tier)
-    url.searchParams.set("stage", "ttc")
-    url.searchParams.set("primary_goal", quizState.primaryGoal)
-    url.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-    url.searchParams.set("birth_experience", "")
-    return url.toString()
-  }
+  const getUrl = () => buildSignupUrl(quizState, score, tier)
 
   return (
     <div className="text-center">
@@ -661,6 +671,7 @@ export default function TTCAssessment() {
           dietary_restrictions: quizState.dietaryRestrictions || null,
           additional_notes: quizState.additionalNotes || null,
           score: calculatedScore,
+          concern_reflection: reflection && !reflection.crisis ? reflection.reflection : null,
         })
         .select()
 
@@ -1209,6 +1220,26 @@ function TTCResultsPage({
         </Card>
 
         <FounderNote stage="ttc" />
+
+        {/* Final ask — the page should end with a door, not a story */}
+        <div className="text-center mt-8 mb-24 md:mb-8">
+          <Button
+            size="lg"
+            onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
+            className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
+            style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
+          >
+            Start My Fertility Plan
+          </Button>
+          <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
+            $29/month founding seat · 30-day guarantee · cancel anytime
+          </p>
+        </div>
+
+        <StickyCta
+          href={buildSignupUrl(quizState, score, tier)}
+          label="Start My Fertility Plan"
+        />
       </div>
     </div>
   )

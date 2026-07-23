@@ -16,7 +16,28 @@ import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/a
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
+import { StickyCta } from "@/components/sticky-cta"
 const supabase = createClient()
+
+// Single source of truth for the signup handoff URL, so every CTA on this
+// page (offer button, sticky bar, final ask) carries the same payload —
+// including the assessment_id link that personalizes her app experience.
+function buildSignupUrl(quizState: QuizState, score: number, tier: string): string {
+  const url = new URL("https://catalystmomofficial.com/signup")
+  url.searchParams.set("name", quizState.name)
+  url.searchParams.set("email", quizState.email)
+  url.searchParams.set("score", score.toString())
+  url.searchParams.set("tier", tier)
+  url.searchParams.set("stage", quizState.weeksPostpartum)
+  url.searchParams.set("primary_goal", quizState.primaryGoal)
+  url.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
+  url.searchParams.set("birth_experience", quizState.birthExperience || "")
+  const assessmentId = typeof window !== "undefined" ? sessionStorage.getItem("postpartum_assessment_id") : null
+  if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
+  const concern = quizState.additionalNotes?.trim()
+  if (concern) url.searchParams.set("concern", concern.slice(0, 250))
+  return url.toString()
+}
 interface QuizState {
   name: string
   email: string
@@ -188,16 +209,7 @@ function PricingSection({
   ]
 
   const goToSignup = () => {
-    const appUrl = new URL("https://catalystmomofficial.com/signup")
-    appUrl.searchParams.set("name", quizState.name)
-    appUrl.searchParams.set("email", quizState.email)
-    appUrl.searchParams.set("score", score.toString())
-    appUrl.searchParams.set("tier", tier)
-    appUrl.searchParams.set("stage", quizState.weeksPostpartum)
-    appUrl.searchParams.set("primary_goal", quizState.primaryGoal)
-    appUrl.searchParams.set("biggest_obstacle", quizState.biggestObstacle)
-    appUrl.searchParams.set("birth_experience", quizState.birthExperience || "")
-    window.location.href = appUrl.toString()
+    window.location.href = buildSignupUrl(quizState, score, tier)
   }
 
   return (
@@ -958,6 +970,7 @@ export default function PostpartumAssessment() {
             score: calculatedScore,
             tier,
             user_concern: quizState.additionalNotes || null,
+            concern_reflection: reflection && !reflection.crisis ? reflection.reflection : null,
           })
           .select()
 
@@ -1598,6 +1611,26 @@ function ResultsPage({
         {tier === "low" && <LowScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
 
         <FounderNote stage="postpartum" />
+
+        {/* Final ask — the page should end with a door, not a story */}
+        <div className="text-center mt-8 mb-24 md:mb-8">
+          <Button
+            size="lg"
+            onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
+            className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
+            style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
+          >
+            Start My Recovery Plan
+          </Button>
+          <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
+            $29/month founding seat · 30-day guarantee · cancel anytime
+          </p>
+        </div>
+
+        <StickyCta
+          href={buildSignupUrl(quizState, score, tier)}
+          label="Start My Recovery Plan"
+        />
       </div>
     </div>
   )
