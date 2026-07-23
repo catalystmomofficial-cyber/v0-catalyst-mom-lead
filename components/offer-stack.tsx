@@ -75,6 +75,14 @@ export function ValueStack({
       <p className="mt-3 text-xs text-center leading-snug" style={{ color: "#8A7060" }}>
         One subscription — instead of separate apps for tracking, workouts, meal plans, and recovery. It all lives in one place.
       </p>
+      <div className="mt-3 rounded-lg p-3 text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
+        <p className="text-sm font-semibold" style={{ color: "#A15C2F" }}>
+          🎁 Your welcome gift: 500 credits
+        </p>
+        <p className="text-xs mt-0.5" style={{ color: "#3A2412", opacity: 0.85 }}>
+          Added to your account the moment you join — put them straight toward any of our premium guides inside the app.
+        </p>
+      </div>
     </div>
   )
 }
