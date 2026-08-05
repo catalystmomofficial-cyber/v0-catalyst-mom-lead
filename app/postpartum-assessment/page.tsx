@@ -11,7 +11,7 @@ import { ArrowLeft, Heart, CheckCircle2, AlertCircle } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, FreeToStart, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
@@ -203,13 +203,13 @@ function PricingSection({
   }
 
   const stackItems: StackItem[] = [
-    { label: "2 private 1:1 Progression Syncs/month with your dedicated postpartum recovery coach", value: "$400/mo", hero: true },
-    { label: "Personalized 8-week core-healing protocol (built from your score)", value: "$297" },
-    { label: "24/7 AI recovery coach — answers any time of night", value: "$97/mo" },
-    { label: "Diastasis-safe workout library (no crunches, no planks)", value: "$149" },
-    { label: "Pelvic floor recovery track — stop the leaking", value: "$99" },
-    { label: "High-protein postpartum meal frameworks", value: "$79" },
-    { label: "Private mom community + weekly check-ins", value: "$30/mo" },
+    { label: "2 private 1:1 Progression Syncs/month with your dedicated postpartum recovery coach", hero: true },
+    { label: "Personalized 8-week core-healing protocol (built from your score)" },
+    { label: "24/7 AI recovery coach — answers any time of night" },
+    { label: "Diastasis-safe workout library (no crunches, no planks)" },
+    { label: "Pelvic floor recovery track — stop the leaking" },
+    { label: "High-protein postpartum meal frameworks" },
+    { label: "Private mom community + weekly check-ins" },
   ]
 
   const goToSignup = () => {
@@ -220,13 +220,13 @@ function PricingSection({
     <div className="text-center p-6 bg-white rounded-lg border-4 overflow-hidden" style={{ borderColor: "#A15C2F" }}>
       {!condensed && (
         <>
-          <CharterScarcity coachLabel="your dedicated postpartum recovery coach" tierPrice="$129/month" />
-          <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
+          <CharterScarcity coachLabel="your dedicated postpartum recovery coach" />
+          <ValueStack items={stackItems} />
         </>
       )}
       {condensed && (
         <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
-          Founding seat: $29/month — locked for life. Only 100 seats include the 1:1 coaching at this price.
+          Your account is free to create — the rest of your plan is already built and waiting in it.
         </p>
       )}
       <Button
@@ -238,12 +238,9 @@ function PricingSection({
         {getButtonLabel()}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        Feel more connected to your core in just 7 days. Cancel anytime. No contracts. Protocol requires only 15 mins/day.
+        Free to create · no card · your protocol needs only 15 mins/day.
       </p>
-      <Guarantee>
-        Do your 15-minute daily protocol for 30 days. If you&apos;ve put in the work and your core honestly doesn&apos;t
-        feel measurably stronger, email us and we&apos;ll refund your payment. We only ask that you gave it a real try.
-      </Guarantee>
+      <FreeToStart />
     </div>
   )
 }
@@ -1655,7 +1652,7 @@ function ResultsPage({
             Start My Recovery Plan
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            $29/month founding seat · 30-day guarantee · cancel anytime
+            Free to create · no card needed · takes about 30 seconds
           </p>
         </div>
 
@@ -1842,20 +1839,12 @@ function HighScorerContent({
               ))}
             </div>
             <div className="mt-6 p-4 bg-white rounded-lg text-center">
-              <p className="text-sm mb-1" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own.
-              </p>
-              <p className="text-2xl font-bold" style={{ color: "#A15C2F" }}>
-                Ongoing coaching tier: $129/month
-              </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Grab a Charter Founder seat now and you lock the same 1:1 coaching for just $29/month — for life. Only 100 seats.
+                Private 1-on-1 coaching, your protocol, and the whole recovery library live in one place — and your
+                Charter Founder place is held the moment your free account exists. Only the first 100.
               </p>
             </div>
-            <Guarantee>
-              Show up for your calls and do the work for 30 days. If you don&apos;t feel real, measurable progress in your
-              recovery, we&apos;ll refund your first month in full. Your coach is committed to your result, so we carry the risk.
-            </Guarantee>
+            <FreeToStart />
           </div>
 
           {/* Social Proof Stats */}
@@ -1884,7 +1873,7 @@ function HighScorerContent({
               ))}
             </div>
             <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-              Feel more connected to your core in just 7 days. Cancel anytime. No contracts.
+              Feel more connected to your core in just 7 days. Free to start — no card, no trial clock.
             </p>
           </div>
 
@@ -2244,11 +2233,11 @@ function MediumScorerContent({
             )}
 
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
-              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                $29/month
+              <p className="text-2xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                Free to start
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+                Create your account, open your protocol, and do day one. No card, no trial clock.
               </p>
               <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
                 Protocol requires only 15 mins/day
@@ -2278,7 +2267,7 @@ function MediumScorerContent({
         <CardContent className="space-y-6">
           <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#A15C2F" }}>
             <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-              What You Get for $29/month:
+              What&apos;s Waiting Inside Your Account:
             </h3>
             <div className="space-y-3">
               {[
@@ -2351,11 +2340,11 @@ function MediumScorerContent({
             )}
 
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
-              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                $29/month
+              <p className="text-2xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                Free to start
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than the cost of a single specialist consultation. Cancel anytime. No contracts.
+                Create your account, open your protocol, and do day one. No card, no trial clock.
               </p>
               <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
                 Protocol requires only 15 mins/day
@@ -2499,7 +2488,7 @@ function LowScorerContent({
         <CardContent className="space-y-6">
           <div className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#A15C2F" }}>
             <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-              What You Get for $29/month:
+              What&apos;s Waiting Inside Your Account:
             </h3>
             <div className="space-y-3">
               {[
@@ -2576,11 +2565,11 @@ function LowScorerContent({
             )}
 
             <div className="mt-6 text-center p-6 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg">
-              <p className="text-3xl font-bold mb-2" style={{ color: "#A15C2F" }}>
-                $29/month
+              <p className="text-2xl font-bold mb-2" style={{ color: "#A15C2F" }}>
+                Free to start
               </p>
               <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
-                Less than a single specialist visit. Cancel anytime. No contracts.
+                Create your account, open your protocol, and do day one. No card, no trial clock.
               </p>
               <p className="text-xs mt-2 font-medium" style={{ color: "#A15C2F" }}>
                 Protocol requires only 15 mins/day

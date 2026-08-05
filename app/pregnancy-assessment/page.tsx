@@ -11,7 +11,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, FreeToStart, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
@@ -432,13 +432,13 @@ function PricingCTA({
   }
 
   const stackItems: StackItem[] = [
-    { label: "2 private 1:1 Progression Syncs/month with your dedicated pregnancy & birth-prep coach", value: "$400/mo", hero: true },
-    { label: "Personalized birth-prep & pregnancy wellness protocol", value: "$297" },
-    { label: "24/7 AI pregnancy coach — answers any time of night", value: "$97/mo" },
-    { label: "Trimester-safe workout & mobility library", value: "$149" },
-    { label: "Birth-prep breathing & positioning protocols (for an easier labor)", value: "$99" },
-    { label: "Pregnancy nutrition frameworks", value: "$79" },
-    { label: "Private mom community + weekly check-ins", value: "$30/mo" },
+    { label: "2 private 1:1 Progression Syncs/month with your dedicated pregnancy & birth-prep coach", hero: true },
+    { label: "Personalized birth-prep & pregnancy wellness protocol" },
+    { label: "24/7 AI pregnancy coach — answers any time of night" },
+    { label: "Trimester-safe workout & mobility library" },
+    { label: "Birth-prep breathing & positioning protocols (for an easier labor)" },
+    { label: "Pregnancy nutrition frameworks" },
+    { label: "Private mom community + weekly check-ins" },
   ]
 
   return (
@@ -451,17 +451,16 @@ function PricingCTA({
       </p>
       {isVip ? (
         <p className="text-sm mb-3" style={{ color: "#3A2412", opacity: 0.7 }}>
-          Private 1-on-1 coaching like this runs <span className="line-through">$400/month</span> on its own — the ongoing
-          coaching tier is $129/month.
+          Private 1-on-1 coaching, the trimester-safe library, and your birth-prep protocols all live in one place.
         </p>
       ) : condensed ? (
         <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
-          Founding seat: $29/month — locked for life. Only 100 seats include the 1:1 coaching at this price.
+          Your account is free to create — the rest of your plan is already built and waiting in it.
         </p>
       ) : (
         <>
-          <CharterScarcity coachLabel="your dedicated pregnancy & birth-prep coach" tierPrice="$129/month" />
-          <ValueStack items={stackItems} total="$1,151" regularPrice="$129/month" price="$29/month" />
+          <CharterScarcity coachLabel="your dedicated pregnancy & birth-prep coach" />
+          <ValueStack items={stackItems} />
         </>
       )}
       <Button
@@ -475,11 +474,7 @@ function PricingCTA({
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
         {footnote}
       </p>
-      <Guarantee>
-        {isVip
-          ? "Show up for your calls and do the work for 30 days. If you don't feel real, measurable progress, we'll refund your first month in full. Your coach carries the risk, not you."
-          : "Follow your protocol for 30 days. If you've followed it and honestly don't feel more prepared, more comfortable, and more in control of your pregnancy, email us and we'll refund your payment. We only ask that you gave it a real try."}
-      </Guarantee>
+      <FreeToStart />
     </div>
   )
 }
@@ -1113,8 +1108,8 @@ function PregnancyResultsPage({
               tier={tier}
               heading=""
               subheading=""
-              buttonLabel="Start My Pregnancy Wellness Plan"
-              footnote="Feel better in your body in just 7 days. Cancel anytime. No contracts."
+              buttonLabel="Create My Free Account — Unlock My Plan"
+              footnote="Free to create · no card · your assessment loads straight in"
               condensed
             />
           </CardContent>
@@ -1330,12 +1325,8 @@ function PregnancyResultsPage({
                     ? "Get pregnancy-safe workouts, meal plans, symptom management protocols, labor prep, and community support — all in one app."
                     : "A step-by-step pregnancy wellness system designed for moms who want clear guidance without the overwhelm."
               }
-              buttonLabel={tier === "high" ? "Book Your 1:1 Strategy Call" : "Start My Pregnancy Wellness Plan"}
-              footnote={
-                tier === "high"
-                  ? "Ongoing coaching tier: $129/month • Charter Founder seats lock the same 1:1 at $29/month for life (only 100)"
-                  : "$29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts"
-              }
+              buttonLabel="Create My Free Account — Unlock My Plan"
+              footnote="Free to create • no card • your score, your gaps and your own words come with you"
               isVip={tier === "high"}
               condensed={false}
             />
@@ -1357,16 +1348,16 @@ function PregnancyResultsPage({
             className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
             style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
           >
-            Start My Pregnancy Wellness Plan
+            Create My Free Account
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            $29/month founding seat · 30-day guarantee · cancel anytime
+            Free to create · no card needed · takes about 30 seconds
           </p>
         </div>
 
         <StickyCta
           href={buildSignupUrl(quizState, score, tier)}
-          label="Start My Pregnancy Wellness Plan"
+          label="Create My Free Account"
         />
       </div>
     </div>

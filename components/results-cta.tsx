@@ -44,7 +44,7 @@ export function ReflectionCta({
   href,
   stage,
   firstName,
-  label = "Show me how we work on this",
+  label = "Save this and show me how we work on it",
 }: {
   href: string
   stage: Stage
@@ -69,7 +69,7 @@ export function ReflectionCta({
         {label}
       </a>
       <p className="text-xs mt-2" style={{ color: MUTED }}>
-        $29/month founding seat · 30-day guarantee · cancel anytime
+        Free account · no card needed · this saves into it
       </p>
     </div>
   )
@@ -79,17 +79,17 @@ export function ReflectionCta({
 
 const NEXT_STEPS: Record<Stage, string[]> = {
   pregnancy: [
-    "Your account is created with this assessment already loaded — you don't retype a thing.",
+    "Your free account is created with this assessment already loaded — no card, nothing to retype.",
     "Confirm your email (we send the link straight away — check spam if it's slow).",
     "Your trimester plan, your coach, and your 500 welcome credits are waiting inside.",
   ],
   postpartum: [
-    "Your account is created with this assessment already loaded — you don't retype a thing.",
+    "Your free account is created with this assessment already loaded — no card, nothing to retype.",
     "Confirm your email (we send the link straight away — check spam if it's slow).",
     "Your recovery plan, your coach, and your 500 welcome credits are waiting inside.",
   ],
   ttc: [
-    "Your account is created with this assessment already loaded — you don't retype a thing.",
+    "Your free account is created with this assessment already loaded — no card, nothing to retype.",
     "Confirm your email (we send the link straight away — check spam if it's slow).",
     "Your cycle plan, your coach, and your 500 welcome credits are waiting inside.",
   ],
@@ -142,16 +142,16 @@ function faqFor(stage: Stage) {
   return [
     SAFETY_Q[stage],
     {
+      q: "Do I have to pay to get in?",
+      a: "No. Creating your account is free and there's no card involved. Everything from this assessment saves into it and your first steps are ready to open. Anything paid you decide on later, from the inside, once it has actually done something for you.",
+    },
+    {
       q: "Is the coach a real person, or a bot?",
-      a: "A real person. Your two monthly Progression Syncs are private 1:1 calls with your dedicated coach, who has read this assessment before you speak. The AI coach is separate — it's there for the 2am questions in between.",
+      a: "A real person. Your monthly Progression Syncs are private 1:1 calls with a coach who has read this assessment before you speak — they're part of the founding membership, and you'll see them waiting inside. The AI coach is separate and it's there from the moment you're in, for the 2am questions.",
     },
     {
       q: "I barely have time. Honestly.",
       a: "That is the assumption the plan is built on. Sessions are short and sequenced, so you're never choosing which of six things to do — you open it and the next thing is already picked for you.",
-    },
-    {
-      q: "What if it turns out not to be for me?",
-      a: "Follow your plan for 30 days. If you've genuinely given it a try and don't feel the difference, email us and we'll refund you. Cancel anytime, no contract, no phone call to escape.",
     },
     {
       q: "What happens to everything I just filled in?",

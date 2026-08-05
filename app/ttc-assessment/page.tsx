@@ -11,7 +11,7 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
+import { ValueStack, CharterScarcity, FreeToStart, FounderNote } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
@@ -396,7 +396,7 @@ function PricingCTA({
         {label}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        $29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts
+        Free to create • no card • your score and your own words come with you
       </p>
     </div>
   )
@@ -997,7 +997,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Start My Fertility Optimisation Plan"
+              label="Create My Free Account — Unlock My Plan"
             />
           </CardContent>
         </Card>
@@ -1177,36 +1177,27 @@ function TTCResultsPage({
           <CardContent className="space-y-6">
             <AppFeatureGrid />
             <div className="p-6 bg-white rounded-lg">
-              <CharterScarcity coachLabel="your dedicated fertility coach" tierPrice="$129/month" />
+              <CharterScarcity coachLabel="your dedicated fertility coach" />
               <ValueStack
                 items={[
-                  { label: "2 private 1:1 Progression Syncs/month with your dedicated fertility coach", value: "$400/mo", hero: true },
-                  { label: "Personalized fertility-optimization protocol (built from your score)", value: "$297" },
-                  { label: "24/7 AI fertility coach — answers any time of night", value: "$97/mo" },
-                  { label: "Cycle-tracking & ovulation-timing system", value: "$149" },
-                  { label: "Fertility nutrition & egg-quality frameworks", value: "$99" },
-                  { label: "Stress & hormone-balance protocols", value: "$79" },
-                  { label: "Private TTC community + weekly check-ins", value: "$30/mo" },
+                  { label: "2 private 1:1 Progression Syncs/month with your dedicated fertility coach", hero: true },
+                  { label: "Personalized fertility-optimization protocol (built from your score)" },
+                  { label: "24/7 AI fertility coach — answers any time of night" },
+                  { label: "Cycle-tracking & ovulation-timing system" },
+                  { label: "Fertility nutrition & egg-quality frameworks" },
+                  { label: "Stress & hormone-balance protocols" },
+                  { label: "Private TTC community + weekly check-ins" },
                 ]}
-                total="$1,151"
-                regularPrice="$129/month"
-                price="$29/month"
               />
-              <p className="text-center text-sm mb-1" style={{ color: "#3A2412", opacity: 0.7 }}>
-                That&apos;s less than one acupuncture session — for everything, every month.
-              </p>
             </div>
             <ObstacleAnswer obstacle={quizState.biggestObstacle} />
             <PricingCTA
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Start My Fertility Plan"
+              label="Create My Free Account"
             />
-            <Guarantee>
-              Follow your fertility protocol for 30 days. If you&apos;ve followed it and honestly don&apos;t feel more in
-              control of your cycle and your body, email us and we&apos;ll refund your payment. We only ask that you gave it a real try.
-            </Guarantee>
+            <FreeToStart />
           </CardContent>
         </Card>
 
@@ -1238,7 +1229,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Start My Fertility Plan"
+              label="Create My Free Account — Unlock My Plan"
             />
             <div className="mt-6 p-4 bg-amber-50 rounded-lg">
               <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>Questions?</p>
@@ -1262,16 +1253,16 @@ function TTCResultsPage({
             className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
             style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
           >
-            Start My Fertility Plan
+            Create My Free Account
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            $29/month founding seat · 30-day guarantee · cancel anytime
+            Free to create · no card needed · takes about 30 seconds
           </p>
         </div>
 
         <StickyCta
           href={buildSignupUrl(quizState, score, tier)}
-          label="Start My Fertility Plan"
+          label="Create My Free Account — Unlock My Plan"
         />
       </div>
     </div>

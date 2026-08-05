@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 export function StickyCta({
   href,
   label,
-  subline = "$29/month founding seat · cancel anytime",
+  subline = "Free to create · no card needed",
   revealAfter = 700,
 }: {
   href: string

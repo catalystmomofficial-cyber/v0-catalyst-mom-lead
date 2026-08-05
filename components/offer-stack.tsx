@@ -3,84 +3,46 @@ import { CheckCircle2 } from "lucide-react"
 
 export type StackItem = {
   label: string
-  value: string
   hero?: boolean
 }
 
-// ─── Value stack + anchor + founding price ──────────────────────────────────
-// Lists the à-la-carte value of everything included, anchors to a big total,
-// shows the regular tier price struck through, then reveals the founding price
-// so it reads as a steal, not a cost.
-export function ValueStack({
-  items,
-  total,
-  regularPrice,
-  price = "$29/month",
-}: {
-  items: StackItem[]
-  total: string
-  regularPrice?: string
-  price?: string
-}) {
+// ─── What's inside — no prices ──────────────────────────────────────────────
+//
+// This used to be a full price stack: à-la-carte dollar values, a $1,151 anchor,
+// the regular tier struck through, then the founding price. It was doing the
+// opposite of its job. A woman reaches the end of a ten-minute assessment,
+// meets a number, and leaves — she never gets far enough to want the thing.
+//
+// Desire stays, the number goes. She sees what is waiting, creates a free
+// account, uses her first steps, and meets the price from the inside once the
+// product has already done something for her. Nothing on the results page asks
+// her for money, so nothing on the results page states a price.
+export function ValueStack({ items }: { items: StackItem[] }) {
   return (
     <div
       className="text-left mb-4 p-4 rounded-lg"
       style={{ backgroundColor: "#F8F5F2", border: "1px solid #E8D5C4" }}
     >
       <p className="text-center font-bold mb-3" style={{ color: "#A15C2F" }}>
-        Everything you unlock today:
+        What&apos;s waiting inside your account:
       </p>
       <div className="space-y-2">
         {items.map((item, i) => (
-          <div key={i} className="flex items-start justify-between gap-3">
-            <span className="flex items-start gap-2 text-sm" style={{ color: "#3A2412" }}>
-              <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0 text-green-600" />
-              <span className={item.hero ? "font-bold" : ""}>{item.label}</span>
-            </span>
-            <span className="text-sm whitespace-nowrap" style={{ color: "#8A7060" }}>
-              {item.value}
-            </span>
+          <div key={i} className="flex items-start gap-2 text-sm" style={{ color: "#3A2412" }}>
+            <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0 text-green-600" />
+            <span className={item.hero ? "font-bold" : ""}>{item.label}</span>
           </div>
         ))}
       </div>
-      <div
-        className="mt-3 pt-3 border-t flex items-center justify-between"
-        style={{ borderColor: "#E8D5C4" }}
-      >
-        <span className="font-bold" style={{ color: "#3A2412" }}>
-          Total value
-        </span>
-        <span className="font-bold" style={{ color: "#3A2412" }}>
-          {total}
-        </span>
-      </div>
-      {regularPrice && (
-        <div className="mt-1 flex items-center justify-between">
-          <span className="text-sm" style={{ color: "#8A7060" }}>
-            Regular price
-          </span>
-          <span className="text-sm line-through" style={{ color: "#8A7060" }}>
-            {regularPrice}
-          </span>
-        </div>
-      )}
-      <div className="mt-1 flex items-center justify-between">
-        <span className="font-bold" style={{ color: "#A15C2F" }}>
-          Your founding seat
-        </span>
-        <span className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-          {price}
-        </span>
-      </div>
       <p className="mt-3 text-xs text-center leading-snug" style={{ color: "#8A7060" }}>
-        One subscription — instead of separate apps for tracking, workouts, meal plans, and recovery. It all lives in one place.
+        One place — instead of separate apps for tracking, workouts, meal plans, and recovery.
       </p>
       <div className="mt-3 rounded-lg p-3 text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
         <p className="text-sm font-semibold" style={{ color: "#A15C2F" }}>
           🎁 Your welcome gift: 500 credits
         </p>
         <p className="text-xs mt-0.5" style={{ color: "#3A2412", opacity: 0.85 }}>
-          Added to your account the moment you join — put them straight toward any of our premium guides inside the app.
+          Added the moment your account is created — put them straight toward any of our premium guides inside the app.
         </p>
       </div>
     </div>
@@ -88,15 +50,13 @@ export function ValueStack({
 }
 
 // ─── Charter Founder scarcity (honest, mechanism-backed) ────────────────────
-// Only 100 seats get the 1:1 coaching at the founding price. After that, the
-// 1:1 syncs move to the ongoing coaching tier. Real constraint (coach time),
-// not a fake countdown.
+// The constraint is real — coach time, first 100 members — so it stays. What
+// leaves is every number attached to it, because scarcity that arrives bolted
+// to a price reads as pressure to pay rather than a reason to claim a place.
 export function CharterScarcity({
   coachLabel = "your dedicated coach",
-  tierPrice = "$129/month",
 }: {
   coachLabel?: string
-  tierPrice?: string
 }) {
   return (
     <div
@@ -104,13 +64,35 @@ export function CharterScarcity({
       style={{ backgroundColor: "#FFF3E0", border: "1px solid #F0C089" }}
     >
       <p className="font-bold mb-1" style={{ color: "#A15C2F" }}>
-        🔒 The Charter Founder Membership — only 100 seats
+        🔒 You&apos;d be joining as a Charter Founder — the first 100
       </p>
       <p className="text-sm" style={{ color: "#3A2412" }}>
-        As a founding member you lock in full app access, community events, and your
-        <strong> 2 private 1:1 Progression Syncs each month with {coachLabel}</strong> — at this price
-        <strong> forever</strong>. Once the first 100 seats are filled, the 1:1 Syncs move exclusively to
-        the {tierPrice} tier. The app stays — the founding rate on 1:1 coaching does not.
+        Creating your account holds your Charter Founder place: full app access, community events, and
+        <strong> 2 private 1:1 Progression Syncs each month with {coachLabel}</strong> on founding terms,
+        for as long as you stay. Once the first 100 places are taken, the 1:1 Syncs move to the standard
+        coaching tier. Claiming your place costs nothing today.
+      </p>
+    </div>
+  )
+}
+
+// ─── Free to start ──────────────────────────────────────────────────────────
+// Replaces the refund guarantee on the results page. A money-back promise only
+// makes sense next to an ask for money; here it introduced the idea of paying
+// at the exact moment we are telling her she doesn't have to.
+export function FreeToStart() {
+  return (
+    <div
+      className="mt-4 p-4 rounded-lg text-left"
+      style={{ backgroundColor: "#F1F8F4", border: "1px solid #A5D6A7" }}
+    >
+      <p className="font-bold mb-1 flex items-center gap-2" style={{ color: "#2E7D32" }}>
+        🛡️ Free to create — no card, no trial clock
+      </p>
+      <p className="text-sm" style={{ color: "#3A2412" }}>
+        Your score, your gaps, and everything you wrote here save straight into your account, and your first
+        steps are ready to use. Anything paid, you decide on later — from the inside, once it has actually
+        done something for you.
       </p>
     </div>
   )
