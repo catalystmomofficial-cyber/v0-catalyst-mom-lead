@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
+import { buildProtocolSteps } from "@/lib/protocol-steps"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
@@ -867,14 +869,20 @@ function TTCResultsPage({
     ],
   }
 
-  const ttcProtocolSteps = [
-    { label: "Cycle Tracking Setup", done: true },
-    { label: "Fertile Window Mapping", done: true },
-    { label: "Fertility Nutrition Blueprint", done: false },
-    { label: "Supplement Protocol", done: false },
-    { label: "Stress & Sleep Reset", done: false },
-    { label: "Ovulation Precision Plan", done: false },
-  ]
+  // Derived from what she actually answered — see lib/protocol-steps.ts for why
+  // this must never go back to a hard-coded list.
+  const ttcProtocolSteps = buildProtocolSteps(
+    breakdown,
+    [
+      { label: "Cycle Tracking Setup", from: "Cycle Tracking" },
+      { label: "Fertile Window Mapping", from: "Ovulation Awareness" },
+      { label: "Fertility Nutrition Blueprint", from: "Fertility Nutrition" },
+      { label: "Supplement Protocol", from: "Supplementation" },
+      { label: "Stress & Sleep Reset", from: "Stress Management" },
+      { label: "Movement & Recovery Balance", from: "Exercise Balance" },
+    ],
+    "Your fertility baseline — mapped",
+  )
   const completedSteps = ttcProtocolSteps.filter((s) => s.done).length
   const totalSteps = ttcProtocolSteps.length
   const pctDone = Math.round((completedSteps / totalSteps) * 100)
@@ -918,6 +926,25 @@ function TTCResultsPage({
             </p>
           </CardContent>
         </Card>
+
+        {/* Her own words, read back — moved directly under the score.
+            This is the highest-conviction moment on the page and it used to sit
+            two-thirds of the way down with nothing attached to it. She now
+            reaches it while the score is still fresh, and it carries a door. */}
+        {concernReflection && (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+            footer={
+              <ReflectionCta
+                href={buildSignupUrl(quizState, score, tier)}
+                stage="ttc"
+                firstName={quizState.name}
+              />
+            }
+          />
+        )}
 
         {/* Zeigarnik Hook + Above-fold CTA */}
         <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -1019,14 +1046,9 @@ function TTCResultsPage({
           </CardContent>
         </Card>
 
-        {/* Personalized Section */}
-        {concernReflection ? (
-          <ConcernReflectionCard
-            concern={quizState.additionalNotes}
-            reflection={concernReflection.reflection}
-            crisis={concernReflection.crisis}
-          />
-        ) : personalizedResponse && (
+        {/* Fallback when the reflection could not be generated. The reflection
+            itself renders far higher up — see the note there. */}
+        {!concernReflection && personalizedResponse && (
           <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
             <CardHeader>
               <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
@@ -1226,6 +1248,11 @@ function TTCResultsPage({
         </Card>
 
         <FounderNote stage="ttc" />
+
+        {/* The objections she is actually holding, answered next to the ask.
+            Unanswered, she resolves them by leaving. */}
+        <ObjectionFaq stage="ttc" />
+        <WhatHappensNext stage="ttc" />
 
         {/* Final ask — the page should end with a door, not a story */}
         <div className="text-center mt-8 mb-24 md:mb-8">

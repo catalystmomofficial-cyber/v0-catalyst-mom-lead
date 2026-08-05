@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
+import { buildProtocolSteps } from "@/lib/protocol-steps"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
 const supabase = createClient()
@@ -986,14 +988,20 @@ function PregnancyResultsPage({
     : score <= 70 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
     : { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
 
-  const pregnancyProtocolSteps = [
-    { label: "Prenatal Nutrition Foundation", done: true },
-    { label: "Safe Exercise Modifications", done: true },
-    { label: "Pelvic Floor Prep Programme", done: false },
-    { label: "Birth Prep Breathing Protocol", done: false },
-    { label: "Trimester-by-Trimester Plan", done: false },
-    { label: "Postpartum Transition Guide", done: false },
-  ]
+  // Derived from what she actually answered — see lib/protocol-steps.ts for why
+  // this must never go back to a hard-coded list.
+  const pregnancyProtocolSteps = buildProtocolSteps(
+    breakdown,
+    [
+      { label: "Prenatal Nutrition Foundation", from: "Prenatal Nutrition" },
+      { label: "Safe Exercise Modifications", from: "Exercise Safety" },
+      { label: "Pelvic Floor Prep Programme", from: "Pelvic Floor Training" },
+      { label: "Birth Prep Breathing Protocol", from: "Stress Management" },
+      { label: "Symptom Relief Protocol", from: "Symptom Management" },
+      { label: "Postpartum Transition Guide", from: "Diastasis Prevention" },
+    ],
+    "Your pregnancy baseline — mapped",
+  )
   const completedSteps = pregnancyProtocolSteps.filter((s) => s.done).length
   const totalSteps = pregnancyProtocolSteps.length
   const pctDone = Math.round((completedSteps / totalSteps) * 100)
@@ -1029,6 +1037,25 @@ function PregnancyResultsPage({
             </div>
           </CardContent>
         </Card>
+
+        {/* Her own words, read back — moved directly under the score.
+            This is the highest-conviction moment on the page and it used to sit
+            two-thirds of the way down with nothing attached to it. She now
+            reaches it while the score is still fresh, and it carries a door. */}
+        {concernReflection && (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+            footer={
+              <ReflectionCta
+                href={buildSignupUrl(quizState, score, tier)}
+                stage="pregnancy"
+                firstName={quizState.name}
+              />
+            }
+          />
+        )}
 
         {/* Zeigarnik Hook + Above-fold CTA */}
         <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -1199,14 +1226,9 @@ function PregnancyResultsPage({
           </CardContent>
         </Card>
 
-        {/* Personalized Additional Notes */}
-        {concernReflection ? (
-          <ConcernReflectionCard
-            concern={quizState.additionalNotes}
-            reflection={concernReflection.reflection}
-            crisis={concernReflection.crisis}
-          />
-        ) : personalizedResponse && (
+        {/* Fallback when the reflection could not be generated. The reflection
+            itself renders far higher up — see the note there. */}
+        {!concernReflection && personalizedResponse && (
           <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
             <CardHeader>
               <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
@@ -1321,6 +1343,11 @@ function PregnancyResultsPage({
         </Card>
 
         <FounderNote stage="pregnancy" />
+
+        {/* The objections she is actually holding, answered next to the ask.
+            Unanswered, she resolves them by leaving. */}
+        <ObjectionFaq stage="pregnancy" />
+        <WhatHappensNext stage="pregnancy" />
 
         {/* Final ask — the page should end with a door, not a story */}
         <div className="text-center mt-8 mb-24 md:mb-8">

@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client"
 import { ValueStack, CharterScarcity, Guarantee, FounderNote, type StackItem } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { ReflectionCta, WhatHappensNext, ObjectionFaq } from "@/components/results-cta"
+import { buildProtocolSteps } from "@/lib/protocol-steps"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
@@ -1382,14 +1384,20 @@ function ResultsPage({
     ? getPersonalizedResponseWithGaps(quizState.additionalNotes, breakdown)
     : null
 
-  const protocolSteps = [
-    { label: "Core Healing Sequence", done: true },
-    { label: "Pelvic Floor Reset", done: true },
-    { label: "Nutrition Blueprint", done: false },
-    { label: "Sleep Optimisation Plan", done: false },
-    { label: "Strength Rebuild Phase 1", done: false },
-    { label: "Postpartum Mindset Reset", done: false },
-  ]
+  // Derived from what she actually answered — see lib/protocol-steps.ts for why
+  // this must never go back to a hard-coded list.
+  const protocolSteps = buildProtocolSteps(
+    breakdown,
+    [
+      { label: "Core Healing Sequence", from: "Core-Safe Exercise Practice" },
+      { label: "Pelvic Floor Reset", from: "Pelvic Floor Training" },
+      { label: "Nutrition Blueprint", from: "Nutrition Tracking" },
+      { label: "Sleep & Recovery Plan", from: "Rest & Recovery" },
+      { label: "Strength Rebuild Phase 1", from: "Workout Routine Consistency" },
+      { label: "Diastasis Repair Track", from: "Diastasis Recti Awareness" },
+    ],
+    "Your recovery baseline — mapped",
+  )
   const completedSteps = protocolSteps.filter((s) => s.done).length
   const totalSteps = protocolSteps.length
   const pctDone = Math.round((completedSteps / totalSteps) * 100)
@@ -1472,6 +1480,25 @@ function ResultsPage({
             )}
           </CardContent>
         </Card>
+
+        {/* Her own words, read back — moved directly under the score.
+            This is the highest-conviction moment on the page and it used to sit
+            at the very bottom with nothing attached to it. She now reaches it
+            while the score is still fresh, and it carries a door. */}
+        {concernReflection && (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+            footer={
+              <ReflectionCta
+                href={buildSignupUrl(quizState, score, tier)}
+                stage="postpartum"
+                firstName={quizState.name}
+              />
+            }
+          />
+        )}
 
         {/* ── Zeigarnik Open-Loop Hook ── */}
         <Card className="border-0 shadow-xl mb-6 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -1598,16 +1625,10 @@ function ResultsPage({
 
         <GoalActionPlan primaryGoal={quizState.primaryGoal} tier={tier} />
 
-        {concernReflection ? (
-          <ConcernReflectionCard
-            concern={quizState.additionalNotes}
-            reflection={concernReflection.reflection}
-            crisis={concernReflection.crisis}
-          />
-        ) : (
-          personalizedResponse && (
-            <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
-          )
+        {/* Fallback when the reflection could not be generated. The reflection
+            itself renders far higher up — see the note there. */}
+        {!concernReflection && personalizedResponse && (
+          <PersonalizedConcernSection concern={personalizedResponse.concern} breakdown={breakdown} />
         )}
 
         {tier === "high" && <HighScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
@@ -1617,6 +1638,11 @@ function ResultsPage({
         {tier === "low" && <LowScorerContent score={score} quizState={quizState} breakdown={breakdown} tier={tier} />}
 
         <FounderNote stage="postpartum" />
+
+        {/* The objections she is actually holding, answered next to the ask.
+            Unanswered, she resolves them by leaving. */}
+        <ObjectionFaq stage="postpartum" />
+        <WhatHappensNext stage="postpartum" />
 
         {/* Final ask — the page should end with a door, not a story */}
         <div className="text-center mt-8 mb-24 md:mb-8">
