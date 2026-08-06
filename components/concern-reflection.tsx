@@ -1,13 +1,22 @@
+import type { ReactNode } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function ConcernReflectionCard({
   concern,
   reflection,
   crisis,
+  footer,
 }: {
   concern: string
   reflection: string
   crisis: boolean
+  /**
+   * The next step, rendered inside this card rather than after it. This is the
+   * highest-conviction moment on the page — she has just read her own words
+   * understood — and it used to dead-end into a card boundary. Never rendered
+   * when crisis is true: a woman in crisis gets resources, not an offer.
+   */
+  footer?: ReactNode
 }) {
   if (crisis) {
     return (
@@ -42,6 +51,7 @@ export function ConcernReflectionCard({
         <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
           {reflection}
         </p>
+        {footer}
       </CardContent>
     </Card>
   )

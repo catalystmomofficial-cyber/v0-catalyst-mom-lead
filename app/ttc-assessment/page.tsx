@@ -11,9 +11,10 @@ import { ArrowLeft } from "lucide-react"
 import { trackQuizEvents } from "@/lib/analytics"
 import { addContactToOmnisend } from "@/lib/omnisend"
 import { createClient } from "@/lib/supabase/client"
-import { ValueStack, CharterScarcity, Guarantee, FounderNote } from "@/components/offer-stack"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
+import { ReflectionCta } from "@/components/results-cta"
+import { buildProtocolSteps } from "@/lib/protocol-steps"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
@@ -63,112 +64,6 @@ const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
 
 // ─── Utility: Gap Explanations ────────────────────────────────────────────────
 // Ethics-reviewed: empathetic, no direct risk attribution or fear-based claims.
-
-function getDetailedGapExplanation(practice: string) {
-  const map: Record<string, { whatThisMeans: string; consequence: string; appSolution: string; timeline: string }> = {
-    "Cycle Tracking": {
-      whatThisMeans:
-        "You're not tracking your menstrual cycle consistently. This means you may not have a clear picture of your fertile window or any irregular patterns.",
-      consequence:
-        "Without cycle data, timing can become a guessing game. Understanding your cycle's unique rhythm is one of the most empowering steps you can take when trying to conceive.",
-      appSolution:
-        "The app provides a digital cycle tracker, fertile window calculator, pattern recognition alerts, and shareable reports. You'll have real data about YOUR cycle.",
-      timeline: "2-3 cycles of tracking to understand your patterns clearly.",
-    },
-    "Ovulation Awareness": {
-      whatThisMeans:
-        "You're not yet confirming ovulation. Many women assume they ovulate on a 'textbook' day, but every body is different.",
-      consequence:
-        "Knowing when you ovulate — not just estimating — helps you time things with confidence. Without this data, you may be working with assumptions rather than your actual window.",
-      appSolution:
-        "The app includes OPK tracking, BBT charting guides, cervical mucus education, and timing recommendations. You'll know when ovulation is actually happening for you.",
-      timeline: "1-2 cycles to confirm your ovulation pattern.",
-    },
-    "Fertility Nutrition": {
-      whatThisMeans:
-        "You're not yet eating in a way that's specifically focused on fertility support. General healthy eating is a great start, but fertility nutrition goes deeper.",
-      consequence:
-        "Nutrition influences egg quality (which develops over 90 days), hormone production, and the body's ability to support early pregnancy. It's one of the most impactful areas to optimize.",
-      appSolution:
-        "The app provides hormone-balancing meal plans, egg quality-supporting foods, anti-inflammatory recipes, and clear guidance — every meal can work for you.",
-      timeline: "1-2 months for hormone improvements, 3 months for egg quality support.",
-    },
-    "Supplementation": {
-      whatThisMeans:
-        "You're not yet taking fertility-supporting supplements. Folate, CoQ10, Vitamin D, and other key nutrients are missing from your daily routine.",
-      consequence:
-        "These nutrients play an important role in egg quality, hormone function, and overall reproductive health. Without them, your body may be working with less than optimal support.",
-      appSolution:
-        "The app provides a complete supplement protocol with exact dosages, timing recommendations, and recommended brands — no guesswork needed.",
-      timeline: "3 months to support a full egg maturation cycle.",
-    },
-    "Stress Management": {
-      whatThisMeans:
-        "Chronic stress is affecting your wellbeing and may be influencing your reproductive hormones. The TTC journey itself can be a significant source of stress.",
-      consequence:
-        "Elevated stress hormones can interfere with ovulation and make the monthly cycle feel emotionally exhausting. Managing stress is an important part of holistic fertility support — and your own wellbeing.",
-      appSolution:
-        "The app includes daily breathwork, meditation, fertility yoga, and mindset coaching. Real tools for real relief — not just advice to 'relax.'",
-      timeline: "2-4 weeks for meaningful stress reduction, with fertility benefits following.",
-    },
-    "Sleep Quality": {
-      whatThisMeans:
-        "You're not consistently getting 7-9 hours of quality sleep — the window during which your body produces key reproductive hormones.",
-      consequence:
-        "Poor sleep affects hormone regulation, energy levels, and emotional resilience during what can be an emotionally demanding journey. It's one of the most overlooked fertility foundations.",
-      appSolution:
-        "The app provides sleep optimization protocols, bedtime routines, and circadian rhythm support tailored for TTC.",
-      timeline: "2-3 weeks for sleep quality improvements, with hormonal benefits building over 1-2 months.",
-    },
-    "Exercise Balance": {
-      whatThisMeans:
-        "You're either not moving enough or exercising at an intensity that may not be optimal for fertility. Both extremes can affect hormone balance.",
-      consequence:
-        "Very low activity can contribute to metabolic imbalances, while very high intensity exercise can sometimes suppress ovulation. There's a supportive middle ground that works with your body.",
-      appSolution:
-        "The app provides conception-friendly workouts — moderate intensity, fertility-safe exercises in the sweet spot for hormonal balance.",
-      timeline: "4-6 weeks for metabolic improvements.",
-    },
-    "Alcohol Consumption": {
-      whatThisMeans:
-        "Alcohol consumption can affect hormone balance and egg quality, even at moderate levels.",
-      consequence:
-        "Alcohol influences the hormonal environment your eggs develop in. Reducing or eliminating it is one of the more impactful positive steps you can take.",
-      appSolution:
-        "The app provides education on alcohol's impact on fertility, mocktail recipes, and support for making informed choices.",
-      timeline: "Hormone environment begins improving quickly; egg quality support builds over 3 months.",
-    },
-    "Smoking/Nicotine": {
-      whatThisMeans:
-        "Nicotine use significantly affects egg quality, hormone function, and overall reproductive health.",
-      consequence:
-        "Smoking is one of the most impactful lifestyle factors for fertility. Supporting yourself to quit is one of the most meaningful things you can do for your TTC journey.",
-      appSolution:
-        "The app provides cessation support, alternative stress management tools, and community accountability.",
-      timeline: "Meaningful fertility improvements with sustained cessation over 3-6 months.",
-    },
-    "Wellness Tracking": {
-      whatThisMeans:
-        "You're not yet tracking fertility metrics like BBT or cervical mucus. Without data, patterns are invisible.",
-      consequence:
-        "Comprehensive tracking helps you and your care provider understand what's happening in your cycle — and identify anything that might benefit from attention.",
-      appSolution:
-        "The app provides comprehensive tracking tools for all fertility metrics, with data you can share with your doctor.",
-      timeline: "2-3 cycles to identify meaningful patterns.",
-    },
-  }
-
-  return (
-    map[practice] || {
-      whatThisMeans: "This area can be optimized to better support your fertility journey.",
-      consequence: "Addressing this gap gives your body more of what it needs for conception.",
-      appSolution: "The app provides comprehensive protocols and community support.",
-      timeline: "2-3 months for meaningful improvements.",
-    }
-  )
-}
-
-// ─── Utility: Score Breakdown ─────────────────────────────────────────────────
 
 function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
   return [
@@ -238,120 +133,6 @@ function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
 // ─── Utility: Personalized Response ──────────────────────────────────────────
 // Ethics-reviewed: empathetic tone, no direct fear-based medical claims.
 
-function getPersonalizedResponse(notes: string, breakdown: BreakdownItem[]) {
-  const lower = notes.toLowerCase()
-  const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
-
-  const formatGaps = () =>
-    gaps
-      .map((gap, i) => {
-        const exp = getDetailedGapExplanation(gap.practice)
-        return `${i + 1}. **${gap.practice} (${gap.score}/10):** ${exp.consequence} ${exp.appSolution}`
-      })
-      .join("\n\n")
-
-  if (lower.includes("pcos") || lower.includes("polycystic")) {
-    return {
-      concern: "PCOS and Fertility",
-      response: `PCOS is one of the most common reasons cycles become unpredictable — and one of the most responsive conditions to lifestyle changes. Many women with PCOS find that targeted nutrition, cycle tracking, and stress management make a meaningful difference.\n\n**Here's how your gaps connect:**\n\n${formatGaps()}\n\n**What the App Does for PCOS:**\n✅ PCOS-friendly meal plans (low-glycemic, anti-inflammatory, hormone-balancing)\n✅ Ovulation tracking tools tailored for irregular cycles\n✅ Supplement protocols used for PCOS support (Inositol, NAC, Vitamin D, Omega-3s)\n✅ Stress management tools for cortisol regulation\n✅ Community of women navigating PCOS together\n\n**Timeline:** Many women with PCOS see cycle improvements within 2-3 months of consistent lifestyle changes.`,
-    }
-  }
-
-  if (lower.includes("irregular") || lower.includes("cycle") || lower.includes("period")) {
-    return {
-      concern: "Irregular Cycles",
-      response: `Irregular cycles can make TTC feel unpredictable and frustrating. The encouraging news is that cycle irregularity is often very responsive to targeted lifestyle support — especially nutrition, stress reduction, and consistent tracking.\n\n**Here's how your gaps connect:**\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Cycle tracking system to identify YOUR patterns, even if irregular\n✅ Hormone-balancing nutrition protocols\n✅ Stress management tools (stress is a major cycle disruptor)\n✅ Supplement protocols for cycle support\n✅ Ovulation prediction tools designed for irregular cycles\n\n**Timeline:** Many women see cycle improvements within 2-4 cycles of consistent implementation.`,
-    }
-  }
-
-  if (lower.includes("age") || lower.includes("old") || lower.includes("35") || lower.includes("40")) {
-    return {
-      concern: "Age and Fertility",
-      response: `The "biological clock" narrative creates a lot of unnecessary pressure. While age is a factor, what matters enormously is how well-optimized your fertility health is. Many women in their late 30s and beyond conceive successfully with the right support.\n\n**Here's how your gaps connect:**\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Egg quality optimization protocols (nutrition, targeted supplements, lifestyle)\n✅ Advanced tracking to maximize timing and cycle understanding\n✅ Stress management — because age-related anxiety is real and worth addressing\n✅ Community of women 35+ supporting each other through this journey\n\n**Timeline:** Egg quality is influenced over a 90-day maturation cycle. Consistent optimization over 3 months can make a real difference.`,
-    }
-  }
-
-  if (lower.includes("stress") || lower.includes("overwhelm") || lower.includes("anxious") || lower.includes("anxiety")) {
-    return {
-      concern: "Stress and TTC",
-      response: `The emotional weight of TTC is real and deserves to be taken seriously. Stress affects reproductive hormones — and "just relax" is not actually helpful advice. You need real tools.\n\n**Here's how your gaps connect:**\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Daily stress management protocols (breathwork, meditation, fertility yoga)\n✅ Supportive community of women who genuinely understand\n✅ 1-on-1 Human Check-ins — bi-weekly expert progress reviews\n✅ Tracking tools to reduce mental load\n✅ Evidence-based protocols so you know you're doing the right things\n\n**Timeline:** Many women notice meaningful stress reduction within 2-4 weeks of consistent daily practice.`,
-    }
-  }
-
-  if (lower.includes("partner") || lower.includes("husband") || lower.includes("spouse") || lower.includes("male factor")) {
-    return {
-      concern: "Partner Involvement",
-      response: `Navigating TTC as a couple — especially when there are differing levels of engagement or concern about male factor — is more common than it seems and rarely talked about openly.\n\n**Here's how your gaps connect:**\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Partner education resources (help them understand the process)\n✅ Shareable cycle reports so they know when timing matters\n✅ Male fertility optimization guides if he's open to it\n✅ Communication tools for navigating TTC as a couple\n✅ Community support from women in similar situations\n\n**Timeline:** Your own fertility optimization can begin immediately, and visible progress often encourages more partner engagement.`,
-    }
-  }
-
-  if (lower.includes("don't know") || lower.includes("confused") || lower.includes("overwhelmed") || lower.includes("where to start")) {
-    return {
-      concern: "Finding a Starting Point",
-      response: `There's so much conflicting advice — track this, eat that, supplement with that, avoid this. The overwhelm is understandable. What you need is a clear, prioritized plan.\n\n**Based on your assessment, here are your 3 highest-impact areas:**\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Step-by-step protocols — no guessing, no overwhelm\n✅ Prioritized action plans: what to do first, second, third\n✅ All the tools in one place (tracking, nutrition, workouts, supplements)\n✅ 24/7 Catalyst AI Expert — instant answers to any wellness question\n✅ Community support from women who've been where you are\n\n**Timeline:** Most women feel meaningfully less overwhelmed within 1 week of having a clear plan to follow.`,
-    }
-  }
-
-  // Default
-  return {
-    concern: "Your TTC Journey",
-    response: `Every TTC journey is unique, and yours deserves personalized attention. Based on your assessment, here are the key areas to focus on:\n\n${formatGaps()}\n\n**What the App Does:**\n✅ Complete fertility optimization system (all 10 practice areas)\n✅ Personalized protocols based on YOUR gaps\n✅ Daily tracking and accountability\n✅ Expert guidance and community support\n✅ Evidence-based interventions that actually work\n\n**Timeline:** Most women see meaningful improvements in 4-8 weeks of consistent implementation.`,
-  }
-}
-
-// ─── Shared UI: Testimonials Block ───────────────────────────────────────────
-
-function TestimonialsBlock({ testimonials }: { testimonials: Testimonial[] }) {
-  return (
-    <div className="space-y-4">
-      {testimonials.map((t, i) => (
-        <div key={i} className="p-6 bg-white rounded-lg border-2" style={{ borderColor: "#E8D5C4" }}>
-          <p className="italic mb-3" style={{ color: "#3A2412" }}>
-            &ldquo;{t.quote}&rdquo;
-          </p>
-          <p className="font-semibold" style={{ color: "#A15C2F" }}>
-            {t.author}
-          </p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ─── Shared UI: App Feature Grid ──────────────────────────────────────────────
-
-const APP_FEATURES = [
-  { title: "Complete Cycle Tracking System", body: "Digital tracker, fertile window calculator, pattern recognition, shareable reports for your doctor." },
-  { title: "Ovulation Confirmation Tools", body: "OPK tracker, BBT charting guide, cervical mucus education, timing recommendations." },
-  { title: "Fertility-Optimized Meal Plans", body: "Hormone-balancing nutrition, egg quality support, implantation-supporting foods." },
-  { title: "TTC Supplement Protocol", body: "Exactly what to take, when to take it, recommended brands (Folate, CoQ10, Vitamin D, and more)." },
-  { title: "Stress Management System", body: "Breathwork, meditation, fertility yoga, mindset coaching." },
-  { title: "Conception-Friendly Workouts", body: "Moderate-intensity, fertility-safe exercise that supports hormonal balance." },
-  { title: "TTC Community", body: "300+ women trying to conceive right now. Support, shared experiences, genuine understanding." },
-  { title: "Weekly Group Coaching Calls", body: "Ask questions, get expert guidance, troubleshoot challenges with real support." },
-]
-
-function AppFeatureGrid() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {APP_FEATURES.map((f, i) => (
-        <div key={i} className="relative rounded-lg">
-          <GlowingEffect disabled={false} proximity={60} spread={25} borderWidth={2} inactiveZone={0.4} />
-          <div className="relative p-4 bg-white rounded-lg h-full">
-            <div className="flex items-start gap-3">
-              <span className="text-green-600 text-2xl flex-shrink-0">✅</span>
-              <div>
-                <p className="font-bold mb-1" style={{ color: "#A15C2F" }}>{f.title}</p>
-                <p className="text-sm" style={{ color: "#3A2412" }}>{f.body}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 // ─── Shared UI: Pricing CTA ───────────────────────────────────────────────────
 
 // Single source of truth for the signup handoff URL — every CTA (offer,
@@ -394,7 +175,7 @@ function PricingCTA({
         {label}
       </Button>
       <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        $29/month founding seat • Start seeing results in 7 days • Cancel anytime • No contracts
+        Free to create • no card • your score and your own words come with you
       </p>
     </div>
   )
@@ -836,9 +617,6 @@ function TTCResultsPage({
   concernReflection: ConcernReflectionResult | null
 }) {
   const breakdown = getDetailedBreakdown(quizState)
-  const personalizedResponse = quizState.additionalNotes.trim()
-    ? getPersonalizedResponse(quizState.additionalNotes, breakdown)
-    : null
   const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
 
   const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
@@ -849,32 +627,21 @@ function TTCResultsPage({
     : score <= 70 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
     : { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
 
-  const testimonialsByTier: Record<string, Testimonial[]> = {
-    low: [
-      { quote: "I scored 38/110 and had been trying for 11 months. After actually tracking my cycle properly I realized I was ovulating on Day 18, not Day 14. I was timing everything wrong. Got pregnant a few weeks later.", author: "— Rachel M., now 22 weeks pregnant" },
-      { quote: "My score was 34/110. I wasn't tracking anything, just 'trying whenever.' The app showed me my exact fertile window. Pregnant on the second cycle of using the app.", author: "— Jen K., TTC for 9 months" },
-      { quote: "The stress management tools alone were worth it. The breathwork and community support genuinely helped me feel calmer every month.", author: "— Leah T., TTC for 7 months" },
-    ],
-    medium: [
-      { quote: "I scored 52/110 — doing SOME things right, but not consistently. The app gave me structure and accountability. Fixed my supplement protocol, optimized my nutrition, and got pregnant a few months later.", author: "— Maria S., TTC for 8 months" },
-      { quote: "My score was 58/110. I knew what to do but wasn't doing it consistently. The app's tracking and community kept me accountable.", author: "— Ashley R., TTC for 6 months" },
-      { quote: "I was overwhelmed by conflicting advice. The app gave me ONE clear protocol to follow. No more guessing.", author: "— Nicole P., TTC for 5 months" },
-    ],
-    high: [
-      { quote: "I scored 78/110 — already doing a lot right, but the app helped me fine-tune the last details. The advanced tracking showed me I had a short luteal phase. Fixed it with targeted supplements.", author: "— Emma L., TTC for 4 months" },
-      { quote: "My score was 82/110. The app helped me with small tweaks that made a big difference. Pregnant on my 2nd cycle after joining.", author: "— TTC Mama · Catalyst Mom Community" },
-      { quote: "The precision tracking tools were game-changers. I was close, but not quite hitting my fertile window perfectly. The app helped me nail the timing.", author: "— TTC Mama · Catalyst Mom Community" },
-    ],
-  }
 
-  const ttcProtocolSteps = [
-    { label: "Cycle Tracking Setup", done: true },
-    { label: "Fertile Window Mapping", done: true },
-    { label: "Fertility Nutrition Blueprint", done: false },
-    { label: "Supplement Protocol", done: false },
-    { label: "Stress & Sleep Reset", done: false },
-    { label: "Ovulation Precision Plan", done: false },
-  ]
+  // Derived from what she actually answered — see lib/protocol-steps.ts for why
+  // this must never go back to a hard-coded list.
+  const ttcProtocolSteps = buildProtocolSteps(
+    breakdown,
+    [
+      { label: "Cycle Tracking Setup", from: "Cycle Tracking" },
+      { label: "Fertile Window Mapping", from: "Ovulation Awareness" },
+      { label: "Fertility Nutrition Blueprint", from: "Fertility Nutrition" },
+      { label: "Supplement Protocol", from: "Supplementation" },
+      { label: "Stress & Sleep Reset", from: "Stress Management" },
+      { label: "Movement & Recovery Balance", from: "Exercise Balance" },
+    ],
+    "Your fertility baseline — mapped",
+  )
   const completedSteps = ttcProtocolSteps.filter((s) => s.done).length
   const totalSteps = ttcProtocolSteps.length
   const pctDone = Math.round((completedSteps / totalSteps) * 100)
@@ -918,6 +685,25 @@ function TTCResultsPage({
             </p>
           </CardContent>
         </Card>
+
+        {/* Her own words, read back — moved directly under the score.
+            This is the highest-conviction moment on the page and it used to sit
+            two-thirds of the way down with nothing attached to it. She now
+            reaches it while the score is still fresh, and it carries a door. */}
+        {concernReflection && (
+          <ConcernReflectionCard
+            concern={quizState.additionalNotes}
+            reflection={concernReflection.reflection}
+            crisis={concernReflection.crisis}
+            footer={
+              <ReflectionCta
+                href={buildSignupUrl(quizState, score, tier)}
+                stage="ttc"
+                firstName={quizState.name}
+              />
+            }
+          />
+        )}
 
         {/* Zeigarnik Hook + Above-fold CTA */}
         <Card className="border-0 shadow-xl mb-8 overflow-hidden" style={{ borderTop: `4px solid ${getTierColor()}` }}>
@@ -970,7 +756,7 @@ function TTCResultsPage({
               quizState={quizState}
               score={score}
               tier={tier}
-              label="Start My Fertility Optimisation Plan"
+              label="Create My Free Account — Unlock My Plan"
             />
           </CardContent>
         </Card>
@@ -1019,213 +805,20 @@ function TTCResultsPage({
           </CardContent>
         </Card>
 
-        {/* Personalized Section */}
-        {concernReflection ? (
-          <ConcernReflectionCard
-            concern={quizState.additionalNotes}
-            reflection={concernReflection.reflection}
-            crisis={concernReflection.crisis}
-          />
-        ) : personalizedResponse && (
+        {/* If the reflection could not be generated, still show her that her
+            own words were read. Nothing else — the pitch lives on the paywall. */}
+        {!concernReflection && quizState.additionalNotes.trim() && (
           <Card className="border-0 shadow-xl mb-8" style={{ borderLeft: "6px solid #A15C2F" }}>
-            <CardHeader>
-              <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-                💬 You Also Mentioned: Your Personalized TTC Journey
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="p-4 rounded-lg" style={{ backgroundColor: "#F3E5F5" }}>
-                <p className="italic text-lg" style={{ color: "#666" }}>
-                  You shared: &ldquo;{quizState.additionalNotes}&rdquo;
-                </p>
-              </div>
-              <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                Based on your assessment, we&apos;ll create a customized fertility optimization plan that addresses your
-                unique situation — combining evidence-based protocols with personalized support.
+            <CardContent className="p-6">
+              <p className="italic text-lg" style={{ color: "#666" }}>
+                You shared: &ldquo;{quizState.additionalNotes}&rdquo;
               </p>
-              <div className="p-6 rounded-lg border-2" style={{ borderColor: "#FFB74D", backgroundColor: "#FFF8E1" }}>
-                <h3 className="text-xl font-bold mb-4" style={{ color: "#A15C2F" }}>
-                  How This Connects to Your Score:
-                </h3>
-                <div className="space-y-4">
-                  {gaps.map((gap, index) => {
-                    const exp = getDetailedGapExplanation(gap.practice)
-                    return (
-                      <div key={index} className="flex items-start gap-3">
-                        <span className="text-orange-600 font-bold text-lg flex-shrink-0">•</span>
-                        <div>
-                          <p className="font-bold" style={{ color: "#A15C2F" }}>
-                            {gap.practice} ({gap.score}/10):
-                          </p>
-                          <p style={{ color: "#3A2412" }}>{exp.whatThisMeans}</p>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-                <div className="mt-6 pt-6 border-t-2" style={{ borderColor: "#FFB74D" }}>
-                  <p className="font-bold text-lg mb-3" style={{ color: "#A15C2F" }}>What the App Does:</p>
-                  <div className="space-y-2">
-                    {[
-                      "Complete fertility optimization system (all 10 practice areas)",
-                      "Personalized protocols based on YOUR gaps",
-                      "Daily tracking and accountability",
-                      "Expert guidance and community support",
-                      "Evidence-based interventions that work with your body",
-                    ].map((item, i) => (
-                      <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                        <span className="text-green-600 flex-shrink-0">✅</span>
-                        <span>{item}</span>
-                      </p>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <p className="mt-3 text-base" style={{ color: "#3A2412" }}>
+                It&apos;s saved with your results, and it&apos;s the first thing your plan is built around.
+              </p>
             </CardContent>
           </Card>
         )}
-
-        {/* What Your Score Means */}
-        <Card className="border-0 shadow-xl mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-              💡 What Your {score}/110 Score Really Means
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-lg" style={{ color: "#3A2412" }}>
-              {tier === "high" &&
-                `${quizState.name}, you're doing a lot right! Your foundations are solid — with a few targeted optimizations, you could be in the 90+ range.`}
-              {tier === "medium" &&
-                `${quizState.name}, you're building momentum! You have good foundations in some areas, but there are 3 key gaps worth addressing for stronger results.`}
-              {tier === "low" &&
-                `${quizState.name}, there's real opportunity here. You're experiencing common challenges that many women face — and the good news is these gaps are ALL addressable with the right support.`}
-            </p>
-
-            {tier === "low" && (
-              <div className="space-y-2">
-                {[
-                  "You may be trying to conceive without full cycle data (tracking, ovulation confirmation)",
-                  "Nutrition and supplementation have room to be more fertility-focused",
-                  "Lifestyle factors (stress, sleep, exercise) have meaningful optimization potential",
-                  "Having structured support and accountability can make a real difference",
-                ].map((point, i) => (
-                  <p key={i} className="flex items-start gap-2" style={{ color: "#3A2412" }}>
-                    <span className="font-bold" style={{ color: "#A15C2F" }}>•</span>
-                    <span>{point}</span>
-                  </p>
-                ))}
-                <p className="text-lg" style={{ color: "#3A2412" }}>
-                  Addressing these gaps gives your body the best possible support for conception — and most women
-                  see meaningful changes within 4-8 weeks of consistent implementation.
-                </p>
-              </div>
-            )}
-
-            {tier === "medium" && (
-              <p className="text-lg" style={{ color: "#3A2412" }}>
-                Closing these 3 gaps can meaningfully improve your fertility health. You&apos;re closer than you think.
-              </p>
-            )}
-
-            {tier === "high" && (
-              <>
-                <p className="text-lg" style={{ color: "#3A2412" }}>
-                  You&apos;re tracking, eating well, and managing stress. You&apos;re doing more than most. There are
-                  still 1-2 areas where precision optimization could make a real difference.
-                </p>
-                <p className="text-lg font-semibold" style={{ color: "#A15C2F" }}>
-                  At your level, it&apos;s about PRECISION, not overhaul. Small tweaks = meaningful results.
-                </p>
-              </>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* App Features + Pricing */}
-        <Card className="border-0 shadow-xl mb-8" style={{ background: "linear-gradient(135deg, #F8F5F2, #FFF8E1)" }}>
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl mb-2" style={{ color: "#A15C2F" }}>
-              🚀 Close ALL Your Gaps: Join the Catalyst Mom App
-            </CardTitle>
-            <p className="text-lg" style={{ color: "#3A2412" }}>
-              You&apos;re at {score}/110 — imagine hitting 80-95+ in 8-12 weeks.
-            </p>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <AppFeatureGrid />
-            <div className="p-6 bg-white rounded-lg">
-              <CharterScarcity coachLabel="your dedicated fertility coach" tierPrice="$129/month" />
-              <ValueStack
-                items={[
-                  { label: "2 private 1:1 Progression Syncs/month with your dedicated fertility coach", value: "$400/mo", hero: true },
-                  { label: "Personalized fertility-optimization protocol (built from your score)", value: "$297" },
-                  { label: "24/7 AI fertility coach — answers any time of night", value: "$97/mo" },
-                  { label: "Cycle-tracking & ovulation-timing system", value: "$149" },
-                  { label: "Fertility nutrition & egg-quality frameworks", value: "$99" },
-                  { label: "Stress & hormone-balance protocols", value: "$79" },
-                  { label: "Private TTC community + weekly check-ins", value: "$30/mo" },
-                ]}
-                total="$1,151"
-                regularPrice="$129/month"
-                price="$29/month"
-              />
-              <p className="text-center text-sm mb-1" style={{ color: "#3A2412", opacity: 0.7 }}>
-                That&apos;s less than one acupuncture session — for everything, every month.
-              </p>
-            </div>
-            <ObstacleAnswer obstacle={quizState.biggestObstacle} />
-            <PricingCTA
-              quizState={quizState}
-              score={score}
-              tier={tier}
-              label="Start My Fertility Plan"
-            />
-            <Guarantee>
-              Follow your fertility protocol for 30 days. If you&apos;ve followed it and honestly don&apos;t feel more in
-              control of your cycle and your body, email us and we&apos;ll refund your payment. We only ask that you gave it a real try.
-            </Guarantee>
-          </CardContent>
-        </Card>
-
-        {/* Testimonials */}
-        <Card className="border-0 shadow-xl mb-8">
-          <CardHeader>
-            <CardTitle className="text-2xl text-center" style={{ color: "#A15C2F" }}>
-              💬 What Women at Your Score Say
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <TestimonialsBlock testimonials={testimonialsByTier[tier] || testimonialsByTier.medium} />
-          </CardContent>
-        </Card>
-
-        {/* Final CTA */}
-        <Card className="border-0 shadow-xl mb-8">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl" style={{ color: "#A15C2F" }}>
-              Ready to Optimize Your Fertility?
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-4">
-            <p className="text-lg" style={{ color: "#3A2412" }}>
-              Join 300+ women who are actively working toward conception with evidence-based protocols and expert
-              support.
-            </p>
-            <PricingCTA
-              quizState={quizState}
-              score={score}
-              tier={tier}
-              label="Start My Fertility Plan"
-            />
-            <div className="mt-6 p-4 bg-amber-50 rounded-lg">
-              <p className="font-semibold mb-1" style={{ color: "#A15C2F" }}>Questions?</p>
-              <p style={{ color: "#3A2412" }}>Email: admin@catalystmom.online</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <FounderNote stage="ttc" />
 
         {/* Final ask — the page should end with a door, not a story */}
         <div className="text-center mt-8 mb-24 md:mb-8">
@@ -1235,16 +828,16 @@ function TTCResultsPage({
             className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
             style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
           >
-            Start My Fertility Plan
+            Create My Free Account
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            $29/month founding seat · 30-day guarantee · cancel anytime
+            Free to create · no card needed · takes about 30 seconds
           </p>
         </div>
 
         <StickyCta
           href={buildSignupUrl(quizState, score, tier)}
-          label="Start My Fertility Plan"
+          label="Create My Free Account — Unlock My Plan"
         />
       </div>
     </div>
