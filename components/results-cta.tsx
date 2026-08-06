@@ -76,6 +76,12 @@ export function ReflectionCta({
 }
 
 // ─── What the next 60 seconds actually look like ─────────────────────────────
+//
+// PARKED FOR THE PAYWALL. WhatHappensNext and ObjectionFaq below are no longer
+// rendered on the results page — that page is down to one screen. Both belong
+// on the upgrade screen inside the app, where she is deciding about money and
+// the objections are live. Kept here so the copy moves rather than gets
+// rewritten from memory.
 
 const NEXT_STEPS: Record<Stage, string[]> = {
   pregnancy: [

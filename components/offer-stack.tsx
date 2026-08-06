@@ -1,6 +1,17 @@
 import type { ReactNode } from "react"
 import { CheckCircle2 } from "lucide-react"
 
+// PARKED FOR THE PAYWALL — nothing in this file is rendered on the results
+// pages any more. The results page is her result: score, one paragraph, her
+// progress, her own words, one door. Everything that sells belongs at the
+// moment she taps a locked action inside the app, after the product has
+// already done something for her.
+//
+// Kept rather than deleted because this is the copy that has to move: the
+// value stack, the Charter Founder constraint, the founder story, and the
+// guarantee all still need a home on the paywall / upgrade screen. Deleting
+// them here would just mean rewriting them there from memory.
+
 export type StackItem = {
   label: string
   hero?: boolean
