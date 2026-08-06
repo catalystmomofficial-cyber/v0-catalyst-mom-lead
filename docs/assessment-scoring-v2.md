@@ -110,19 +110,52 @@ made v1 impossible to explain. It is only safe because the arithmetic is uniform
 and disclosable: every category is worth the same, and the only step is scaling
 at the end.
 
-Two rules make it honest, and they are not optional:
+**The governing principle, which is broader than this bug:**
 
-**The page must never show a total that is not a sum of what is above it.** v1
-showed ten categories scoring 5 and a headline of 44 — the complaint that
-started all of this. Showing eight categories out of ten each and a headline of
-79/100 is the same defect. The breakdown's own total line shows the real
-subtotal (`63 of 80`), and the headline is presented as what it is — a
-percentage.
+> Every number shown to her must be independently explainable from what is
+> visible on the page.
 
-**The invariant test changes with it.** `total === sum(categories)` becomes
-`displayed === round(sum(categories) / maxPossible * 100)`, and a second test
-asserts `maxPossible === categories.length * 10`. Without that pair, an
-unreachable maximum can come back the moment a category is added.
+If she points at any figure and asks where it came from, the answer must be on
+the screen. No hidden weighting, no invisible multipliers, no bonus points, no
+"behind the scenes". That principle also rules out anything an AI adjusts
+silently — if a number moves, the reason must be visible.
+
+**In practice, the hero and the breakdown speak different languages.**
+
+The failure mode is two numbers that look like they should reconcile and don't.
+Eight categories showing out of ten each, adding to 63, under a hero reading
+`79/100` is the same defect as v1's ten fives under a 44 — she does not think
+"normalisation", she thinks the calculator is broken, and the trust earned by
+every personalised line above it is gone in a second.
+
+So they stop competing:
+
+> **You're in the Building Momentum Stage**
+> 79% of your recovery foundations are currently in place
+
+and further down:
+
+> **Behaviour breakdown**
+> 63 of 80 foundation points currently in place
+
+One is a percentage. One is a subtotal. Nothing on the page invites her to
+reconcile them, and both are true on their own terms.
+
+**Keep the gauge; change what it is labelled.** Removing the number entirely
+would throw away the emotional payoff of a ten-minute assessment — the animated
+dial is the moment the work pays off. It just stops being `79/100`, a total that
+invites addition, and becomes `79%`, a proportion that does not. The tier
+carries the headline; the percentage sits beneath it.
+
+One consequence to hold: this makes the **tier** the most prominent thing on the
+page. The thresholds stop being a background detail and become the headline, so
+they have to be right before this ships — and the top tier, which has never once
+fired in v1, becomes the most visible element in the product.
+
+**The invariants change with it.** `total === sum(categories)` becomes
+`displayed === round(sum(categories) / maxPossible * 100)`, paired with
+`maxPossible === categories.length * 10`. Without both, an unreachable maximum
+returns the moment a category is added.
 
 ---
 
@@ -293,9 +326,18 @@ before it is written:
 - **Personalises** — it shapes the plan, the sequencing or the copy
 - **Explains** — it gives a recommendation its reason
 
-A question may serve two. A question that serves none is asking a tired woman
-for something nobody uses, and should be deleted. This rule is what stops v2
-drifting back into v1.
+Reviewing a proposed question means filling this in:
+
+| | Yes / No |
+|---|---|
+| Does it measure behaviour within her control? | |
+| Does it personalise the plan? | |
+| Does it explain a recommendation? | |
+
+At least one box must be ticked. All three empty means the question does not get
+added. A question may serve two. A question that serves none is asking a tired
+woman for something nobody uses, and should be deleted. This rule is what stops
+v2 drifting back into v1.
 
 ---
 
