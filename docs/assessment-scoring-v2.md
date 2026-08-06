@@ -68,37 +68,61 @@ plan, the copy, and the coach's starting point.
 
 ## 3. The categories
 
-Ten categories, ten points each, total one hundred. The maximum must be
-reachable — in v1 it was not, and the top tier never once fired for any user on
-any of the three assessments.
+Each stage has as many behavioural categories as it genuinely has. Not ten.
+Ten was arithmetic wanting symmetry, and inventing a category to satisfy it is
+precisely how v1 ended up with "timeline always scores 10".
 
-### Postpartum
+Every category is worth ten points. The stage total is however many categories
+× 10, and the displayed score is that normalised to 100.
 
-Today there are only **eight** clean behavioural categories:
+### Postpartum — 8 categories, max 80
 
 pelvic floor training · core-safe exercise practice · nutrition ·
 protein intake · hydration · rest behaviour · workout consistency ·
 wellness tracking
 
-Two are needed to reach ten. Candidates, to be chosen deliberately rather than
-invented to fill slots: movement outside workouts (walking), and asking for or
-accepting support. Until they exist, do not fake a hundred by weighting eight
-categories at 12.5 — pick the questions.
-
-### Pregnancy
+### Pregnancy — 10 categories, max 100
 
 prenatal care attendance · pregnancy-safe movement · nutrition ·
 supplementation · stress-management behaviour · rest behaviour ·
 pelvic floor preparation · symptom-management behaviour ·
 birth-prep practice · wellness tracking
 
-### TTC
+### TTC — 10 categories, max 100
 
 cycle tracking · ovulation awareness practice · fertility nutrition ·
 supplementation · stress-management behaviour · rest behaviour ·
 movement balance · alcohol · nicotine · wellness tracking
 
-TTC is the only stage that already has ten clean behavioural categories.
+### Rejected: asking for or accepting support
+
+Considered as a ninth postpartum category and deliberately left out. A woman
+with no partner, no family nearby and no childcare cannot build a habit around
+support she does not have access to. That makes it circumstance wearing the
+costume of behaviour, and scoring it would penalise the most isolated mothers
+hardest — the ones the product exists for. If it ever returns it must be phrased
+as something genuinely within her control.
+
+### The display contract that comes with normalising
+
+Normalisation reintroduces arithmetic the user cannot see, which is exactly what
+made v1 impossible to explain. It is only safe because the arithmetic is uniform
+and disclosable: every category is worth the same, and the only step is scaling
+at the end.
+
+Two rules make it honest, and they are not optional:
+
+**The page must never show a total that is not a sum of what is above it.** v1
+showed ten categories scoring 5 and a headline of 44 — the complaint that
+started all of this. Showing eight categories out of ten each and a headline of
+79/100 is the same defect. The breakdown's own total line shows the real
+subtotal (`63 of 80`), and the headline is presented as what it is — a
+percentage.
+
+**The invariant test changes with it.** `total === sum(categories)` becomes
+`displayed === round(sum(categories) / maxPossible * 100)`, and a second test
+asserts `maxPossible === categories.length * 10`. Without that pair, an
+unreachable maximum can come back the moment a category is added.
 
 ---
 
@@ -120,8 +144,12 @@ two years is stressful and that is not a habit failure.
 > After: When you're overwhelmed, do you have a way to decompress or ask for
 > support?
 
-**Pregnancy symptoms.** Nausea severity is not a behaviour. Either reword to
-what she does about it, or move it to context.
+**Pregnancy symptoms.** "How bad is your nausea?" measures biology. A woman
+with hyperemesis is not failing a habit.
+
+> Before: How are you managing nausea?
+> After: When nausea makes eating difficult, how often are you able to use
+> strategies that help you stay nourished?
 
 These rewrites ship with the engine, not after it. An engine that promises
 "habits within her control" while scoring hours slept contradicts itself on the
@@ -194,11 +222,14 @@ failure mode is the coach telling a woman it is 94% confident about her body.
 Three tests. They exist because v1 drifted silently for months, and these three
 lines make that specific failure impossible to ship again.
 
-1. `total === sum(categories)` — the breakdown can never disagree with the score
-2. `tier` matches its threshold for every score in `0..100`
-3. `0 <= total <= 100` for every possible combination of answers
+1. `displayed === round(sum(categories) / maxPossible * 100)` — the breakdown
+   can never disagree with the score
+2. `maxPossible === categories.length * 10` — the top of the scale is always
+   reachable
+3. `tier` matches its threshold for every score in `0..100`
+4. `0 <= displayed <= 100` for every possible combination of answers
 
-Test 3 is the one that would have caught the unreachable maximum.
+Tests 2 and 4 are the pair that would have caught the unreachable maximum.
 
 Answer values are typed and scored through `Record<AnswerValue, number>` maps,
 so adding a quiz option without scoring it is a compile error rather than a
@@ -247,15 +278,28 @@ These block implementation. They are not engineering questions.
    anon may INSERT, anon may SELECT nothing, reads only from the authenticated
    side and only her own row. Confirm what is there now before widening it.
 
-2. **The two extra postpartum categories.** Which behaviours, decided on merit.
-
 3. **Old rows.** v1 scores stay as they are and are never recalculated — they
    were true when they were generated, and a mom who remembers 62 should not
    become 48. `engine_version` separates them.
 
 ---
 
-## 10. Order of work
+## 10. The rule for adding any future question
+
+Every question must serve at least one of three purposes, chosen deliberately
+before it is written:
+
+- **Measures** — it scores, so it must be behaviour within her control
+- **Personalises** — it shapes the plan, the sequencing or the copy
+- **Explains** — it gives a recommendation its reason
+
+A question may serve two. A question that serves none is asking a tired woman
+for something nobody uses, and should be deleted. This rule is what stops v2
+drifting back into v1.
+
+---
+
+## 11. Order of work
 
 1. This document ✅
 2. Verify RLS
