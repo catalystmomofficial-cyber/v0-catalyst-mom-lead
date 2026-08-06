@@ -48,7 +48,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Personal coaching—not just another app",
+      title: "Your dedicated maternal wellness coach",
       body: [
         "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
@@ -83,7 +83,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Personal coaching—not just another app",
+      title: "Your dedicated maternal wellness coach",
       body: [
         "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
@@ -118,7 +118,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Personal coaching—not just another app",
+      title: "Your dedicated maternal wellness coach",
       body: [
         "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
