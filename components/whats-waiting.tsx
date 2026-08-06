@@ -43,7 +43,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       body: [
         "We've already built your roadmap from the answers you just gave us. Your first recovery session is waiting.",
         "Every recommendation is matched to where your body is today — not where a generic program assumes it is.",
-        "Your AI coach is already trained on your answers, so you never start a conversation from scratch.",
+        "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
     },
     {
@@ -65,9 +65,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need is already inside.",
+      lead: "Everything you need between coaching sessions.",
       body: [
-        "Meal plans built for a healing body, not a diet. The wellness library, including guides for what you're dealing with today. And 500 welcome credits, added the moment your account exists.",
+        "Healing-focused meal plans, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
       ],
     },
   ],
@@ -79,7 +79,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       body: [
         "We've already built your roadmap from the answers you just gave us. Your first session is waiting.",
         "Every recommendation is matched to where your body is today and which trimester you're in — not where a generic program assumes it is.",
-        "Your AI coach is already trained on your answers, so you never start a conversation from scratch.",
+        "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
     },
     {
@@ -101,9 +101,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need is already inside.",
+      lead: "Everything you need between coaching sessions.",
       body: [
-        "Meal plans built for pregnancy, not a diet. The wellness library, including guides for what you're dealing with today. And 500 welcome credits, added the moment your account exists.",
+        "Pregnancy-safe meal plans, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
       ],
     },
   ],
@@ -115,7 +115,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       body: [
         "We've already built your roadmap from the answers you just gave us. Your first steps are waiting.",
         "Every recommendation is matched to where your cycle and your body are today — not where a generic program assumes they are.",
-        "Your AI coach is already trained on your answers, so you never start a conversation from scratch.",
+        "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
     },
     {
@@ -137,9 +137,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need is already inside.",
+      lead: "Everything you need between coaching sessions.",
       body: [
-        "Meal plans built around egg quality and hormone balance. The wellness library, including guides for what you're dealing with today. And 500 welcome credits, added the moment your account exists.",
+        "Meal plans built around egg quality and hormone balance, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
       ],
     },
   ],
@@ -154,7 +154,8 @@ export function WhatsWaiting({ stage }: { stage: Stage }) {
         Everything below has already been prepared from the answers you just gave us.
       </p>
       <p className="text-center text-sm mb-5" style={{ color: MUTED }}>
-        The moment you create your free account, your {WORD[stage]} plan is already there.
+        The moment you create your free account, your personalised {WORD[stage]} plan will already be
+        waiting for you.
       </p>
 
       <div className="space-y-4">
