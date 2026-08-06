@@ -148,9 +148,22 @@ invites addition, and becomes `79%`, a proportion that does not. The tier
 carries the headline; the percentage sits beneath it.
 
 One consequence to hold: this makes the **tier** the most prominent thing on the
-page. The thresholds stop being a background detail and become the headline, so
-they have to be right before this ships — and the top tier, which has never once
-fired in v1, becomes the most visible element in the product.
+page. The top tier, which has never once fired in v1, becomes the most visible
+element in the product.
+
+That does not mean the thresholds have to be *correct* before shipping — there is
+no population to be correct about yet. It means they have to be **principled**:
+every tier reachable, boundaries chosen for a stated reason, and the reason
+written down. They are configuration, not engine:
+
+```ts
+export const TIER_THRESHOLDS = {
+  postpartum: { early: 0, momentum: 45, thriving: 75 },
+}
+```
+
+Moving 75 to 72 after a thousand assessments is a config edit. If it ever
+requires touching the engine, the separation has failed.
 
 **The invariants change with it.** `total === sum(categories)` becomes
 `displayed === round(sum(categories) / maxPossible * 100)`, paired with
@@ -190,7 +203,25 @@ first day.
 
 ---
 
-## 5. What the engine returns
+## 5. Four systems, one set of answers
+
+The assessment is no longer a quiz. It is four systems that happen to share an
+input, and keeping them separate is what stops any one of them dragging the
+others out of shape:
+
+| System | Consumes | Produces |
+|---|---|---|
+| **Behaviour** | behavioural answers | the score and the breakdown |
+| **Context** | timeline, clearance, goal | what the plan may contain |
+| **Prescription** | both of the above | ordered module keys with reasons |
+| **Coach context** | all of it | how the AI and the human coach open |
+
+One answer can feed several of these. None of them may reach into another's
+output and recompute it.
+
+---
+
+## 6. What the engine returns
 
 One function, one source of truth. Everything downstream reads this object and
 nothing recomputes any part of it.
@@ -215,7 +246,7 @@ can actually fire, and retuned after the first 100–200 assessments.
 
 ---
 
-## 6. How a prescription is generated
+## 7. How a prescription is generated
 
 ```ts
 {
@@ -250,10 +281,21 @@ failure mode is the coach telling a woman it is 94% confident about her body.
 
 ---
 
-## 7. Invariants
+## 8. Invariants
 
 Three tests. They exist because v1 drifted silently for months, and these three
 lines make that specific failure impossible to ship again.
+
+0. **Reproducibility.** The same answers plus the same `engine_version` produce
+   an identical result — same score, same categories, same prescription, same
+   order. Not approximately. Exactly.
+
+   This is a purity constraint, not a nicety. The engine may read nothing except
+   its inputs: no `Date.now()`, no randomness, no network, no clock-derived
+   values. The trap is real — if weeks-postpartum were ever computed from a birth
+   date rather than taken from her answer, the same stored assessment would
+   generate a different plan next month, and "why was Pelvic Floor Reset my first
+   module?" would become unanswerable.
 
 1. `displayed === round(sum(categories) / maxPossible * 100)` — the breakdown
    can never disagree with the score
@@ -270,7 +312,7 @@ silent zero. That is the actual regression that produced v1's column of zeros.
 
 ---
 
-## 8. Storage and lifecycle
+## 9. Storage and lifecycle
 
 The answers that produce the score are currently **not persisted on any of the
 three assessments**. Postpartum stores name, email, goal, score, tier, concern.
@@ -299,7 +341,7 @@ is unpleasant; build it now.
 
 ---
 
-## 9. Open before the first migration
+## 10. Open before the first migration
 
 These block implementation. They are not engineering questions.
 
@@ -317,7 +359,7 @@ These block implementation. They are not engineering questions.
 
 ---
 
-## 10. The rule for adding any future question
+## 11. The rule for adding any future question
 
 Every question must serve at least one of three purposes, chosen deliberately
 before it is written:
@@ -341,7 +383,7 @@ v2 drifting back into v1.
 
 ---
 
-## 11. Order of work
+## 12. Order of work
 
 1. This document ✅
 2. Verify RLS
