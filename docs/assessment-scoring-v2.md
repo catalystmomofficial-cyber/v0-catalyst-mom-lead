@@ -77,9 +77,30 @@ Every category is worth ten points. The stage total is however many categories
 
 ### Postpartum — 8 categories, max 80
 
-pelvic floor training · core-safe exercise practice · nutrition ·
-protein intake · hydration · rest behaviour · workout consistency ·
-wellness tracking
+**Four of these exist today. Four have no question and must be written.**
+
+| Category | Asked today? |
+|---|---|
+| core-safe exercise / pelvic floor state | yes — `coreSafeExercises` |
+| workout consistency | yes — `workoutRoutine` |
+| nutrition | yes — `nutrition` |
+| rest behaviour | yes — `rest` |
+| pelvic floor training as its own habit | **no question** |
+| protein intake | **no question** |
+| hydration | **no question** |
+| wellness tracking | **no question** |
+
+The four missing fields (`pelvicFloor`, `proteinIntake`, `hydration`, `tracking`)
+are declared on `QuizState` and read by `getDetailedBreakdown`, but nothing ever
+asks for them. That is the other half of why v1's breakdown showed a column of
+zeros: four categories were mismatched strings, and four were never collected at
+all.
+
+So this is not "wire the engine to the existing questions". Writing four new
+questions is part of the work, and each one passes the reviewer checklist in
+§11 like anything else. Until they exist, postpartum has four behavioural
+categories and a max of 40 — do not ship eight categories where half are
+permanently zero, which would be v1's failure with a nicer spec attached.
 
 ### Pregnancy — 10 categories, max 100
 
