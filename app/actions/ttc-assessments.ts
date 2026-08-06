@@ -23,26 +23,9 @@ export async function saveTTCAssessment(data: any) {
   }
 }
 
-export async function getTTCAssessments(email?: string) {
-  try {
-    const supabase = await createClient()
-
-    let query = supabase.from('ttc_assessments').select('*')
-    
-    if (email) {
-      query = query.eq('email', email)
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false })
-
-    if (error) {
-      console.error('[v0] Fetch TTC assessments error:', error)
-      throw new Error(error.message)
-    }
-
-    return data
-  } catch (error) {
-    console.error('[v0] Fetch TTC assessments exception:', error)
-    throw error
-  }
-}
+// The `get…Assessments` server action that used to live here has been removed.
+//
+// It selected `*` from the assessments table with no auth check. Server actions
+// compile to callable POST endpoints whether or not the app ever calls them, so
+// this was a second way to read every woman's assessment — same data, different
+// door. Nothing in this codebase called it.

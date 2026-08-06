@@ -65,33 +65,13 @@ export async function POST(request: Request) {
   }
 }
 
-// GET endpoint to fetch assessments (for analytics/admin)
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const limit = searchParams.get('limit') || '100'
-    const offset = searchParams.get('offset') || '0'
-
-    const { data, error, count } = await supabase
-      .from('postpartum_assessments')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false })
-      .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1)
-
-    if (error) {
-      console.error('[v0] Supabase query error:', error)
-      return Response.json(
-        { error: 'Failed to fetch assessments' },
-        { status: 500 }
-      )
-    }
-
-    return Response.json({ data, total: count })
-  } catch (error) {
-    console.error('[v0] Assessment GET error:', error)
-    return Response.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
+// The unauthenticated GET handler that used to live here has been removed.
+//
+// It ran `.select('*')` against the assessments table with no auth check of any
+// kind, so `GET /api/assessments?limit=100&offset=0` returned every woman's name, email, score and free-text
+// concern to anyone who asked for it. The comment above it said "for
+// analytics/admin". There was no admin check, and nothing in this codebase ever
+// called it.
+//
+// If an admin view is needed, it authenticates first and selects the columns it
+// needs — never `*`, and never from a route that answers to the public internet.
