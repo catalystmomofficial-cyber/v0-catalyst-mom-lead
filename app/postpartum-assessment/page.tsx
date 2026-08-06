@@ -1363,7 +1363,7 @@ function ResultsPage({
             className="w-full md:w-auto text-white px-8 py-4 text-lg font-bold rounded-xl shadow-lg whitespace-normal leading-snug h-auto"
             style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
           >
-            Create My Free Account
+            Continue to My Recovery Plan
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
             Your personalised dashboard, AI coach and recovery plan will already be waiting for you.
@@ -1372,7 +1372,7 @@ function ResultsPage({
 
         <StickyCta
           href={buildSignupUrl(quizState, score, tier)}
-          label="Create My Free Account"
+          label="Continue to My Recovery Plan"
         />
       </div>
     </div>

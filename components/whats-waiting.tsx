@@ -24,7 +24,7 @@ type Stage = "postpartum" | "pregnancy" | "ttc"
 interface Section {
   emoji: string
   title: string
-  lead: string
+  lead?: string
   body: string[]
 }
 
@@ -48,10 +48,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Your dedicated recovery coach",
-      lead: "You're not doing this alone.",
+      title: "Personal coaching—not just another app",
       body: [
-        "A dedicated coach reviews your progress every two weeks and adjusts your plan with you — what's working, what hurts, what comes next.",
+        "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
     },
     {
@@ -84,10 +83,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Your dedicated pregnancy & birth-prep coach",
-      lead: "You're not doing this alone.",
+      title: "Personal coaching—not just another app",
       body: [
-        "A dedicated coach reviews your progress every two weeks and adjusts your plan with you — what's working, what's changed this trimester, what comes next.",
+        "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
     },
     {
@@ -120,10 +118,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     },
     {
       emoji: "👩‍⚕️",
-      title: "Your dedicated fertility coach",
-      lead: "You're not doing this alone.",
+      title: "Personal coaching—not just another app",
       body: [
-        "A dedicated coach reviews your progress every two weeks and adjusts your plan with you — what's working, what your cycle is telling us, what comes next.",
+        "Every two weeks, you'll meet one-on-one with your dedicated maternal wellness coach to review your progress, celebrate wins, solve challenges, and adjust your plan together",
       ],
     },
     {
@@ -165,12 +162,14 @@ export function WhatsWaiting({ stage }: { stage: Stage }) {
             className="rounded-lg p-4"
             style={{ backgroundColor: "#FFFFFF", border: `1px solid ${EDGE}` }}
           >
-            <p className="font-bold text-sm" style={{ color: COPPER }}>
+            <p className="font-bold text-sm mb-1" style={{ color: COPPER }}>
               {section.emoji} {section.title}
             </p>
-            <p className="text-sm font-semibold mt-0.5 mb-2" style={{ color: INK }}>
-              {section.lead}
-            </p>
+            {section.lead && (
+              <p className="text-sm font-semibold mt-0.5 mb-2" style={{ color: INK }}>
+                {section.lead}
+              </p>
+            )}
             {section.body.map((line, i) => (
               <p key={i} className="text-sm leading-relaxed mb-1.5 last:mb-0" style={{ color: INK }}>
                 {line}
