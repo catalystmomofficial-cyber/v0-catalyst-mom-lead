@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client"
 import { generateConcernReflection, type ConcernReflectionResult } from "@/lib/ai-reflection"
 import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta } from "@/components/results-cta"
+import { WhatsWaiting } from "@/components/whats-waiting"
 import { buildProtocolSteps } from "@/lib/protocol-steps"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
@@ -1382,6 +1383,11 @@ function ResultsPage({
             </CardContent>
           </Card>
         )}
+
+        {/* Answers the question she is actually asking here — not "why is
+            this worth the money" but "if I create an account, what happens
+            next". No prices; the money conversation happens inside. */}
+        <WhatsWaiting stage="postpartum" />
 
         {/* Final ask — the page should end with a door, not a story */}
         <div className="text-center mt-8 mb-24 md:mb-8">

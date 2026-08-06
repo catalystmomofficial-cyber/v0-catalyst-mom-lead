@@ -1,5 +1,4 @@
 import type { ReactNode } from "react"
-import { CheckCircle2 } from "lucide-react"
 
 // PARKED FOR THE PAYWALL — nothing in this file is rendered on the results
 // pages any more. The results page is her result: score, one paragraph, her
@@ -8,57 +7,13 @@ import { CheckCircle2 } from "lucide-react"
 // already done something for her.
 //
 // Kept rather than deleted because this is the copy that has to move: the
-// value stack, the Charter Founder constraint, the founder story, and the
-// guarantee all still need a home on the paywall / upgrade screen. Deleting
-// them here would just mean rewriting them there from memory.
-
-export type StackItem = {
-  label: string
-  hero?: boolean
-}
-
-// ─── What's inside — no prices ──────────────────────────────────────────────
+// Charter Founder constraint, the founder story, and the guarantee all still
+// need a home on the paywall / upgrade screen. Deleting them here would just
+// mean rewriting them there from memory.
 //
-// This used to be a full price stack: à-la-carte dollar values, a $1,151 anchor,
-// the regular tier struck through, then the founding price. It was doing the
-// opposite of its job. A woman reaches the end of a ten-minute assessment,
-// meets a number, and leaves — she never gets far enough to want the thing.
-//
-// Desire stays, the number goes. She sees what is waiting, creates a free
-// account, uses her first steps, and meets the price from the inside once the
-// product has already done something for her. Nothing on the results page asks
-// her for money, so nothing on the results page states a price.
-export function ValueStack({ items }: { items: StackItem[] }) {
-  return (
-    <div
-      className="text-left mb-4 p-4 rounded-lg"
-      style={{ backgroundColor: "#F8F5F2", border: "1px solid #E8D5C4" }}
-    >
-      <p className="text-center font-bold mb-3" style={{ color: "#A15C2F" }}>
-        What&apos;s waiting inside your account:
-      </p>
-      <div className="space-y-2">
-        {items.map((item, i) => (
-          <div key={i} className="flex items-start gap-2 text-sm" style={{ color: "#3A2412" }}>
-            <CheckCircle2 className="h-4 w-4 mt-0.5 flex-shrink-0 text-green-600" />
-            <span className={item.hero ? "font-bold" : ""}>{item.label}</span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-3 text-xs text-center leading-snug" style={{ color: "#8A7060" }}>
-        One place — instead of separate apps for tracking, workouts, meal plans, and recovery.
-      </p>
-      <div className="mt-3 rounded-lg p-3 text-left" style={{ backgroundColor: "#FFF8E1", border: "1px solid #F0C089" }}>
-        <p className="text-sm font-semibold" style={{ color: "#A15C2F" }}>
-          🎁 Your welcome gift: 500 credits
-        </p>
-        <p className="text-xs mt-0.5" style={{ color: "#3A2412", opacity: 0.85 }}>
-          Added the moment your account is created — put them straight toward any of our premium guides inside the app.
-        </p>
-      </div>
-    </div>
-  )
-}
+// The old ValueStack is gone for good — components/whats-waiting.tsx replaces
+// it. Same list, different job: it stopped arguing that the plan is worth the
+// money and started answering "if I create an account, what happens next".
 
 // ─── Charter Founder scarcity (honest, mechanism-backed) ────────────────────
 // The constraint is real — coach time, first 100 members — so it stays. What
@@ -79,9 +34,9 @@ export function CharterScarcity({
       </p>
       <p className="text-sm" style={{ color: "#3A2412" }}>
         Creating your account holds your Charter Founder place: full app access, community events, and
-        <strong> 2 private 1:1 Progression Syncs each month with {coachLabel}</strong> on founding terms,
-        for as long as you stay. Once the first 100 places are taken, the 1:1 Syncs move to the standard
-        coaching tier. Claiming your place costs nothing today.
+        <strong> a private call with {coachLabel} every two weeks</strong> on founding terms, for as long as
+        you stay. Once the first 100 places are taken, those calls move to the standard coaching tier.
+        Claiming your place costs nothing today.
       </p>
     </div>
   )
