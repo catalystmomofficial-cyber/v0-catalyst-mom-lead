@@ -240,39 +240,6 @@ function buildSignupUrl(quizState: QuizState, score: number, tier: string): stri
   return url.toString()
 }
 
-function PricingCTA({
-  quizState,
-  score,
-  tier,
-  buttonLabel,
-  footnote,
-}: {
-  quizState: QuizState
-  score: number
-  tier: string
-  buttonLabel: string
-  footnote: string
-}) {
-  return (
-    <div className="text-center">
-      <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
-        Your account is free to create — the rest of your plan is already built and waiting in it.
-      </p>
-      <Button
-        size="lg"
-        onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
-        className="w-full md:w-auto text-white px-6 py-3 text-base md:px-12 md:py-6 md:text-xl font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto text-center"
-        style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-      >
-        {buttonLabel}
-      </Button>
-      <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        {footnote}
-      </p>
-    </div>
-  )
-}
-
 // ─── Obstacle crusher — answers the #1 obstacle she told us about ────────────
 function ObstacleAnswer({ obstacle }: { obstacle: string }) {
   const answers: Record<string, { said: string; answer: string }> = {
@@ -848,13 +815,6 @@ function PregnancyResultsPage({
               👇 Unlock the remaining {totalSteps - completedSteps} steps — personalised to your trimester &amp; goals
             </p>
             <ObstacleAnswer obstacle={quizState.biggestObstacle} />
-            <PricingCTA
-              quizState={quizState}
-              score={score}
-              tier={tier}
-              buttonLabel="Create My Free Account — Unlock My Plan"
-              footnote="Free to create · no card · your assessment loads straight in"
-            />
           </CardContent>
         </Card>
 
@@ -948,8 +908,13 @@ function PregnancyResultsPage({
             next". No prices; the money conversation happens inside. */}
         <WhatsWaiting stage="pregnancy" />
 
-        {/* Final ask — the page should end with a door, not a story */}
+        {/* One ask, after she has read everything. Every other button on the
+            page was removed: two different labels for the same action made her
+            stop and choose, which is a decision she should never have to make. */}
         <div className="text-center mt-8 mb-24 md:mb-8">
+          <p className="text-sm mb-3" style={{ color: "#A15C2F" }}>
+            Your account is free to create — the rest of your plan is already built and waiting in it.
+          </p>
           <Button
             size="lg"
             onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
@@ -959,7 +924,7 @@ function PregnancyResultsPage({
             Create My Free Account
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            Free to create · no card needed · takes about 30 seconds
+            Your personalised dashboard, AI coach and pregnancy plan will already be waiting for you.
           </p>
         </div>
 

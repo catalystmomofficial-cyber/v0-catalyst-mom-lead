@@ -93,44 +93,6 @@ function sanitizeName(name: string): string {
 
 // ─── DR Shorthand Detector ────────────────────────────────────────────────────
 // ─── Goal + Tier Action Plan ──────────────────────────────────────────────────
-function PricingSection({
-  quizState,
-  score,
-  tier,
-}: {
-  quizState: QuizState
-  score: number
-  tier: string
-}) {
-  const getButtonLabel = () => {
-    if (quizState.primaryGoal === "heal-dr") return "Create My Free Account — Start Closing My Gap"
-    if (quizState.primaryGoal === "weight-loss") return "Create My Free Account — Reclaim My Energy"
-    if (quizState.primaryGoal === "strength") return "Create My Free Account — Rebuild My Strength"
-    if (quizState.weeksPostpartum === "0-6" || quizState.medicalClearance === "not-yet")
-      return "Create My Free Account — Start Gently"
-    return "Create My Free Account — Unlock My Plan"
-  }
-
-  return (
-    <div className="text-center">
-      <p className="text-sm font-semibold mb-3" style={{ color: "#A15C2F" }}>
-        Your account is free to create — the rest of your plan is already built and waiting in it.
-      </p>
-      <Button
-        size="lg"
-        className="w-full text-white px-6 py-4 text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-normal leading-snug h-auto"
-        style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
-        onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
-      >
-        {getButtonLabel()}
-      </Button>
-      <p className="text-sm mt-4" style={{ color: "#3A2412", opacity: 0.7 }}>
-        Free to create · no card · your protocol needs only 15 mins/day.
-      </p>
-    </div>
-  )
-}
-
 // ─── Obstacle crusher — answers the #1 obstacle she told us about ────────────
 function ObstacleAnswer({ obstacle }: { obstacle: string }) {
   const answers: Record<string, { said: string; answer: string }> = {
@@ -1300,7 +1262,6 @@ function ResultsPage({
             </p>
 
             <ObstacleAnswer obstacle={quizState.biggestObstacle} />
-            <PricingSection quizState={quizState} score={score} tier={tier} />
           </CardContent>
         </Card>
 
@@ -1389,8 +1350,13 @@ function ResultsPage({
             next". No prices; the money conversation happens inside. */}
         <WhatsWaiting stage="postpartum" />
 
-        {/* Final ask — the page should end with a door, not a story */}
+        {/* One ask, after she has read everything. Every other button on the
+            page was removed: two different labels for the same action made her
+            stop and choose, which is a decision she should never have to make. */}
         <div className="text-center mt-8 mb-24 md:mb-8">
+          <p className="text-sm mb-3" style={{ color: "#A15C2F" }}>
+            Your account is free to create — the rest of your plan is already built and waiting in it.
+          </p>
           <Button
             size="lg"
             onClick={() => { window.location.href = buildSignupUrl(quizState, score, tier) }}
@@ -1400,13 +1366,13 @@ function ResultsPage({
             Create My Free Account
           </Button>
           <p className="text-sm mt-3" style={{ color: "#8A7060" }}>
-            Free to create · no card needed · takes about 30 seconds
+            Your personalised dashboard, AI coach and recovery plan will already be waiting for you.
           </p>
         </div>
 
         <StickyCta
           href={buildSignupUrl(quizState, score, tier)}
-          label="Start My Recovery Plan"
+          label="Create My Free Account"
         />
       </div>
     </div>

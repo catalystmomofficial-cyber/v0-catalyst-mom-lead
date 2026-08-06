@@ -31,6 +31,11 @@ const EDGE = "#E8D5C4"
 type Stage = "postpartum" | "pregnancy" | "ttc"
 
 // ─── The door under her reflection ───────────────────────────────────────────
+//
+// The only ask before the bottom of the page, and it asks her to SAVE, not to
+// sign up. She just read her own words understood; the next move should feel
+// like keeping that, not like starting a transaction. Short label on purpose —
+// people scan buttons, they don't read them.
 
 const REFLECTION_LINE: Record<Stage, string> = {
   pregnancy:
@@ -40,11 +45,17 @@ const REFLECTION_LINE: Record<Stage, string> = {
   ttc: "This is the part of trying nobody walks you through — and it is exactly what your plan is built around.",
 }
 
+const SAVE_LABEL: Record<Stage, string> = {
+  pregnancy: "Save My Pregnancy Plan",
+  postpartum: "Save My Recovery Plan",
+  ttc: "Save My Fertility Plan",
+}
+
 export function ReflectionCta({
   href,
   stage,
   firstName,
-  label = "Save this and show me how we work on it",
+  label,
 }: {
   href: string
   stage: Stage
@@ -53,23 +64,22 @@ export function ReflectionCta({
 }) {
   const name = firstName?.trim().split(" ")[0]
   return (
-    <div
-      className="mt-2 rounded-lg p-4 text-center"
-      style={{ backgroundColor: CREAM, border: `1px solid ${EDGE}` }}
-    >
-      <p className="text-sm leading-snug mb-3" style={{ color: INK }}>
+    <div className="mt-5">
+      {/* The emotional line gets its own air. It is the strongest sentence in
+          this block and it should not be crowded by the button. */}
+      <p className="text-base leading-relaxed text-center mb-5" style={{ color: INK }}>
         {name ? `${name}, y` : "Y"}ou don&apos;t have to work this one out on your own.{" "}
         {REFLECTION_LINE[stage]}
       </p>
       <a
         href={href}
-        className="block w-full md:inline-block md:w-auto text-center text-white font-bold py-3 px-6 rounded-xl shadow-lg leading-snug"
+        className="block w-full md:w-auto md:mx-auto md:max-w-sm text-center text-white font-bold py-4 px-6 rounded-xl shadow-lg leading-snug"
         style={{ background: "linear-gradient(135deg, #A15C2F, #C27B48)" }}
       >
-        {label}
+        {label ?? SAVE_LABEL[stage]}
       </a>
-      <p className="text-xs mt-2" style={{ color: MUTED }}>
-        Free account · no card needed · this saves into it
+      <p className="text-center text-xs mt-2" style={{ color: MUTED }}>
+        Free account • No card • Your assessment is saved automatically
       </p>
     </div>
   )
