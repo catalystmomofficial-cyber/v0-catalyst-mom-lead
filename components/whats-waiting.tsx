@@ -56,7 +56,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "🤝",
       title: "Your community",
-      lead: "Neither are these moms.",
+      lead: "You're joining mothers who are rebuilding alongside you.",
       body: [
         "Ask the questions you'd never say out loud, watch someone two weeks ahead of you get through the thing you're in, and stop doing postpartum on your own.",
       ],
@@ -91,7 +91,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "🤝",
       title: "Your community",
-      lead: "Neither are these women.",
+      lead: "You're joining women who are at the same stage as you.",
       body: [
         "Ask the questions you'd never say out loud, hear from women a few weeks ahead of you, and stop working it out from search results at 2am.",
       ],
@@ -126,7 +126,7 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "🤝",
       title: "Your community",
-      lead: "Neither are these women.",
+      lead: "You're joining women who are trying alongside you.",
       body: [
         "Ask the questions you'd never say out loud, sit with women who know exactly what a two-week wait feels like, and stop carrying it by yourself.",
       ],
