@@ -64,9 +64,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need between coaching sessions.",
+      lead: "Your trusted Catalyst Mom guides—all in one place.",
       body: [
-        "Healing-focused meal plans, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
+        "The digital guides you've relied on are now built into your recovery experience, alongside meal plans, practical wellness resources, and your 500 welcome credits.",
       ],
     },
   ],
@@ -99,9 +99,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need between coaching sessions.",
+      lead: "Your trusted Catalyst Mom guides—all in one place.",
       body: [
-        "Pregnancy-safe meal plans, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
+        "The digital guides you've relied on are now built into your pregnancy experience, alongside meal plans, practical wellness resources, and your 500 welcome credits.",
       ],
     },
   ],
@@ -134,9 +134,9 @@ const SECTIONS: Record<Stage, Section[]> = {
     {
       emoji: "📚",
       title: "Your resources",
-      lead: "Everything you need between coaching sessions.",
+      lead: "Your trusted Catalyst Mom guides—all in one place.",
       body: [
-        "Meal plans built around egg quality and hormone balance, practical wellness guides for the challenges you're facing today, and 500 welcome credits waiting inside your account.",
+        "The digital guides you've relied on are now built into your fertility experience, alongside meal plans, practical wellness resources, and your 500 welcome credits.",
       ],
     },
   ],
