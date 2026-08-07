@@ -3,6 +3,15 @@
 Status: agreed, not yet implemented. This document is the contract. Code that
 disagrees with it is wrong, including code written before it.
 
+**Phase 1 shipped separately (Aug 2026).** It removed the trust leak without
+touching the model: the second scoring function is deleted, the breakdown is
+derived from the same values that produce the total, the hero shows a
+percentage instead of a fraction, and the breakdown carries no total line. The
+free context points still exist internally, medical clearance still scores,
+rest and stress still measure circumstance, four postpartum categories still
+have no questions, and answers are still not persisted. Everything below is
+still to do.
+
 Why this exists outside the code: v1 drifted because the quiz was edited and
 the scoring wasn't, and nothing recorded what the score was supposed to mean,
 so nobody could tell the two apart. When a fourth stage gets added, this file

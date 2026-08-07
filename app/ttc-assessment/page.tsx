@@ -16,6 +16,7 @@ import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta } from "@/components/results-cta"
 import { WhatsWaiting } from "@/components/whats-waiting"
 import { buildProtocolSteps } from "@/lib/protocol-steps"
+import { cat, summarise, type ScoredCategory, type Tier } from "@/lib/score"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
@@ -66,69 +67,43 @@ const isValidEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)
 // ─── Utility: Gap Explanations ────────────────────────────────────────────────
 // Ethics-reviewed: empathetic, no direct risk attribution or fear-based claims.
 
-function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
-  return [
-    {
-      practice: "Cycle Tracking",
-      score: qs.cycleTracking === "yes-app" ? 10 : qs.cycleTracking === "sometimes" ? 5 : qs.cycleTracking === "irregular" ? 3 : 0,
-      maxScore: 10,
-      status: qs.cycleTracking === "yes-app" ? "excellent" : qs.cycleTracking === "sometimes" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Ovulation Awareness",
-      score: qs.ovulationAwareness === "yes" ? 10 : qs.ovulationAwareness === "roughly" ? 5 : qs.ovulationAwareness === "irregular" ? 2 : 0,
-      maxScore: 10,
-      status: qs.ovulationAwareness === "yes" ? "excellent" : qs.ovulationAwareness === "roughly" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Fertility Nutrition",
-      score: qs.fertilityNutrition === "yes" ? 10 : qs.fertilityNutrition === "sometimes" ? 5 : qs.fertilityNutrition === "trying" ? 3 : 0,
-      maxScore: 10,
-      status: qs.fertilityNutrition === "yes" ? "excellent" : qs.fertilityNutrition === "sometimes" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Supplementation",
-      score: qs.supplementation === "yes" ? 10 : qs.supplementation === "some" ? 5 : qs.supplementation === "unsure" ? 2 : 0,
-      maxScore: 10,
-      status: qs.supplementation === "yes" ? "excellent" : qs.supplementation === "some" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Stress Management",
-      score: qs.stress === "low" ? 10 : qs.stress === "moderate" ? 5 : 0,
-      maxScore: 10,
-      status: qs.stress === "low" ? "excellent" : qs.stress === "moderate" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Sleep Quality",
-      score: qs.sleep === "yes" ? 10 : qs.sleep === "mostly" ? 7 : 0,
-      maxScore: 10,
-      status: qs.sleep === "yes" ? "excellent" : qs.sleep === "mostly" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Exercise Balance",
-      score: qs.exercise === "yes" ? 10 : qs.exercise === "sometimes" ? 5 : qs.exercise === "intense" ? 2 : 0,
-      maxScore: 10,
-      status: qs.exercise === "yes" ? "excellent" : qs.exercise === "sometimes" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Alcohol Consumption",
-      score: qs.alcohol === "none" ? 10 : qs.alcohol === "occasional" ? 7 : qs.alcohol === "regular" ? 3 : 0,
-      maxScore: 10,
-      status: qs.alcohol === "none" ? "excellent" : qs.alcohol === "occasional" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Smoking/Nicotine",
-      score: qs.smoking === "no" ? 10 : qs.smoking === "occasional" ? 5 : 0,
-      maxScore: 10,
-      status: qs.smoking === "no" ? "excellent" : qs.smoking === "occasional" ? "good" : "needs-attention",
-    },
-    {
-      practice: "Wellness Tracking",
-      score: qs.tracking === "yes" ? 10 : qs.tracking === "some" ? 5 : 0,
-      maxScore: 10,
-      status: qs.tracking === "yes" ? "excellent" : qs.tracking === "some" ? "good" : "needs-attention",
-    },
+// ─── Scoring — one function, one source of truth ─────────────────────────────
+//
+// There used to be two: `calculateScore` totalled five answers, and
+// `getDetailedBreakdown` scored ten. Alcohol, nicotine, supplementation,
+// movement balance and tracking were all asked, all displayed, and none of them
+// moved the number. Every question she answers now counts, once.
+//
+// The TTC-duration points stay out of sight — how long she has been trying is
+// not an achievement, and v2 removes them entirely.
+
+const DURATION_POINTS = 10
+
+export interface TtcScore {
+  total: number
+  categories: ScoredCategory[]
+  earned: number
+  max: number
+  percent: number
+  tier: Tier
+}
+
+export function scoreTtc(q: QuizState): TtcScore {
+  const categories: ScoredCategory[] = [
+    cat("Cycle Tracking", q.cycleTracking === "yes-app" ? 10 : q.cycleTracking === "sometimes" ? 6 : q.cycleTracking === "irregular" ? 3 : 0),
+    cat("Ovulation Awareness", q.ovulationAwareness === "yes" ? 10 : q.ovulationAwareness === "roughly" ? 6 : q.ovulationAwareness === "irregular" ? 3 : 0),
+    cat("Fertility Nutrition", q.fertilityNutrition === "yes" ? 10 : q.fertilityNutrition === "sometimes" ? 6 : q.fertilityNutrition === "trying" ? 3 : 0),
+    cat("Supplementation", q.supplementation === "yes" ? 10 : q.supplementation === "some" ? 5 : q.supplementation === "unsure" ? 2 : 0),
+    cat("Stress Management", q.stress === "low" ? 10 : q.stress === "moderate" ? 6 : q.stress === "high" ? 2 : 0),
+    cat("Sleep Quality", q.sleep === "yes" ? 10 : q.sleep === "mostly" ? 7 : q.sleep === "no" ? 2 : 0),
+    cat("Exercise Balance", q.exercise === "yes" ? 10 : q.exercise === "sometimes" ? 5 : q.exercise === "intense" ? 2 : 0),
+    cat("Alcohol", q.alcohol === "none" ? 10 : q.alcohol === "occasional" ? 7 : q.alcohol === "regular" ? 3 : 0),
+    cat("Smoking/Nicotine", q.smoking === "no" ? 10 : q.smoking === "occasional" ? 5 : 0),
+    cat("Wellness Tracking", q.tracking === "yes" ? 10 : q.tracking === "some" ? 5 : 0),
   ]
+
+  const summary = summarise(categories)
+  return { ...summary, total: summary.earned + DURATION_POINTS }
 }
 
 // ─── Utility: Personalized Response ──────────────────────────────────────────
@@ -329,28 +304,10 @@ export default function TTCAssessment() {
     },
   ]
 
-  const calculateScore = () => {
-    let s = 10 // TTC duration: context, not scored negatively
-    if (quizState.cycleTracking === "yes-app") s += 10
-    else if (quizState.cycleTracking === "sometimes") s += 6
-    else if (quizState.cycleTracking === "irregular") s += 3
-    if (quizState.ovulationAwareness === "yes") s += 10
-    else if (quizState.ovulationAwareness === "roughly") s += 6
-    else if (quizState.ovulationAwareness === "irregular") s += 3
-    if (quizState.fertilityNutrition === "yes") s += 10
-    else if (quizState.fertilityNutrition === "sometimes") s += 6
-    else if (quizState.fertilityNutrition === "trying") s += 3
-    if (quizState.stress === "low") s += 10
-    else if (quizState.stress === "moderate") s += 6
-    else if (quizState.stress === "high") s += 2
-    if (quizState.sleep === "yes") s += 10
-    else if (quizState.sleep === "mostly") s += 7
-    else if (quizState.sleep === "no") s += 2
-    return s
-  }
-
-  const getTier = (s: number): "low" | "medium" | "high" =>
-    s <= 40 ? "low" : s <= 70 ? "medium" : "high"
+  // Both the stored score and everything on the page come from one call.
+  const scored = scoreTtc(quizState)
+  const calculateScore = () => scored.total
+  const getTier = (): Tier => scored.tier
 
   const handleNext = async () => {
     trackQuizEvents.questionAnswered(currentQuestion + 1)
@@ -363,7 +320,7 @@ export default function TTCAssessment() {
     setIsLoading(true)
     try {
       const calculatedScore = calculateScore()
-      const tier = getTier(calculatedScore)
+      const tier = getTier()
       setScore(calculatedScore)
       setScoreTier(tier)
       trackQuizEvents.quizCompleted(calculatedScore, tier)
@@ -593,15 +550,19 @@ function TTCResultsPage({
   quizState: QuizState
   concernReflection: ConcernReflectionResult | null
 }) {
-  const breakdown = getDetailedBreakdown(quizState)
-  const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
+  // Everything on this page reads from one call, so no number here can drift
+  // away from any other. `percent` is what she sees; `score` is what we store.
+  const scored = scoreTtc(quizState)
+  const percent = scored.percent
+  const breakdown = scored.categories
+  const gaps = breakdown.filter((item: ScoredCategory) => item.score < 8).slice(0, 3)
 
-  const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
+  const getTierColor = () => percent < 40 ? "#E57373" : percent < 75 ? "#FFB74D" : "#81C784"
   const getTierLabel = () =>
-    score <= 40 ? "Early Foundations Stage" : score <= 70 ? "Building Momentum Stage" : "Thriving & Ready Stage"
+    percent < 40 ? "Early Foundations Stage" : percent < 75 ? "Building Momentum Stage" : "Thriving & Ready Stage"
   const gauge =
-    score <= 40 ? { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
-    : score <= 70 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
+    percent < 40 ? { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
+    : percent < 75 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
     : { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
 
 
@@ -637,8 +598,8 @@ function TTCResultsPage({
           <CardContent className="p-8 text-center">
             <div className="mb-4">
               <AnimatedScoreGauge
-                value={score}
-                max={110}
+                value={percent}
+                caption="%"
                 fromColor={gauge.from}
                 toColor={gauge.to}
                 captionColor="#8A7060"
@@ -654,11 +615,11 @@ function TTCResultsPage({
             </div>
             <p className="text-lg" style={{ color: "#3A2412" }}>
               {tier === "high" &&
-                `${score}/110 — solid foundations. Here's what matters: fertility readiness compounds. Every fundamental you refine now stacks in your favor, cycle after cycle.`}
+                `${percent}% of your fertility foundations are already in place. Here's what matters: readiness compounds. Every fundamental you refine now stacks in your favor, cycle after cycle.`}
               {tier === "medium" &&
-                `${score}/110 — real momentum. And here's the good news about fertility: readiness compounds. Every gap you close now keeps paying you back, cycle after cycle.`}
+                `${percent}% of your fertility foundations are in place — real momentum. And here's the good news: readiness compounds. Every gap you close now keeps paying you back, cycle after cycle.`}
               {tier === "low" &&
-                `${score}/110 — which means most of your levers are still unpulled. That's genuinely good news: fertility readiness compounds, and every fundamental you put in place from today stacks in your favor, cycle after cycle.`}
+                `${percent}% — which means most of your levers are still unpulled. That's genuinely good news: fertility readiness compounds, and every fundamental you put in place from today stacks in your favor, cycle after cycle.`}
             </p>
           </CardContent>
         </Card>
@@ -694,7 +655,7 @@ function TTCResultsPage({
               </div>
               <div>
                 <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
-                  Your personalised fertility plan is {pctDone}% built.
+                  {pctDone}% of your fertility plan is unlocked.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                   The locked steps are where the momentum is — cycle clarity, timing, the fundamentals that compound. Every cycle spent guessing is one that can't stack in your favor.
@@ -743,7 +704,7 @@ function TTCResultsPage({
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {breakdown.map((item, index) => (
+            {breakdown.map((item: ScoredCategory, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 rounded-lg"
@@ -767,12 +728,14 @@ function TTCResultsPage({
                 </span>
               </div>
             ))}
-            <div className="border-t-4 pt-4 mt-4" style={{ borderColor: "#A15C2F" }}>
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-bold" style={{ color: "#A15C2F" }}>TOTAL SCORE:</p>
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>{score}/110</p>
-              </div>
-            </div>
+            {/* No total line. It used to read "TOTAL SCORE: x/110" above rows
+                that summed to something else, which is the single thing on this
+                page that cost the most trust. Each row is explainable on its
+                own; nothing here asks her to add them. */}
+            <p className="pt-3 text-sm" style={{ color: "#8A7060" }}>
+              Each area is scored out of 10 from the answer you gave. Your overall
+              percentage above is how many of these foundations are in place.
+            </p>
           </CardContent>
         </Card>
 

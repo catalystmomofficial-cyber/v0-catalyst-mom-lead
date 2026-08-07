@@ -12,8 +12,17 @@ interface AnimatedScoreGaugeProps {
   toColor?: string
   /** Light end of the arc gradient. Defaults to toColor. */
   fromColor?: string
-  /** Color of the "/100" caption under the number. */
+  /** Color of the caption under the number. */
   captionColor?: string
+  /**
+   * Caption under the number. Defaults to "/ {max}".
+   *
+   * Pass "%" when the value is a proportion. A fraction invites her to add the
+   * rows underneath and check — which is exactly how the old page lost trust,
+   * showing "34 / 100" above a column that summed to something else. A
+   * percentage makes no such claim.
+   */
+  caption?: string
   /** Base (unfilled) track color. */
   trackColor?: string
   size?: number
@@ -31,6 +40,7 @@ export function AnimatedScoreGauge({
   toColor = "#A15C2F",
   fromColor,
   captionColor = "#8A7060",
+  caption,
   trackColor = "#E8D5C4",
   size = 260,
   strokeWidth,
@@ -116,7 +126,7 @@ export function AnimatedScoreGauge({
         />
       </svg>
 
-      {/* Center number + /100 caption, nudged into the bowl */}
+      {/* Center number + caption, nudged into the bowl */}
       <div
         className="absolute inset-0 flex flex-col items-center justify-center"
         style={{ transform: `translateY(${size * 0.05}px)` }}
@@ -125,7 +135,7 @@ export function AnimatedScoreGauge({
           {Math.round(current)}
         </span>
         <span className="font-semibold leading-none mt-1" style={{ fontSize: size * 0.06, color: captionColor }}>
-          / {max}
+          {caption ?? `/ ${max}`}
         </span>
       </div>
     </div>

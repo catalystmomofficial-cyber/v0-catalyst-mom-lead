@@ -16,6 +16,7 @@ import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta } from "@/components/results-cta"
 import { WhatsWaiting } from "@/components/whats-waiting"
 import { buildProtocolSteps } from "@/lib/protocol-steps"
+import { cat, summarise, type ScoredCategory, type Tier } from "@/lib/score"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
 const supabase = createClient()
@@ -75,59 +76,44 @@ const initialQuizState: QuizState = {
 // ─── Utility: Score Breakdown ─────────────────────────────────────────────────
 // Defined outside component so it is not recreated on every render.
 
-function getDetailedBreakdown(qs: QuizState): BreakdownItem[] {
-  return [
-    {
-      practice: "Prenatal Care",
-      score: qs.prenatalCare === "yes" ? 10 : qs.prenatalCare === "sometimes" ? 5 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Exercise Safety",
-      score: qs.exerciseSafety === "yes" ? 10 : qs.exerciseSafety === "unsure" ? 3 : qs.exerciseSafety === "no" ? 5 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Prenatal Nutrition",
-      score: qs.nutrition === "yes" ? 10 : qs.nutrition === "sometimes" ? 5 : qs.nutrition === "trying" ? 3 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Supplementation",
-      score: qs.supplementation === "yes" ? 10 : qs.supplementation === "some" ? 5 : qs.supplementation === "unsure" ? 2 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Stress Management",
-      score: qs.stress === "low" ? 10 : qs.stress === "moderate" ? 5 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Sleep Quality",
-      score: qs.sleep === "yes" ? 10 : qs.sleep === "mostly" ? 7 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Pelvic Floor Training",
-      score: qs.pelvicFloor === "yes" ? 10 : qs.pelvicFloor === "sometimes" ? 5 : qs.pelvicFloor === "dont-know" ? 2 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Diastasis Prevention",
-      score: qs.diastasisRecti === "yes" ? 10 : qs.diastasisRecti === "aware" ? 5 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Symptom Management",
-      score: qs.nausea === "none" ? 10 : qs.nausea === "managed" ? 7 : qs.nausea === "struggling" ? 2 : 0,
-      maxScore: 10,
-    },
-    {
-      practice: "Wellness Tracking",
-      score: qs.tracking === "yes" ? 10 : qs.tracking === "some" ? 5 : 0,
-      maxScore: 10,
-    },
+// ─── Scoring — one function, one source of truth ─────────────────────────────
+//
+// There used to be two: `calculateScore` totalled five answers, and
+// `getDetailedBreakdown` scored ten with different point values for the same
+// answer. Both looked plausible, so nobody noticed — "sometimes" on nutrition
+// was worth 5 in one place and 6 in the other, and five of the questions she
+// answered counted for nothing at all.
+//
+// Every question she answers now counts, once, at one value. The trimester
+// points stay out of sight — see the note in the postpartum file for why.
+
+const TRIMESTER_POINTS = 10
+
+export interface PregnancyScore {
+  total: number
+  categories: ScoredCategory[]
+  earned: number
+  max: number
+  percent: number
+  tier: Tier
+}
+
+export function scorePregnancy(q: QuizState): PregnancyScore {
+  const categories: ScoredCategory[] = [
+    cat("Prenatal Care", q.prenatalCare === "yes" ? 10 : q.prenatalCare === "sometimes" ? 5 : 0),
+    cat("Exercise Safety", q.exerciseSafety === "yes" ? 10 : q.exerciseSafety === "no" ? 5 : q.exerciseSafety === "unsure" ? 3 : 0),
+    cat("Prenatal Nutrition", q.nutrition === "yes" ? 10 : q.nutrition === "sometimes" ? 6 : q.nutrition === "trying" ? 3 : 0),
+    cat("Supplementation", q.supplementation === "yes" ? 10 : q.supplementation === "some" ? 5 : q.supplementation === "unsure" ? 2 : 0),
+    cat("Stress Management", q.stress === "low" ? 10 : q.stress === "moderate" ? 6 : q.stress === "high" ? 2 : 0),
+    cat("Sleep Quality", q.sleep === "yes" ? 10 : q.sleep === "mostly" ? 7 : 0),
+    cat("Pelvic Floor Training", q.pelvicFloor === "yes" ? 10 : q.pelvicFloor === "sometimes" ? 6 : q.pelvicFloor === "dont-know" ? 2 : 0),
+    cat("Diastasis Prevention", q.diastasisRecti === "yes" ? 10 : q.diastasisRecti === "aware" ? 5 : 0),
+    cat("Symptom Management", q.nausea === "none" ? 10 : q.nausea === "managed" ? 7 : q.nausea === "struggling" ? 2 : 0),
+    cat("Wellness Tracking", q.tracking === "yes" ? 10 : q.tracking === "some" ? 5 : 0),
   ]
+
+  const summary = summarise(categories)
+  return { ...summary, total: summary.earned + TRIMESTER_POINTS }
 }
 
 // ─── Utility: Gap Explanations ────────────────────────────────────────────────
@@ -409,26 +395,10 @@ export default function PregnancyAssessment() {
     },
   ]
 
-  const calculateScore = () => {
-    let s = 10 // Trimester: context, not penalized
-    if (quizState.prenatalCare === "yes") s += 10
-    else if (quizState.prenatalCare === "sometimes") s += 5
-    if (quizState.exerciseSafety === "yes") s += 10
-    else if (quizState.exerciseSafety === "unsure" || quizState.exerciseSafety === "no") s += 4
-    if (quizState.nutrition === "yes") s += 10
-    else if (quizState.nutrition === "sometimes") s += 6
-    else if (quizState.nutrition === "trying") s += 3
-    if (quizState.pelvicFloor === "yes") s += 10
-    else if (quizState.pelvicFloor === "sometimes") s += 6
-    else if (quizState.pelvicFloor === "dont-know") s += 2
-    if (quizState.stress === "low") s += 10
-    else if (quizState.stress === "moderate") s += 6
-    else if (quizState.stress === "high") s += 2
-    return s
-  }
-
-  const getTier = (s: number): "low" | "medium" | "high" =>
-    s <= 40 ? "low" : s <= 70 ? "medium" : "high"
+  // Both the stored score and everything on the page come from one call.
+  const scored = scorePregnancy(quizState)
+  const calculateScore = () => scored.total
+  const getTier = (): Tier => scored.tier
 
   const handleNext = async () => {
     trackQuizEvents.questionAnswered(currentQuestion + 1)
@@ -441,7 +411,7 @@ export default function PregnancyAssessment() {
     setIsLoading(true)
     try {
       const calculatedScore = calculateScore()
-      const tier = getTier(calculatedScore)
+      const tier = getTier()
       setScore(calculatedScore)
       setScoreTier(tier)
       trackQuizEvents.quizCompleted(calculatedScore, tier)
@@ -685,15 +655,19 @@ function PregnancyResultsPage({
   quizState: QuizState
   concernReflection: ConcernReflectionResult | null
 }) {
-  const breakdown = getDetailedBreakdown(quizState)
-  const gaps = breakdown.filter((item) => item.score < 8).slice(0, 3)
+  // Everything on this page reads from one call, so no number here can drift
+  // away from any other. `percent` is what she sees; `score` is what we store.
+  const scored = scorePregnancy(quizState)
+  const percent = scored.percent
+  const breakdown = scored.categories
+  const gaps = breakdown.filter((item: ScoredCategory) => item.score < 8).slice(0, 3)
 
-  const getTierColor = () => score <= 40 ? "#E57373" : score <= 70 ? "#FFB74D" : "#81C784"
+  const getTierColor = () => percent < 40 ? "#E57373" : percent < 75 ? "#FFB74D" : "#81C784"
   const getTierLabel = () =>
-    score <= 40 ? "Early Foundations Stage" : score <= 70 ? "Building Momentum Stage" : "Thriving & Ready Stage"
+    percent < 40 ? "Early Foundations Stage" : percent < 75 ? "Building Momentum Stage" : "Thriving & Ready Stage"
   const gauge =
-    score <= 40 ? { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
-    : score <= 70 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
+    percent < 40 ? { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
+    : percent < 75 ? { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
     : { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
 
   // Derived from what she actually answered — see lib/protocol-steps.ts for why
@@ -728,8 +702,8 @@ function PregnancyResultsPage({
           <CardContent className="p-8 text-center">
             <div className="mb-4">
               <AnimatedScoreGauge
-                value={score}
-                max={100}
+                value={percent}
+                caption="%"
                 fromColor={gauge.from}
                 toColor={gauge.to}
                 captionColor="#8A7060"
@@ -777,7 +751,7 @@ function PregnancyResultsPage({
               </div>
               <div>
                 <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
-                  Your personalised pregnancy plan is {pctDone}% built.
+                  {pctDone}% of your pregnancy plan is unlocked.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                   The locked steps are the part that actually prepares your body — the breath, the positioning, the pelvic floor work. Every week of your prep window counts.
@@ -824,21 +798,21 @@ function PregnancyResultsPage({
           <CardContent className="p-6">
             {tier === "high" && (
               <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                <strong>{quizState.name}, {score}/100 puts you in the top 15% of pregnant women we assess.</strong>{" "}
+                <strong>{quizState.name}, {percent}% of your pregnancy foundations are already in place — that puts you in the top 15% of women we assess.</strong>{" "}
                 Prenatal care, safe movement, food, stress — you&apos;re already doing most of it. What&apos;s left is
                 two or three areas of fine-tuning, and they&apos;re the ones below.
               </p>
             )}
             {tier === "medium" && (
               <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                <strong>{quizState.name}, at {score}/100 you have real foundations and a handful of open gaps.</strong>{" "}
+                <strong>{quizState.name}, {percent}% of your pregnancy foundations are in place — real ground under you, and a handful of open gaps.</strong>{" "}
                 They&apos;re the reason some days feel harder than they need to, and they&apos;re exactly what your prep
                 window exists to close.
               </p>
             )}
             {tier === "low" && (
               <p className="text-lg leading-relaxed" style={{ color: "#3A2412" }}>
-                <strong>{quizState.name}, {score}/100 is a starting line, not a verdict.</strong> Most women start
+                <strong>{quizState.name}, {percent}% is a starting line, not a verdict.</strong> Most women start
                 here — unsure what&apos;s safe, buried in conflicting advice. You&apos;re in your prep window right now,
                 and everything you build in it is momentum your body carries into birth and recovery.
               </p>
@@ -858,7 +832,7 @@ function PregnancyResultsPage({
           </CardHeader>
           <CardContent className="p-6">
             <div className="space-y-4">
-              {breakdown.map((item, index) => (
+              {breakdown.map((item: ScoredCategory, index: number) => (
                 <div
                   key={index}
                   className="flex items-center justify-between p-4 rounded-lg"

@@ -16,6 +16,7 @@ import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta } from "@/components/results-cta"
 import { WhatsWaiting } from "@/components/whats-waiting"
 import { buildProtocolSteps } from "@/lib/protocol-steps"
+import { cat, summarise, type ScoredCategory, type Tier } from "@/lib/score"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
@@ -140,130 +141,93 @@ function ObstacleAnswer({ obstacle }: { obstacle: string }) {
 
 // ─── Utility functions ────────────────────────────────────────────────────────
 
-const getDetailedBreakdown = (quizState: QuizState) => {
-  return [
-    {
-      practice: "Medical Clearance",
-      score: quizState.medicalClearance === "yes" ? 10 : 0,
-      maxScore: 10,
-      status: quizState.medicalClearance === "yes" ? "excellent" : "needs-work",
-    },
-    {
-      practice: "Diastasis Recti Awareness",
-      score:
-        quizState.diastasisRecti === "diagnosed" || quizState.diastasisRecti === "no"
-          ? 10
-          : quizState.diastasisRecti === "think-so"
-            ? 5
-            : 0,
-      maxScore: 10,
-      status:
-        quizState.diastasisRecti === "diagnosed" || quizState.diastasisRecti === "no"
-          ? "excellent"
-          : quizState.diastasisRecti === "think-so"
-            ? "good"
-            : "needs-work",
-    },
-    {
-      practice: "Core-Safe Exercise Practice",
-      score:
-        quizState.coreSafeExercises === "yes"
-          ? 10
-          : quizState.coreSafeExercises === "not-working"
-            ? 5
-            : quizState.coreSafeExercises === "unsure"
-              ? 3
-              : 0,
-      maxScore: 10,
-      status:
-        quizState.coreSafeExercises === "yes"
-          ? "excellent"
-          : quizState.coreSafeExercises === "not-working" || quizState.coreSafeExercises === "unsure"
-            ? "good"
-            : "needs-work",
-    },
-    {
-      practice: "Pelvic Floor Training",
-      score:
-        quizState.pelvicFloor === "yes"
-          ? 10
-          : quizState.pelvicFloor === "sometimes"
-            ? 5
-            : quizState.pelvicFloor === "dont-know"
-              ? 2
-              : 0,
-      maxScore: 10,
-      status:
-        quizState.pelvicFloor === "yes" ? "excellent" : quizState.pelvicFloor === "sometimes" ? "good" : "needs-work",
-    },
-    {
-      practice: "Nutrition Tracking",
-      score:
-        quizState.nutrition === "yes"
-          ? 10
-          : quizState.nutrition === "sometimes"
-            ? 5
-            : quizState.nutrition === "try"
-              ? 3
-              : 0,
-      maxScore: 10,
-      status: quizState.nutrition === "yes" ? "excellent" : quizState.nutrition === "sometimes" ? "good" : "needs-work",
-    },
-    {
-      practice: "Protein Intake",
-      score: quizState.proteinIntake === "yes" ? 10 : quizState.proteinIntake === "sometimes" ? 5 : 0,
-      maxScore: 10,
-      status:
-        quizState.proteinIntake === "yes"
-          ? "excellent"
-          : quizState.proteinIntake === "sometimes"
-            ? "good"
-            : "needs-work",
-    },
-    {
-      practice: "Rest & Recovery",
-      score: quizState.rest === "yes" ? 10 : quizState.rest === "sometimes" ? 5 : quizState.rest === "no-sleep" ? 3 : 0,
-      maxScore: 10,
-      status: quizState.rest === "yes" ? "excellent" : quizState.rest === "sometimes" ? "good" : "needs-work",
-    },
-    {
-      practice: "Hydration",
-      score:
-        quizState.hydration === "yes"
-          ? 10
-          : quizState.hydration === "mostly"
-            ? 7
-            : quizState.hydration === "coffee"
-              ? 2
-              : 0,
-      maxScore: 10,
-      status: quizState.hydration === "yes" ? "excellent" : quizState.hydration === "mostly" ? "good" : "needs-work",
-    },
-    {
-      practice: "Workout Routine Consistency",
-      score:
-        quizState.workoutRoutine === "yes"
-          ? 10
-          : quizState.workoutRoutine === "sometimes"
-            ? 5
-            : quizState.workoutRoutine === "random"
-              ? 2
-              : 0,
-      maxScore: 10,
-      status:
-        quizState.workoutRoutine === "yes"
-          ? "excellent"
-          : quizState.workoutRoutine === "sometimes"
-            ? "good"
-            : "needs-work",
-    },
-    {
-      practice: "Wellness Tracking",
-      score: quizState.tracking === "yes" ? 10 : quizState.tracking === "sometimes" ? 5 : 0,
-      maxScore: 10,
-      status: quizState.tracking === "yes" ? "excellent" : quizState.tracking === "sometimes" ? "good" : "needs-work",
-    },
+// ─── Scoring — one function, one source of truth ─────────────────────────────
+//
+// There used to be two. `calculateScore` produced the headline number from the
+// answers the quiz actually stores, and `getDetailedBreakdown` produced the
+// per-category rows by comparing against answer values that no longer existed,
+// so nearly every row fell through to zero. The page showed 34 above a column
+// that added up to 5, and anyone who can add lost confidence in the whole page.
+//
+// The breakdown is now derived from the same expressions that produce the
+// total. It is arithmetically impossible for them to disagree.
+//
+// Two things are deliberately NOT changed here — they are v2 decisions that
+// shift the score distribution and need the threshold work behind them (see
+// docs/assessment-scoring-v2.md):
+//   • the free 10 points for timeline still exist internally
+//   • medical clearance still costs points instead of acting as a gate
+
+export interface PostpartumScore {
+  /** What gets stored and reported. Unchanged from v1, including the free 10. */
+  total: number
+  categories: ScoredCategory[]
+  earned: number
+  max: number
+  percent: number
+  tier: Tier
+}
+
+/**
+ * Timeline is scored internally (10, always) but never shown as a category.
+ *
+ * It is an implementation detail that v2 removes, and putting "Timeline 10" in
+ * front of her would teach a scoring model we are about to retire — she would
+ * reasonably ask why being six months postpartum earns points, and there is no
+ * good answer. It stays out of `categories`, which is why the breakdown carries
+ * no total line: the visible rows sum to `earned`, not to `total`.
+ */
+const TIMELINE_POINTS = 10
+
+export function scorePostpartum(q: QuizState): PostpartumScore {
+  const categories: ScoredCategory[] = [
+    cat("Medical Clearance", q.medicalClearance === "yes" ? 10 : 0),
+
+    cat(
+      "Body Awareness",
+      q.diastasisRecti === "diagnosed" ? 10
+      : q.diastasisRecti === "no" ? 10
+      : q.diastasisRecti === "think-so" ? 7
+      : 3,
+    ),
+
+    cat(
+      "Core & Pelvic Floor",
+      q.coreSafeExercises === "okay" ? 10
+      : q.coreSafeExercises === "weak" ? 5
+      : q.coreSafeExercises === "pain" ? 4
+      : q.coreSafeExercises === "leak" ? 3
+      : q.coreSafeExercises === "all" ? 2
+      : 0,
+    ),
+
+    cat(
+      "Movement",
+      q.workoutRoutine === "3-plus" ? 10
+      : q.workoutRoutine === "1-2" ? 7
+      : q.workoutRoutine === "occasional" ? 4
+      : 0,
+    ),
+
+    cat(
+      "Nutrition",
+      q.nutrition === "well" ? 10
+      : q.nutrition === "okay" ? 6
+      : q.nutrition === "poorly" ? 2
+      : 0,
+    ),
+
+    cat(
+      "Recovery",
+      q.rest === "good" ? 10
+      : q.rest === "tired" ? 7
+      : q.rest === "exhausted" ? 2
+      : 0,
+    ),
   ]
+
+  const summary = summarise(categories)
+  return { ...summary, total: summary.earned + TIMELINE_POINTS }
 }
 
 const getPersonalizedResponseWithGaps = (additionalNotes: string, breakdown: any[]) => {
@@ -564,48 +528,10 @@ export default function PostpartumAssessment() {
     },
   ]
 
-  const calculateScore = () => {
-    let totalScore = 0
-
-    totalScore += 10 // Timeline always scores 10
-
-    if (quizState.medicalClearance === "yes") totalScore += 10
-    else totalScore += 0
-
-    if (quizState.diastasisRecti === "diagnosed") totalScore += 10
-    else if (quizState.diastasisRecti === "think-so") totalScore += 7
-    else if (quizState.diastasisRecti === "no") totalScore += 10
-    else totalScore += 3
-
-    if (quizState.coreSafeExercises === "leak") totalScore += 3
-    else if (quizState.coreSafeExercises === "weak") totalScore += 5
-    else if (quizState.coreSafeExercises === "pain") totalScore += 4
-    else if (quizState.coreSafeExercises === "all") totalScore += 2
-    else if (quizState.coreSafeExercises === "okay") totalScore += 10
-
-    if (quizState.workoutRoutine === "3-plus") totalScore += 10
-    else if (quizState.workoutRoutine === "1-2") totalScore += 7
-    else if (quizState.workoutRoutine === "occasional") totalScore += 4
-    else if (quizState.workoutRoutine === "not-started") totalScore += 0
-
-    if (quizState.nutrition === "well") totalScore += 10
-    else if (quizState.nutrition === "okay") totalScore += 6
-    else if (quizState.nutrition === "poorly") totalScore += 2
-    else if (quizState.nutrition === "no-idea") totalScore += 0
-
-    if (quizState.rest === "good") totalScore += 10
-    else if (quizState.rest === "tired") totalScore += 7
-    else if (quizState.rest === "exhausted") totalScore += 2
-    else if (quizState.rest === "depleted") totalScore += 0
-
-    return totalScore
-  }
-
-  const getTier = (score: number): "low" | "medium" | "high" => {
-    if (score <= 40) return "low"
-    if (score <= 70) return "medium"
-    return "high"
-  }
+  // Both the stored score and everything on the page come from one call.
+  const scored = scorePostpartum(quizState)
+  const calculateScore = () => scored.total
+  const getTier = () => scored.tier
 
   const handleNext = async () => {
     trackQuizEvents.questionAnswered(currentQuestion + 1)
@@ -616,7 +542,7 @@ export default function PostpartumAssessment() {
       setIsLoading(true)
       try {
         const calculatedScore = calculateScore()
-        const tier = getTier(calculatedScore)
+        const tier = getTier()
 
         setScore(calculatedScore)
         setScoreTier(tier)
@@ -1065,28 +991,32 @@ function ResultsPage({
 }) {
   const displayName = sanitizeName(quizState.name)
 
+  // Everything on this page reads from one call, so no number here can drift
+  // away from any other. `percent` is what she sees; `score` is what we store.
+  const scored = scorePostpartum(quizState)
+  const percent = scored.percent
+  const breakdown = scored.categories
+
   const getTierColor = () => {
-    if (score <= 40) return "#E57373"
-    if (score <= 70) return "#FFB74D"
+    if (percent < 40) return "#E57373"
+    if (percent < 75) return "#FFB74D"
     return "#81C784"
   }
 
   // Tier-aware gauge colors — the arc color must still tell the truth
   // (green = thriving, amber = building, warm red = foundations to build).
   const getTierGauge = () => {
-    if (score <= 40) return { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
-    if (score <= 70) return { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
+    if (percent < 40) return { from: "#EF9A9A", to: "#E53935", text: "#C62828" }
+    if (percent < 75) return { from: "#FFCC80", to: "#FB8C00", text: "#E65100" }
     return { from: "#A5D6A7", to: "#43A047", text: "#2E7D32" }
   }
   const gauge = getTierGauge()
 
   const getTierLabel = () => {
-    if (score <= 40) return `${displayName}, you're in the Early Foundations Stage`
-    if (score <= 70) return `${displayName}, you're in the Building Momentum Stage`
+    if (percent < 40) return `${displayName}, you're in the Early Foundations Stage`
+    if (percent < 75) return `${displayName}, you're in the Building Momentum Stage`
     return `${displayName}, you're in the Thriving & Ready Stage`
   }
-
-  const breakdown = getDetailedBreakdown(quizState)
 
   const personalizedResponse = quizState.additionalNotes.trim()
     ? getPersonalizedResponseWithGaps(quizState.additionalNotes, breakdown)
@@ -1128,7 +1058,8 @@ function ResultsPage({
             </h1>
             <div className="mb-4">
               <AnimatedScoreGauge
-                value={score}
+                value={percent}
+                caption="%"
                 fromColor={gauge.from}
                 toColor={gauge.to}
                 captionColor="#8A7060"
@@ -1146,7 +1077,7 @@ function ResultsPage({
             {tier === "high" && (
               <div className="max-w-xl mx-auto text-left">
                 <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
-                  {score}/100 — you&apos;re in the top 15% of postpartum moms we assess.
+                  {percent}% of your recovery foundations are already in place — that puts you in the top 15% of postpartum moms we assess.
                 </p>
                 <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
                   Your risk isn&apos;t collapse — it&apos;s coasting. The gap between &ldquo;mostly recovered&rdquo; and
@@ -1158,7 +1089,7 @@ function ResultsPage({
             {tier === "medium" && (
               <div className="max-w-xl mx-auto text-left">
                 <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
-                  {score}/100 — real foundations, with gaps that won&apos;t close on their own.
+                  {percent}% of your recovery foundations are in place — real ground under you, with gaps that won&apos;t close on their own.
                 </p>
                 <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
                   Here&apos;s the part no one tells you: the gaps you leave open are the ones your body quietly builds
@@ -1171,7 +1102,7 @@ function ResultsPage({
             {tier === "low" && (
               <div className="max-w-xl mx-auto text-left">
                 <p className="text-xl font-semibold mb-2 text-center" style={{ color: "#A15C2F" }}>
-                  Let&apos;s be honest about what {score}/100 means.
+                  Let&apos;s be honest about what {percent}% means.
                 </p>
                 <p className="text-base leading-relaxed" style={{ color: "#3A2412" }}>
                   The foundations of your recovery — core connection, pelvic floor, fuel, rest — mostly aren&apos;t in
@@ -1220,7 +1151,7 @@ function ResultsPage({
               </div>
               <div>
                 <p className="font-bold text-lg" style={{ color: "#3A2412" }}>
-                  Your 8-week recovery protocol is {pctDone}% built.
+                  {pctDone}% of your recovery plan is unlocked.
                 </p>
                 <p className="text-sm" style={{ color: "#3A2412", opacity: 0.7 }}>
                   The locked steps are the real work — core reconnection, pelvic floor retraining. Every week you wait, the compensation patterns dig in a little deeper.
@@ -1276,7 +1207,7 @@ function ResultsPage({
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
-            {breakdown.map((item, index) => (
+            {breakdown.map((item: ScoredCategory, index: number) => (
               <div
                 key={index}
                 className="flex items-center justify-between p-4 rounded-lg border-2"
@@ -1317,16 +1248,14 @@ function ResultsPage({
                 </div>
               </div>
             ))}
-            <div className="border-t-4 pt-4 mt-4" style={{ borderColor: "#A15C2F" }}>
-              <div className="flex items-center justify-between">
-                <p className="text-xl font-bold" style={{ color: "#A15C2F" }}>
-                  TOTAL SCORE:
-                </p>
-                <p className="text-3xl font-bold" style={{ color: "#A15C2F" }}>
-                  {score}/100
-                </p>
-              </div>
-            </div>
+            {/* No total line. It used to read "TOTAL SCORE: 34/100" above rows
+                that summed to something else entirely, which is the single
+                thing on this page that cost the most trust. The rows are each
+                explainable on their own; nothing here asks her to add them. */}
+            <p className="pt-3 text-sm" style={{ color: "#8A7060" }}>
+              Each area is scored out of 10 from the answer you gave. Your overall
+              percentage above is how many of these foundations are in place.
+            </p>
           </CardContent>
         </Card>
 
