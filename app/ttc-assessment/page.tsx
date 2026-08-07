@@ -733,8 +733,8 @@ function TTCResultsPage({
                 page that cost the most trust. Each row is explainable on its
                 own; nothing here asks her to add them. */}
             <p className="pt-3 text-sm" style={{ color: "#8A7060" }}>
-              Each area is scored out of 10 from the answer you gave. Your overall
-              percentage above is how many of these foundations are in place.
+              Each area below is scored out of 10. Your overall percentage reflects how
+              many of your fertility foundations are currently in place.
             </p>
           </CardContent>
         </Card>

@@ -827,7 +827,8 @@ function PregnancyResultsPage({
               Your Detailed Pregnancy Breakdown
             </CardTitle>
             <p className="text-base" style={{ color: "#3A2412" }}>
-              Here&apos;s how your score breaks down across 10 key pregnancy wellness practices:
+              Each area below is scored out of 10. Your overall percentage reflects how
+              many of your pregnancy foundations are currently in place.
             </p>
           </CardHeader>
           <CardContent className="p-6">
