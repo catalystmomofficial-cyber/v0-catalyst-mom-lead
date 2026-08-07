@@ -16,7 +16,7 @@ import { ConcernReflectionCard } from "@/components/concern-reflection"
 import { ReflectionCta } from "@/components/results-cta"
 import { WhatsWaiting } from "@/components/whats-waiting"
 import { buildProtocolSteps } from "@/lib/protocol-steps"
-import { cat, summarise, type ScoredCategory, type Tier } from "@/lib/score"
+import { cat, summarise, encodeCategories, type ScoredCategory, type Tier } from "@/lib/score"
 import { AnimatedScoreGauge } from "@/components/ui/animated-score-gauge"
 import { StickyCta } from "@/components/sticky-cta"
 const supabase = createClient()
@@ -219,6 +219,10 @@ function buildSignupUrl(quizState: QuizState, score: number, tier: string): stri
   url.searchParams.set("birth_experience", "")
   const assessmentId = typeof window !== "undefined" ? sessionStorage.getItem("pregnancy_assessment_id") : null
   if (assessmentId) url.searchParams.set("assessment_id", assessmentId)
+  // Her per-category scores, so the coach on the other side can open with the
+  // specific thing rather than a generic hello. Two Supabase projects means
+  // this cannot be looked up — it travels or it is lost.
+  url.searchParams.set("categories", encodeCategories(scorePregnancy(quizState).categories))
   const concern = quizState.additionalNotes?.trim()
   if (concern) url.searchParams.set("concern", concern.slice(0, 250))
   const reflectionText = typeof window !== "undefined" ? sessionStorage.getItem("pregnancy_concern_reflection") : null

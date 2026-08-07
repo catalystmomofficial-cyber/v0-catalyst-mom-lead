@@ -60,3 +60,14 @@ export function summarise(categories: ScoredCategory[]): Summary {
   const percent = max === 0 ? 0 : Math.round((earned / max) * 100)
   return { categories, earned, max, percent, tier: tierFromPercent(percent) }
 }
+
+/**
+ * Compact wire format for the signup handoff: "Nutrition:6|Recovery:4".
+ *
+ * The funnel and the app are two different Supabase projects, so her scores
+ * cannot be read across the gap — they have to travel in the URL. Labels rather
+ * than keys because the receiving end drops them straight into the coach's
+ * prompt, where "Pelvic Floor: 3/10" is what we want it to read.
+ */
+export const encodeCategories = (categories: ScoredCategory[]): string =>
+  categories.map((c) => `${c.practice}:${c.score}`).join("|")
