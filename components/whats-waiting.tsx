@@ -41,7 +41,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       title: "Your plan starts here",
       lead: "Here's what we've already built.",
       body: [
-        "We've already built your roadmap from the answers you just gave us. Your first recovery session is waiting.",
+        "Your roadmap has already been built from your answers. Your first recovery session is waiting.",
         "Every recommendation is matched to where your body is today — not where a generic program assumes it is.",
         "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
@@ -76,7 +76,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       title: "Your plan starts here",
       lead: "Here's what we've already built.",
       body: [
-        "We've already built your roadmap from the answers you just gave us. Your first session is waiting.",
+        "Your roadmap has already been built from your answers. Your first session is waiting.",
         "Every recommendation is matched to where your body is today and which trimester you're in — not where a generic program assumes it is.",
         "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
@@ -111,7 +111,7 @@ const SECTIONS: Record<Stage, Section[]> = {
       title: "Your plan starts here",
       lead: "Here's what we've already built.",
       body: [
-        "We've already built your roadmap from the answers you just gave us. Your first steps are waiting.",
+        "Your roadmap has already been built from your answers. Your first steps are waiting.",
         "Every recommendation is matched to where your cycle and your body are today — not where a generic program assumes they are.",
         "Your AI coach already knows your goals, your answers, and where you're starting—so you never have to explain your story twice.",
       ],
